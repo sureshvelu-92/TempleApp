@@ -19,7 +19,7 @@ var DATA_START     = 4;
 function doGet(e) {
   try {
     var action = (e.parameter.action || '').trim();
-    if (action === 'ping')        return ok({ status: 'ok', message: 'Connected ✓', version: 4 });
+    if (action === 'ping')        return ok({ status: 'ok', message: 'Connected ✓', version: 5 });
     if (action === 'addDonation') return addDonation(e.parameter);
     if (action === 'getReceipts') return getReceipts();
     if (action === 'getLastSeq')  return getLastSeq();
@@ -59,8 +59,11 @@ function addDonation(p) {
     if (k) col[k] = c + 1;
   }
 
-  // ── Insert row after last data row (copies format from above)
+  // ── Insert row, copy full format+merges from last data row ──
   sheet.insertRowAfter(lastDataRow);
+  var src = sheet.getRange(lastDataRow, 1, 1, lastCol);
+  var dst = sheet.getRange(newRow,      1, 1, lastCol);
+  src.copyTo(dst, SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
 
   // ── Write values into the correct columns by header name ───
   function set(name, val) {
@@ -75,6 +78,7 @@ function addDonation(p) {
   set('Date Received',     makeDate(p.date));
   set('Received By',       p.receivedBy || '');
   set('Purpose / Notes',   'Towards Aadi Festival');
+  set('Payment Status',    'Received');
   set('Expected Pay Date', '');
 
   return ok({ status: 'success', receiptNo: p.receiptNo, row: newRow, seq: seqNo });
@@ -133,7 +137,7 @@ function getReceipts() {
       mode       : r[col['Payment Mode']     || 5],
       date       : r[col['Date Received']    || 6],
       receivedBy : r[col['Received By']      || 7],
-      status     : r[col['Status']           || 8],
+      status     : r[col['Payment Status']     || 8],
       notes      : r[col['Purpose / Notes']  || 10]
     };
   });

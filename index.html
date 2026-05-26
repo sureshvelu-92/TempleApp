@@ -991,9 +991,6 @@
                     <select id="f-mode">
                         <option>Cash</option>
                         <option>UPI</option>
-                        <option>Cheque</option>
-                        <option>Bank Transfer</option>
-                        <option>DD</option>
                     </select>
                 </div>
             </div>
@@ -1003,6 +1000,8 @@
                     <label>Received by *</label>
                     <select id="f-receiver" required>
                         <option value="">— Select Receiver —</option>
+                        <option>Sunil Kumar</option>
+                        <option>Suresh</option>
                     </select>
                 </div>
             </div>
@@ -1193,8 +1192,12 @@
 
 
         /* ── Receiver management ── */
+        const DEFAULT_RECEIVERS = ['Sunil Kumar', 'Suresh'];
         function loadReceivers() {
-            const names = JSON.parse(localStorage.getItem('receiverNames') || '[]');
+            const stored = localStorage.getItem('receiverNames');
+            const extra = stored ? JSON.parse(stored) : [];
+            // Defaults always first; user-added names appended (no duplicates)
+            const names = [...DEFAULT_RECEIVERS, ...extra.filter(n => !DEFAULT_RECEIVERS.includes(n))];
             const sel = document.getElementById('f-receiver');
             const prev = sel.value;
             sel.innerHTML = '<option value="">— Select Receiver —</option>';
