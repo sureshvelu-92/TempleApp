@@ -911,10 +911,18 @@
 
             <div class="form-row">
                 <div>
+                    <label>Phone Number</label>
+                    <input id="f-phone" type="tel" placeholder="e.g. 9876543210" maxlength="15" />
+                </div>
+                <div>
                     <label>Amount (Rs.) *</label>
                     <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" required oninput="liveAmt()" />
-                    <div class="amount-live" id="amt-live"></div>
                 </div>
+            </div>
+
+            <div class="amount-live" id="amt-live" style="margin-bottom:10px;"></div>
+
+            <div class="form-row">
                 <div>
                     <label>Payment Mode</label>
                     <select id="f-mode">
@@ -922,9 +930,6 @@
                         <option>UPI</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-row full">
                 <div>
                     <label>Received by *</label>
                     <select id="f-receiver" required>
@@ -1036,10 +1041,11 @@
             </div>
         </div>
 
-        <!-- Receipt actions: Print + Download as Image ONLY -->
+        <!-- Receipt actions -->
         <div class="action-row" style="max-width:620px;margin:14px auto 0;justify-content:center;">
             <button class="btn btn-print" onclick="window.print()">Print / PDF</button>
-            <button class="btn btn-img" onclick="downloadAsImage()">Download as Image</button>
+            <button class="btn btn-img" onclick="downloadAsImage()">⬇ Download</button>
+            <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
         <div id="action-status"
             style="max-width:620px;margin:8px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;">
@@ -1190,6 +1196,7 @@
         /* ── Generate Receipt ── */
         function generateReceipt() {
             const donor = titleCase(document.getElementById('f-donor').value.trim());
+            const phone = document.getElementById('f-phone').value.trim();
             const amt = parseFloat(document.getElementById('f-amount').value);
             const mode = document.getElementById('f-mode').value;
             const receiver = document.getElementById('f-receiver').value;
@@ -1212,7 +1219,7 @@
             document.getElementById('r-amount').textContent = `${inr(amt)} /-`;
             document.getElementById('r-receiver').textContent = receiver;
 
-            current = { no, date, donor, amount: amt, words, mode, receiver };
+            current = { no, date, donor, phone, amount: amt, words, mode, receiver };
             histArr.unshift({ ...current });
             bumpNo();
 
@@ -1238,90 +1245,130 @@
             } catch (e) { return src; }   // fallback: keep original src
         }
 
+        /* ── Build receipt canvas (shared by Download & WhatsApp) ── */
+        async function buildReceiptCanvas() {
+            const el = document.getElementById('receipt-preview');
+
+            /* Step 1 — pre-clip watermark circle */
+            const wmDiv = document.getElementById('rcp-wm');
+            const wmImg = wmDiv ? wmDiv.querySelector('img') : null;
+            let wmOrigSrc = null;
+            if (wmImg) {
+                const size = wmDiv.offsetWidth || 200;
+                const dataUrl = await srcToDataUrl(wmImg.src);
+                const c = document.createElement('canvas');
+                c.width = size; c.height = size;
+                const ctx = c.getContext('2d');
+                const tmp = new Image();
+                await new Promise(r => { tmp.onload = r; tmp.src = dataUrl; });
+                ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.clip();
+                ctx.drawImage(tmp, 0, 0, size, size);
+                wmOrigSrc = wmImg.src;
+                wmImg.src = c.toDataURL('image/png');
+                wmDiv.style.borderRadius = '0';
+                wmDiv.style.overflow = 'visible';
+            }
+
+            /* Step 2 — swap remaining img srcs to data URLs */
+            const imgs = [...el.querySelectorAll('img')].filter(i => i !== wmImg);
+            const origSrcs = imgs.map(i => i.src);
+            for (const img of imgs) img.src = await srcToDataUrl(img.src);
+
+            /* Step 3 — force fixed 380px width for screen-size independence */
+            const origWidth = el.style.width;
+            el.style.width = '380px';
+            await new Promise(r => setTimeout(r, 120));
+
+            /* Step 4 — capture at scale:3 → always ~1140px wide */
+            const rcpCanvas = await html2canvas(el, {
+                scale: 3, useCORS: false, allowTaint: false,
+                backgroundColor: '#FFFDF8', logging: false,
+                imageTimeout: 8000, windowWidth: 400
+            });
+
+            /* Step 5 — restore element */
+            imgs.forEach((img, i) => { img.src = origSrcs[i]; });
+            if (wmImg && wmOrigSrc !== null) {
+                wmImg.src = wmOrigSrc;
+                wmDiv.style.borderRadius = '';
+                wmDiv.style.overflow = '';
+            }
+            el.style.width = origWidth;
+
+            /* Step 6 — compose with fixed margin (left/right 20px, top/bottom 10px) */
+            const MARGX = 20, MARGY = 10;
+            const out = document.createElement('canvas');
+            out.width  = rcpCanvas.width  + MARGX * 2;
+            out.height = rcpCanvas.height + MARGY * 2;
+            const octx = out.getContext('2d');
+            octx.fillStyle = '#FFFFFF';
+            octx.fillRect(0, 0, out.width, out.height);
+            octx.drawImage(rcpCanvas, MARGX, MARGY, rcpCanvas.width, rcpCanvas.height);
+            return out;
+        }
+
         /* ── Download as Image ── */
         async function downloadAsImage() {
-            const el = document.getElementById('receipt-preview');
             const status = document.getElementById('action-status');
             status.textContent = 'Preparing image…';
             try {
-                /* Step 1 — pre-clip watermark into a circle using Canvas API
-                   html2canvas doesn't honour overflow:hidden + border-radius on img elements */
-                const wmDiv = document.getElementById('rcp-wm');
-                const wmImg = wmDiv.querySelector('img');
-                let wmOrigSrc = null;
-                if (wmImg) {
-                    const size = wmDiv.offsetWidth || 200;
-                    const dataUrl = await srcToDataUrl(wmImg.src);
-                    const c = document.createElement('canvas');
-                    c.width = size; c.height = size;
-                    const ctx = c.getContext('2d');
-                    const tmp = new Image();
-                    await new Promise(r => { tmp.onload = r; tmp.src = dataUrl; });
-                    ctx.beginPath(); ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); ctx.clip();
-                    ctx.drawImage(tmp, 0, 0, size, size);
-                    wmOrigSrc = wmImg.src;
-                    wmImg.src = c.toDataURL('image/png');
-                    wmDiv.style.borderRadius = '0';
-                    wmDiv.style.overflow = 'visible';
-                }
-
-                /* Step 2 — swap remaining <img> srcs to data URLs */
-                const imgs = [...el.querySelectorAll('img')].filter(i => i !== wmImg);
-                const origSrcs = imgs.map(i => i.src);
-                for (const img of imgs) img.src = await srcToDataUrl(img.src);
-
-                /* Step 2.5 — force fixed render width for consistent capture */
-                const origWidth = el.style.width;
-                el.style.width = '380px';
-                await new Promise(r => setTimeout(r, 120));
-
-                /* Step 3 — capture receipt (scale:3 → ~1140px wide) */
-                const rcpCanvas = await html2canvas(el, {
-                    scale: 3,
-                    useCORS: false,
-                    allowTaint: false,
-                    backgroundColor: '#FFFDF8',
-                    logging: false,
-                    imageTimeout: 8000,
-                    windowWidth: 400
-                });
-
-                /* Step 4 — restore element */
-                imgs.forEach((img, i) => { img.src = origSrcs[i]; });
-                if (wmImg && wmOrigSrc !== null) {
-                    wmImg.src = wmOrigSrc;
-                    wmDiv.style.borderRadius = '';
-                    wmDiv.style.overflow = '';
-                }
-                el.style.width = origWidth;
-
-                /* Step 5 — compose with fixed margin; size is always receipt-exact
-                   (capture is always 380px CSS × scale:3 = ~1140px wide, screen-size independent) */
-                const MARGX = 20; // left & right
-                const MARGY = 10; // top & bottom
-                const canvasW = rcpCanvas.width + MARGX * 2;
-                const canvasH = rcpCanvas.height + MARGY * 1;
-                const a6 = document.createElement('canvas');
-                a6.width = canvasW; a6.height = canvasH;
-                const a6ctx = a6.getContext('2d');
-                a6ctx.fillStyle = '#FFFFFF';
-                a6ctx.fillRect(0, 0, canvasW, canvasH);
-                a6ctx.drawImage(rcpCanvas, MARGX, MARGY, rcpCanvas.width, rcpCanvas.height);
-
-                /* Step 6 — download */
-                const link = document.createElement('a');
+                const canvas = await buildReceiptCanvas();
                 const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const link = document.createElement('a');
                 link.download = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
-                link.href = a6.toDataURL('image/png');
+                link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 status.textContent = 'Image downloaded!';
                 toast('Image saved ✓', 'success');
-            } catch (e) {
+            } catch(e) {
                 status.textContent = 'Download failed: ' + e.message;
                 toast('Download failed', 'error');
                 console.error('downloadAsImage error:', e);
+            }
+        }
+
+        /* ── Share via WhatsApp ── */
+        async function shareToWhatsApp() {
+            const status = document.getElementById('action-status');
+            status.textContent = 'Preparing…';
+            try {
+                const canvas = await buildReceiptCanvas();
+                const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
+
+                /* Convert canvas → Blob → File */
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    /* Native share sheet (Android / iOS) – user picks WhatsApp */
+                    await navigator.share({
+                        files: [file],
+                        title: `Receipt #${current?.no || ''}`,
+                        text: `Receipt for ${current?.donor || 'Donor'} – Sri Ponniamman Temple Trust`
+                    });
+                    status.textContent = 'Shared!';
+                    toast('Shared ✓', 'success');
+                } else {
+                    /* Fallback: download image + open WhatsApp Web */
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                    const text = encodeURIComponent(
+                        `Receipt #${current?.no || ''} | ${current?.donor || ''} | Rs.${current?.amount || ''} | Sri Ponniamman Temple Trust`
+                    );
+                    setTimeout(() => window.open(`https://wa.me/?text=${text}`, '_blank'), 600);
+                    status.textContent = 'Image saved – WhatsApp opened';
+                    toast('Saved & WhatsApp opened ✓', 'success');
+                }
+            } catch(e) {
+                if (e.name === 'AbortError') { status.textContent = ''; return; }
+                status.textContent = 'Share failed: ' + e.message;
+                toast('Share failed', 'error');
+                console.error('shareToWhatsApp error:', e);
             }
         }
 
@@ -1333,6 +1380,7 @@
                 const p = new URLSearchParams({
                     action: 'addDonation',
                     receiptNo: d.no, date: d.date, donor: d.donor,
+                    phone: d.phone || '',
                     amount: d.amount, amountWords: d.words, mode: d.mode,
                     receivedBy: d.receiver
                 });
@@ -1368,7 +1416,7 @@
 
         /* ── Utilities ── */
         function clearForm() {
-            ['f-donor', 'f-amount'].forEach(id => document.getElementById(id).value = '');
+            ['f-donor', 'f-phone', 'f-amount'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('f-receiver').value = '';
             document.getElementById('f-mode').value = 'Cash';
             document.getElementById('f-date').value = todayISO();
