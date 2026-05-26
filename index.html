@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#7B0D3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="SPTT Receipts"/>
+<title>Sri Ponniamman Temple Trust – Donation Receipt</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/* ═══════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --m1:#1A0010; --m2:#4A0028; --m3:#7B0D3E; --m4:#9C2752;
+  --iv1:#E8D5A3; --iv2:#F5E6C8; --iv3:#FFF8F0; --iv4:#FFFDF8;
+  --body-bg:#F5EFE8;
+}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--body-bg);min-height:100vh;color:#222;}
+
+/* ═══════════════════════════════════════
+   APP HEADER
+═══════════════════════════════════════ */
+.app-header{
+  background:linear-gradient(135deg,var(--m1) 0%,var(--m2) 50%,var(--m3) 100%);
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 3px 12px rgba(0,0,0,.45);
+  border-bottom:3px solid var(--iv1);
+}
+.app-header-inner{display:flex;align-items:center;gap:10px;padding:9px 14px;}
+.app-logo{
+  width:44px;height:44px;border-radius:50%;border:2px solid var(--iv1);
+  overflow:hidden;flex-shrink:0;
+  background:radial-gradient(circle,var(--iv2) 20%,var(--iv1) 55%,var(--m3));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 10px rgba(232,213,163,.4);
+}
+.app-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.app-logo-fb{font-size:1.6rem;}
+.app-title-wrap{flex:1;min-width:0;}
+.app-title{font-size:.95rem;font-weight:800;color:var(--iv1);letter-spacing:.3px;line-height:1.2;}
+.app-sub{font-size:.62rem;color:rgba(245,230,200,.75);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.festival-chip{
+  background:rgba(232,213,163,.15);border:1px solid rgba(232,213,163,.4);
+  border-radius:20px;padding:4px 10px;font-size:.6rem;
+  color:var(--iv1);font-weight:700;letter-spacing:.4px;
+  white-space:nowrap;flex-shrink:0;text-align:center;line-height:1.4;
+}
+
+/* ═══════════════════════════════════════
+   TABS
+═══════════════════════════════════════ */
+.tabs{display:flex;background:var(--m2);border-bottom:3px solid var(--iv1);position:sticky;top:66px;z-index:40;}
+.tab-btn{flex:1;padding:10px 2px;border:none;background:transparent;
+  cursor:pointer;font-size:.73rem;font-weight:700;color:rgba(232,213,163,.5);transition:.2s;}
+.tab-btn.active{color:var(--iv1);border-bottom:3px solid var(--iv1);background:rgba(255,255,255,.06);}
+
+/* ═══════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════ */
+.section{display:none;padding:14px 12px 70px;max-width:620px;margin:0 auto;}
+.section.active{display:block;}
+
+/* ═══════════════════════════════════════
+   FORM CARDS
+═══════════════════════════════════════ */
+.card{background:#fff;border-radius:12px;box-shadow:0 3px 16px rgba(123,13,62,.10);
+  padding:16px 14px;margin-bottom:12px;border-top:3px solid var(--m3);}
+.card-title{font-size:.88rem;font-weight:800;color:var(--m3);margin-bottom:12px;
+  padding-bottom:7px;border-bottom:1.5px solid var(--iv2);display:flex;align-items:center;gap:7px;}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row.full{grid-template-columns:1fr;}
+label{font-size:.7rem;color:#666;font-weight:700;display:block;margin-bottom:3px;
+  text-transform:uppercase;letter-spacing:.4px;}
+input,select{width:100%;padding:9px 11px;border:1.5px solid #e0cfc8;
+  border-radius:7px;font-size:.88rem;background:#FFFDF8;transition:.2s;}
+input:focus,select:focus{outline:none;border-color:var(--m3);box-shadow:0 0 0 3px rgba(123,13,62,.1);}
+input[readonly]{background:#f5f0f0;color:#999;}
+
+.amount-live{margin-top:5px;padding:6px 10px;border-radius:6px;
+  background:linear-gradient(90deg,rgba(123,13,62,.06),rgba(232,213,163,.12));
+  border-left:3px solid var(--m3);font-size:.72rem;color:var(--m2);font-weight:700;min-height:26px;}
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.btn{padding:10px 18px;border:none;border-radius:8px;cursor:pointer;
+  font-size:.85rem;font-weight:700;transition:.2s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:linear-gradient(135deg,var(--m2),var(--m3));color:var(--iv1);box-shadow:0 3px 10px rgba(123,13,62,.3);}
+.btn-print  {background:linear-gradient(135deg,#4A148C,#6A1B9A);color:#fff;box-shadow:0 3px 10px rgba(74,20,140,.25);}
+.btn-img    {background:linear-gradient(135deg,var(--m2),var(--m3));color:var(--iv1);box-shadow:0 3px 10px rgba(123,13,62,.25);}
+.btn-wa     {background:linear-gradient(135deg,#075E54,#25D366);color:#fff;box-shadow:0 3px 10px rgba(7,94,84,.25);}
+.btn-outline{background:#fff;border:2px solid var(--m3);color:var(--m3);}
+.btn-gold   {background:linear-gradient(135deg,#C9A84C,var(--iv1));color:var(--m2);}
+.action-row {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+
+/* ═══════════════════════════════════════
+   RECEIPT — FINAL DESIGN 4B
+═══════════════════════════════════════ */
+#receipt-preview{
+  font-family:Georgia,'Times New Roman',serif;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 3px var(--iv1),
+    0 0 0 6px var(--m3),
+    0 0 0 9px var(--iv1),
+    0 8px 32px rgba(0,0,0,.28);
+  background:var(--iv4);
+}
+
+/* Top kolam strip */
+.rcp-top-strip{height:9px;background:repeating-linear-gradient(
+  90deg,var(--m2) 0 10px,var(--iv1) 10px 15px,var(--m1) 15px 25px,var(--iv1) 25px 30px);}
+
+/* Header */
+.rcp-hdr{
+  background:linear-gradient(180deg,var(--m1) 0%,var(--m2) 45%,var(--m3) 100%);
+  padding:13px 14px 11px;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;text-align:center;
+}
+.rcp-hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--iv1),var(--iv2),var(--iv1),transparent);}
+.rcp-logo{
+  width:74px;height:74px;flex-shrink:0;border-radius:50%;border:2.5px solid var(--iv1);
+  overflow:hidden;box-shadow:0 0 16px rgba(232,213,163,.55);
+  background:radial-gradient(circle,var(--iv2) 20%,var(--iv1) 55%,var(--m3));
+  display:flex;align-items:center;justify-content:center;
+}
+.rcp-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.rcp-logo-fb{font-size:2.5rem;}
+.rcp-org{min-width:0;overflow:hidden;text-align:center;}
+.rcp-org-name{font-size:.98rem;font-weight:900;color:var(--iv1);line-height:1.2;}
+.rcp-addr1{font-size:.54rem;color:rgba(245,230,200,.88);margin-top:4px;display:block;}
+.rcp-addr2{font-size:.54rem;color:rgba(245,230,200,.82);margin-top:2px;display:block;}
+.rcp-pan  {font-size:.53rem;color:var(--iv2);margin-top:4px;font-weight:700;}
+
+/* Festival Motif B — Ribbon Banner */
+.rcp-festival{
+  background:linear-gradient(180deg,var(--m3),var(--m2));
+  padding:12px 0 9px;text-align:center;position:relative;
+}
+.rcp-festival::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--iv1),var(--iv2),var(--iv1),transparent);}
+.rcp-fest-year{font-size:.63rem;font-weight:700;color:rgba(232,213,163,.8);letter-spacing:2.5px;margin-bottom:5px;}
+.rcp-ribbon{display:inline-flex;align-items:stretch;margin:0 16px;}
+.rcp-rib-l{width:0;height:0;border-top:23px solid transparent;border-bottom:23px solid transparent;border-right:13px solid var(--iv1);}
+.rcp-rib-c{background:var(--iv1);padding:4px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.rcp-rib-r{width:0;height:0;border-top:23px solid transparent;border-bottom:23px solid transparent;border-left:13px solid var(--iv1);}
+.rcp-rib-event{font-size:.95rem;font-weight:900;color:var(--m2);letter-spacing:2.5px;line-height:1;}
+.rcp-rib-date {font-size:.6rem;font-weight:700;color:var(--m3);letter-spacing:1px;margin-top:3px;}
+
+/* Donation Receipt band — BELOW motif */
+.rcp-title-band{
+  background:linear-gradient(90deg,var(--m2),var(--m3),var(--m2));
+  padding:7px 16px;text-align:center;border-top:1px solid rgba(232,213,163,.3);
+}
+.rcp-title-text{font-size:.8rem;font-weight:900;color:var(--iv2);letter-spacing:2.5px;}
+
+/* Body */
+.rcp-body{
+  background:var(--iv4);padding:15px 16px 12px;
+  position:relative;
+  border-left:3px double var(--iv1);
+  border-right:3px double var(--iv1);
+  border-bottom:3px double var(--iv1);
+}
+
+/* Watermark — circular, properly centered */
+.rcp-watermark{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:60%;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  overflow:hidden;
+  opacity:.13;
+  pointer-events:none;
+  z-index:0;
+}
+.rcp-watermark img{
+  width:100%;height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+.rcp-wm-fb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:8rem;color:var(--m3);}
+
+.rcp-content{position:relative;z-index:1;}
+
+/* No & Date */
+.rcp-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.78rem;font-weight:700;color:var(--m3);
+  margin-bottom:11px;padding-bottom:8px;
+  border-bottom:1px dashed rgba(123,13,62,.25);
+}
+.rcp-meta-no span{font-size:.95rem;color:var(--m2);}
+.rcp-meta-date span{font-size:.9rem;color:var(--m2);border-bottom:1.5px solid var(--m3);padding-bottom:1px;}
+
+/* Fields */
+.rcp-field{display:flex;align-items:flex-end;gap:7px;margin:10px 0;}
+.rcp-lbl{font-style:italic;font-weight:700;color:var(--m3);font-size:.75rem;min-width:148px;flex-shrink:0;}
+.rcp-dotline{flex:1;border-bottom:1.5px dotted rgba(123,13,62,.4);padding-bottom:2px;min-height:20px;display:flex;align-items:flex-end;}
+.rcp-val{font-weight:800;color:#111;font-size:.84rem;letter-spacing:.2px;}
+
+/* Footer row */
+.rcp-footer{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-top:13px;padding-top:10px;
+  border-top:1px dashed rgba(123,13,62,.2);
+  gap:10px;
+}
+/* Amount box — smaller */
+.rcp-amt{border:2px solid var(--m3);border-radius:8px;overflow:hidden;box-shadow:1px 2px 7px rgba(123,13,62,.15);}
+.rcp-amt-lbl{background:var(--m3);color:var(--iv1);font-size:.54rem;font-weight:900;text-align:center;padding:3px 9px;letter-spacing:1.5px;}
+.rcp-amt-val{background:linear-gradient(135deg,var(--iv4),var(--iv3));display:flex;align-items:center;gap:5px;padding:5px 10px;}
+.rcp-rupee{width:19px;height:19px;background:var(--m3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--iv1);font-size:.7rem;font-weight:900;flex-shrink:0;}
+.rcp-amt-num{font-size:.88rem;font-weight:900;color:var(--m3);}
+
+/* Received by — right bottom */
+.rcp-recv{text-align:right;}
+.rcp-recv-lbl{font-size:.58rem;font-weight:600;color:var(--m4);font-style:italic;margin-bottom:2px;}
+.rcp-recv-name{font-size:.86rem;font-weight:900;color:var(--m2);}
+
+/* Digital note — very bottom, small */
+.rcp-digital{
+  margin-top:9px;padding-top:6px;
+  border-top:1px solid rgba(123,13,62,.15);
+  text-align:center;
+}
+.rcp-digital-txt{font-size:.57rem;color:var(--m4);font-style:italic;letter-spacing:.5px;font-weight:600;}
+.rcp-digital-dot{display:inline-block;width:3px;height:3px;background:var(--iv1);border-radius:50%;margin:0 6px;vertical-align:middle;}
+
+/* Bottom kolam strip */
+.rcp-bot-strip{height:9px;background:repeating-linear-gradient(
+  90deg,var(--m2) 0 7px,var(--iv1) 7px 11px,var(--m1) 11px 18px,var(--iv1) 18px 22px);}
+
+/* ═══════════════════════════════════════
+   HISTORY
+═══════════════════════════════════════ */
+.hist-item{background:#fff;border-radius:10px;margin-bottom:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;overflow:hidden;border-left:4px solid var(--m3);}
+.hist-body{padding:10px 12px;flex:1;}
+.hist-name{font-weight:800;font-size:.88rem;}
+.hist-meta{font-size:.7rem;color:#888;margin-top:2px;}
+.hist-right{padding:10px 12px;display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.hist-amt{font-size:.95rem;font-weight:800;color:var(--m3);}
+.hist-actions{display:flex;gap:5px;}
+.hist-btn{background:none;border:1.5px solid var(--m3);border-radius:6px;padding:3px 8px;font-size:.68rem;cursor:pointer;color:var(--m3);font-weight:700;}
+.hist-wa{background:none;border:1.5px solid #25D366;border-radius:6px;padding:3px 8px;font-size:.68rem;cursor:pointer;color:#25D366;font-weight:700;}
+
+/* ═══════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════ */
+.img-box{border:2px dashed var(--iv1);border-radius:10px;padding:12px;text-align:center;
+  cursor:pointer;background:var(--iv4);transition:.2s;}
+.img-box:hover{background:rgba(232,213,163,.15);border-color:var(--m3);}
+.img-box img{max-height:80px;max-width:100%;border-radius:8px;margin:0 auto 6px;display:block;}
+.img-box-lbl{font-size:.72rem;color:#888;font-weight:600;line-height:1.5;}
+.img-box.has-img .img-box-lbl{color:var(--m3);}
+.setting-note{font-size:.7rem;color:#888;margin-top:5px;line-height:1.5;}
+.inst-step{padding:8px 12px;margin:5px 0;border-radius:8px;font-size:.78rem;
+  background:#fafafa;border-left:3px solid var(--m3);color:#333;line-height:1.65;}
+.inst-step a{color:var(--m3);font-weight:700;}
+.warn-box{background:rgba(232,213,163,.2);border:1px solid var(--iv1);border-radius:8px;
+  padding:10px 12px;font-size:.73rem;color:#5a3000;margin-top:8px;line-height:1.6;}
+.badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:700;}
+.badge-ok  {background:#e8f5e9;color:#1b5e20;}
+.badge-err {background:#ffebee;color:#b71c1c;}
+.badge-wait{background:#fff8e1;color:#6d4c00;}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  color:#fff;padding:11px 22px;border-radius:24px;font-size:.82rem;z-index:999;
+  transition:transform .3s;white-space:nowrap;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.success{background:#2e7d32;}
+#toast.error  {background:#b71c1c;}
+#toast.info   {background:#1565c0;}
+
+/* ═══════════════════════════════════════
+   PRINT
+═══════════════════════════════════════ */
+@media print{
+  body *{visibility:hidden!important;}
+  #print-zone,#print-zone *{visibility:visible!important;}
+  #print-zone{position:fixed;top:0;left:0;right:0;padding:8mm;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── APP HEADER ── -->
+<div class="app-header">
+  <div class="app-header-inner">
+    <div class="app-logo" id="app-logo">
+      <img src="./images/logo.png" alt="logo"/>
+    </div>
+    <div class="app-title-wrap">
+      <div class="app-title">Sri Ponniamman Temple Trust (R)</div>
+      <div class="app-sub">Ulsoor, Bangalore &nbsp;|&nbsp; PAN: AAYTS1092E</div>
+    </div>
+    <div class="festival-chip">42nd Aadi<br>Festival</div>
+  </div>
+</div>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('entry')">Entry</button>
+  <button class="tab-btn" onclick="switchTab('receipt')">Receipt</button>
+  <button class="tab-btn" onclick="switchTab('history')">History</button>
+  <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+</div>
+
+<!-- ══════════════════════════════════
+     ENTRY TAB
+══════════════════════════════════ -->
+<section id="tab-entry" class="section active">
+  <div class="card">
+    <div class="card-title">New Donation Entry</div>
+
+    <div class="form-row">
+      <div>
+        <label>Receipt No.</label>
+        <input id="f-no" type="text" readonly/>
+      </div>
+      <div>
+        <label>Date *</label>
+        <input id="f-date" type="date" required/>
+      </div>
+    </div>
+
+    <div class="form-row full">
+      <label>Received from Sri / Smt. *</label>
+      <input id="f-donor" type="text" placeholder="e.g. Mahadevan, Chennai" required/>
+    </div>
+
+    <div class="form-row">
+      <div>
+        <label>Amount (Rs.) *</label>
+        <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" required oninput="liveAmt()"/>
+        <div class="amount-live" id="amt-live"></div>
+      </div>
+      <div>
+        <label>Payment Mode</label>
+        <select id="f-mode">
+          <option>Cash</option>
+          <option>UPI</option>
+          <option>Cheque</option>
+          <option>Bank Transfer</option>
+          <option>DD</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row full">
+      <div>
+        <label>Received by *</label>
+        <select id="f-receiver" required>
+          <option value="">— Select Receiver —</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="generateReceipt()">Generate Receipt</button>
+      <button class="btn btn-outline"  onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     RECEIPT TAB
+══════════════════════════════════ -->
+<section id="tab-receipt" class="section">
+  <div id="print-zone">
+    <div id="receipt-preview">
+
+      <div class="rcp-top-strip"></div>
+
+      <!-- Header -->
+      <div class="rcp-hdr">
+        <div class="rcp-logo" id="rcp-logo">
+          <img src="./images/logo.png" alt="logo"/>
+        </div>
+        <div class="rcp-org">
+          <div class="rcp-org-name">Sri Ponniamman Temple Trust (R)</div>
+          <span class="rcp-addr1">54, Bhajanai Koil Street, Gundaleri Village, Ranipet Dt, Tamil Nadu</span>
+          <span class="rcp-addr2">Branch : 39, Ramakrishna Mutt Road, Ulsoor, Bangalore – 560 008</span>
+          <div class="rcp-pan">PAN : AAYTS1092E &nbsp;|&nbsp; Regd. No. : 64/2013 &nbsp;Dated 02/09/2013</div>
+        </div>
+      </div>
+
+      <!-- Festival Motif — Ribbon Banner -->
+      <div class="rcp-festival">
+        <div class="rcp-fest-year">42 nd Year</div>
+        <div class="rcp-ribbon">
+          <div class="rcp-rib-l"></div>
+          <div class="rcp-rib-c">
+            <div class="rcp-rib-event">Aadi Festival</div>
+            <div class="rcp-rib-date">16 August 2026</div>
+          </div>
+          <div class="rcp-rib-r"></div>
+        </div>
+      </div>
+
+      <!-- Donation Receipt — below motif -->
+      <div class="rcp-title-band">
+        <div class="rcp-title-text">Donation Receipt</div>
+      </div>
+
+      <!-- Body -->
+      <div class="rcp-body">
+        <div class="rcp-watermark" id="rcp-wm">
+          <img src="./images/watermark.jpg" alt=""/>
+        </div>
+        <div class="rcp-content">
+
+          <div class="rcp-meta">
+            <div class="rcp-meta-no">No. &nbsp;<span id="r-no">—</span></div>
+            <div class="rcp-meta-date">Date : &nbsp;<span id="r-date">—</span></div>
+          </div>
+
+          <div class="rcp-field">
+            <span class="rcp-lbl">Received from Sri / Smt.</span>
+            <div class="rcp-dotline"><span class="rcp-val" id="r-donor"></span></div>
+          </div>
+
+          <div class="rcp-field">
+            <span class="rcp-lbl">Sum of Rupees</span>
+            <div class="rcp-dotline"><span class="rcp-val" id="r-words"></span></div>
+          </div>
+
+          <div class="rcp-field">
+            <span class="rcp-lbl">Payment Mode</span>
+            <div class="rcp-dotline"><span class="rcp-val" id="r-mode"></span></div>
+          </div>
+
+          <div class="rcp-footer">
+            <div class="rcp-amt">
+              <div class="rcp-amt-lbl">Amount</div>
+              <div class="rcp-amt-val">
+                <div class="rcp-rupee">&#8377;</div>
+                <div class="rcp-amt-num" id="r-amount">0</div>
+              </div>
+            </div>
+            <div class="rcp-recv">
+              <div class="rcp-recv-lbl">Received by</div>
+              <div class="rcp-recv-name" id="r-receiver">—</div>
+            </div>
+          </div>
+
+          <div class="rcp-digital">
+            <span class="rcp-digital-txt">Digitally Generated Receipt</span>
+            <span class="rcp-digital-dot"></span>
+            <span class="rcp-digital-txt">Signature Not Required</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rcp-bot-strip"></div>
+    </div>
+  </div>
+
+  <!-- Receipt actions: Print + Download as Image ONLY -->
+  <div class="action-row" style="max-width:620px;margin:14px auto 0;justify-content:center;">
+    <button class="btn btn-print" onclick="window.print()">Print / PDF</button>
+    <button class="btn btn-img"   onclick="downloadAsImage()">Download as Image</button>
+  </div>
+  <div id="action-status" style="max-width:620px;margin:8px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;"></div>
+</section>
+
+<!-- ══════════════════════════════════
+     HISTORY TAB
+══════════════════════════════════ -->
+<section id="tab-history" class="section">
+  <div class="card">
+    <div class="card-title">Recent Receipts</div>
+    <div id="history-list">
+      <p style="color:#ccc;text-align:center;padding:20px 0;font-size:.85rem;">No entries yet</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SETTINGS TAB
+══════════════════════════════════ -->
+<section id="tab-settings" class="section">
+
+  <div class="card">
+    <div class="card-title">Volunteers / Receivers</div>
+    <div class="form-row">
+      <div>
+        <label>Name</label>
+        <input id="s-recv-name" type="text" placeholder="e.g. Sunil Kumar"/>
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn btn-primary" style="width:100%" onclick="addReceiver()">Add</button>
+      </div>
+    </div>
+    <div id="recv-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Google Sheets Integration</div>
+    <div style="margin-bottom:12px;">
+      <label>Apps Script Web App URL</label>
+      <input id="s-url" type="url" placeholder="https://script.google.com/macros/s/.../exec"/>
+      <p class="setting-note">Receipts are auto-saved to Google Sheet when generated.</p>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label>Starting Receipt Number</label>
+      <input id="s-no" type="number" value="155" min="1"/>
+      <p class="setting-note">Last physical receipt was #154.</p>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+      <button class="btn btn-outline"  onclick="testConn()">Test Connection</button>
+    </div>
+    <div id="conn-st" style="margin-top:8px;"></div>
+  </div>
+
+</section>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════ -->
+<script>
+/* ── Indian number words ── */
+const W1=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine',
+  'Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+const W10=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+function toWords(n){
+  n=Math.floor(n);if(!n)return'Zero';let w='';
+  if(n>=10000000){w+=toWords(Math.floor(n/10000000))+' Crore ';n%=10000000;}
+  if(n>=100000)  {w+=toWords(Math.floor(n/100000))+' Lakh ';  n%=100000;}
+  if(n>=1000)    {w+=toWords(Math.floor(n/1000))+' Thousand ';n%=1000;}
+  if(n>=100)     {w+=W1[Math.floor(n/100)]+' Hundred ';       n%=100;}
+  if(n>=20)      {w+=W10[Math.floor(n/10)]+' ';               n%=10;}
+  if(n>0)        {w+=W1[n]+' ';}
+  return w.trim();
+}
+function inr(n){return new Intl.NumberFormat('en-IN').format(n);}
+function liveAmt(){
+  const v=parseFloat(document.getElementById('f-amount').value)||0;
+  const el=document.getElementById('amt-live');
+  if(!v){el.innerHTML='';return;}
+  const rp=Math.floor(v),pa=Math.round((v-rp)*100);
+  let w=toWords(rp);if(pa)w+=` and ${toWords(pa)} Paise`;
+  el.innerHTML=`<strong>Rs. ${inr(rp)}</strong> &rarr; ${w} Only`;
+}
+
+
+/* ── Receiver management ── */
+function loadReceivers(){
+  const names=JSON.parse(localStorage.getItem('receiverNames')||'[]');
+  const sel=document.getElementById('f-receiver');
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Select Receiver —</option>';
+  names.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});
+  if(prev)sel.value=prev;
+  renderReceiverList(names);
+}
+function renderReceiverList(names){
+  const el=document.getElementById('recv-list');
+  if(!names||!names.length){el.innerHTML='<p style="color:#bbb;text-align:center;padding:10px 0;font-size:.8rem;">No receivers added yet</p>';return;}
+  el.innerHTML=names.map((n,i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:#fafafa;border-radius:7px;margin-bottom:5px;border:1px solid #e8e0d8;">
+      <span style="font-size:.85rem;font-weight:600;">${esc(n)}</span>
+      <button onclick="removeReceiver(${i})" style="background:none;border:1.5px solid #b71c1c;color:#b71c1c;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:.68rem;font-weight:700;">Remove</button>
+    </div>`).join('');
+}
+function addReceiver(){
+  const inp=document.getElementById('s-recv-name');
+  const name=inp.value.trim();
+  if(!name){toast('Enter a name','error');return;}
+  const names=JSON.parse(localStorage.getItem('receiverNames')||'[]');
+  if(names.includes(name)){toast('Already in list','error');return;}
+  names.push(name);
+  localStorage.setItem('receiverNames',JSON.stringify(names));
+  inp.value='';
+  loadReceivers();
+  toast('Receiver added','success');
+}
+function removeReceiver(i){
+  const names=JSON.parse(localStorage.getItem('receiverNames')||'[]');
+  names.splice(i,1);
+  localStorage.setItem('receiverNames',JSON.stringify(names));
+  loadReceivers();
+  toast('Receiver removed','info');
+}
+
+/* ── Settings ── */
+function loadSettings(){
+  document.getElementById('s-url').value =localStorage.getItem('gsUrl')||'';
+  document.getElementById('s-no').value  =localStorage.getItem('gsNo') ||'155';
+  syncNo();
+  document.getElementById('f-date').value=todayISO();
+  loadReceivers();
+}
+function saveSettings(){
+  localStorage.setItem('gsUrl',document.getElementById('s-url').value.trim());
+  localStorage.setItem('gsNo', document.getElementById('s-no').value.trim());
+  syncNo();toast('Settings saved','success');
+}
+function syncNo(){document.getElementById('f-no').value=localStorage.getItem('gsNo')||'155';}
+function getNo(){return parseInt(localStorage.getItem('gsNo')||'155',10);}
+function bumpNo(){
+  const n=getNo()+1;
+  localStorage.setItem('gsNo',String(n));
+  document.getElementById('s-no').value=n;syncNo();
+}
+function todayISO(){return new Date().toISOString().split('T')[0];}
+function fmtDate(iso){if(!iso)return'—';const[y,m,d]=iso.split('-');return`${d} / ${m} / ${y}`;}
+
+/* ── Tabs ── */
+function switchTab(t){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  const map={entry:0,receipt:1,history:2,settings:3};
+  document.querySelectorAll('.tab-btn')[map[t]].classList.add('active');
+}
+
+/* ── State ── */
+let current=null;
+const histArr=[];
+
+/* ── Generate Receipt ── */
+function generateReceipt(){
+  const donor   =document.getElementById('f-donor').value.trim();
+  const amt     =parseFloat(document.getElementById('f-amount').value);
+  const mode    =document.getElementById('f-mode').value;
+  const receiver=document.getElementById('f-receiver').value;
+  const date    =document.getElementById('f-date').value;
+  const no      =getNo();
+
+  if(!donor)   {toast('Enter donor name','error');return;}
+  if(!amt||amt<=0){toast('Enter valid amount','error');return;}
+  if(!receiver){toast('Select receiver','error');return;}
+  if(!date)    {toast('Select date','error');return;}
+
+  const rp=Math.floor(amt),pa=Math.round((amt-rp)*100);
+  let words=toWords(rp);if(pa)words+=` and ${toWords(pa)} Paise`;words+=' Only';
+
+  document.getElementById('r-no').textContent      = no;
+  document.getElementById('r-date').textContent    = fmtDate(date);
+  document.getElementById('r-donor').textContent   = donor;
+  document.getElementById('r-words').textContent   = words;
+  document.getElementById('r-mode').textContent    = mode;
+  document.getElementById('r-amount').textContent  = `${inr(amt)} /-`;
+  document.getElementById('r-receiver').textContent= receiver;
+
+  current={no,date,donor,amount:amt,words,mode,receiver};
+  histArr.unshift({...current});
+  renderHistory();
+  bumpNo();
+
+  document.getElementById('action-status').textContent='';
+  switchTab('receipt');
+  toast('Receipt generated','success');
+
+  /* Auto-save to Sheet silently */
+  autoSaveSheet(current);
+}
+
+/* ── Convert any image src → data URL (avoids canvas taint) ── */
+async function srcToDataUrl(src){
+  if(!src || src.startsWith('data:')) return src;
+  try{
+    const resp = await fetch(src);
+    const blob = await resp.blob();
+    return new Promise(res=>{
+      const fr=new FileReader();
+      fr.onload=e=>res(e.target.result);
+      fr.readAsDataURL(blob);
+    });
+  }catch(e){ return src; }   // fallback: keep original src
+}
+
+/* ── Download as Image ── */
+async function downloadAsImage(){
+  const el=document.getElementById('receipt-preview');
+  const status=document.getElementById('action-status');
+  status.textContent='Preparing image…';
+  try{
+    /* Step 1 — pre-clip watermark into a circle using Canvas API
+       html2canvas doesn't honour overflow:hidden + border-radius on img elements */
+    const wmDiv=document.getElementById('rcp-wm');
+    const wmImg=wmDiv.querySelector('img');
+    let wmOrigSrc=null;
+    if(wmImg){
+      const size=wmDiv.offsetWidth||200;
+      const dataUrl=await srcToDataUrl(wmImg.src);
+      const c=document.createElement('canvas');
+      c.width=size; c.height=size;
+      const ctx=c.getContext('2d');
+      const tmp=new Image();
+      await new Promise(r=>{tmp.onload=r;tmp.src=dataUrl;});
+      ctx.beginPath();ctx.arc(size/2,size/2,size/2,0,Math.PI*2);ctx.clip();
+      ctx.drawImage(tmp,0,0,size,size);
+      wmOrigSrc=wmImg.src;
+      wmImg.src=c.toDataURL('image/png');
+      wmDiv.style.borderRadius='0';
+      wmDiv.style.overflow='visible';
+    }
+
+    /* Step 2 — swap remaining <img> srcs to data URLs */
+    const imgs=[...el.querySelectorAll('img')].filter(i=>i!==wmImg);
+    const origSrcs=imgs.map(i=>i.src);
+    for(const img of imgs) img.src=await srcToDataUrl(img.src);
+    await new Promise(r=>setTimeout(r,120));
+
+    /* Step 3 — render */
+    const canvas=await html2canvas(el,{
+      scale:3,
+      useCORS:false,
+      allowTaint:false,
+      backgroundColor:'#FFFDF8',
+      logging:false,
+      imageTimeout:8000
+    });
+
+    /* Step 4 — restore */
+    imgs.forEach((img,i)=>{ img.src=origSrcs[i]; });
+    if(wmImg&&wmOrigSrc!==null){
+      wmImg.src=wmOrigSrc;
+      wmDiv.style.borderRadius='';
+      wmDiv.style.overflow='';
+    }
+
+    /* Step 5 — trigger download */
+    const link=document.createElement('a');
+    const donor=(current?.donor||'Donor').split(',')[0].trim().replace(/\s+/g,'_');
+    link.download=current?`Receipt_${current.no}_${donor}.png`:'Receipt.png';
+    link.href=canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    status.textContent='Image downloaded!';
+    toast('Image saved ✓','success');
+  }catch(e){
+    status.textContent='Download failed: '+e.message;
+    toast('Download failed','error');
+    console.error('downloadAsImage error:',e);
+  }
+}
+
+/* ── Auto-save to Sheet (silent) ── */
+async function autoSaveSheet(d){
+  const url=localStorage.getItem('gsUrl')||'';
+  if(!url)return;
+  try{
+    const p=new URLSearchParams({
+      action:'addDonation',
+      receiptNo:d.no, date:d.date, donor:d.donor,
+      amount:d.amount, amountWords:d.words, mode:d.mode,
+      receiver:d.receiver
+    });
+    await fetch(url+'?'+p,{method:'GET',mode:'no-cors'});
+  }catch(e){/* silent */}
+}
+
+
+/* ── Test connection ── */
+async function testConn(){
+  const url=document.getElementById('s-url').value.trim();
+  const el=document.getElementById('conn-st');
+  if(!url){el.innerHTML='<span class="badge badge-err">No URL entered</span>';return;}
+  el.innerHTML='<span class="badge badge-wait">Testing…</span>';
+  try{
+    await fetch(url+'?action=ping',{mode:'no-cors'});
+    el.innerHTML='<span class="badge badge-ok">Reachable — save a test entry to confirm</span>';
+  }catch(e){el.innerHTML='<span class="badge badge-err">Cannot reach URL</span>';}
+}
+
+/* ── History ── */
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!histArr.length){
+    el.innerHTML='<p style="color:#ccc;text-align:center;padding:20px 0;">No entries yet</p>';return;
+  }
+  el.innerHTML=histArr.map((h,i)=>`
+    <div class="hist-item">
+      <div class="hist-body">
+        <div class="hist-name">${esc(h.donor)}</div>
+        <div class="hist-meta">#${h.no} &nbsp;·&nbsp; ${fmtDate(h.date)} &nbsp;·&nbsp; ${h.mode} &nbsp;·&nbsp; ${esc(h.receiver)}</div>
+      </div>
+      <div class="hist-right">
+        <div class="hist-amt">Rs. ${inr(h.amount)}</div>
+        <div class="hist-actions">
+          <button class="hist-btn" onclick="reprint(${i})">Reprint</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function reprint(i){
+  const h=histArr[i];current=h;
+  document.getElementById('r-no').textContent      = h.no;
+  document.getElementById('r-date').textContent    = fmtDate(h.date);
+  document.getElementById('r-donor').textContent   = h.donor;
+  document.getElementById('r-words').textContent   = h.words;
+  document.getElementById('r-mode').textContent    = h.mode;
+  document.getElementById('r-amount').textContent  = `${inr(h.amount)} /-`;
+  document.getElementById('r-receiver').textContent= h.receiver;
+  document.getElementById('action-status').textContent='';
+  switchTab('receipt');
+}
+
+/* ── Utilities ── */
+function clearForm(){
+  ['f-donor','f-amount'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-receiver').value='';
+  document.getElementById('f-mode').value='Cash';
+  document.getElementById('f-date').value=todayISO();
+  document.getElementById('amt-live').innerHTML='';
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+let tT;
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=type?`show ${type}`:'show';
+  clearTimeout(tT);tT=setTimeout(()=>{t.className=type;},3200);
+}
+
+/* ── PWA Service Worker ── */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    const sw=`const C='sptt-v4';
+    self.addEventListener('install',()=>self.skipWaiting());
+    self.addEventListener('activate',e=>{
+      e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch',e=>{
+      e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+    });`;
+    navigator.serviceWorker.register(
+      URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))
+    ).catch(()=>{});
+  });
+}
+
+/* ── Init ── */
+loadSettings();
+</script>
+</body>
+</html>
