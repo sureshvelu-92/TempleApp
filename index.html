@@ -597,7 +597,7 @@
         .rcp-val {
             font-weight: 800;
             color: #111;
-            font-size: 1rem;
+            font-size: .7rem;
             letter-spacing: .2px;
         }
 
@@ -707,76 +707,6 @@
         .rcp-bot-strip {
             height: 9px;
             background: repeating-linear-gradient(90deg, var(--m2) 0 7px, var(--iv1) 7px 11px, var(--m1) 11px 18px, var(--iv1) 18px 22px);
-        }
-
-        /* ═══════════════════════════════════════
-   HISTORY
-═══════════════════════════════════════ */
-        .hist-item {
-            background: #fff;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
-            display: flex;
-            overflow: hidden;
-            border-left: 4px solid var(--m3);
-        }
-
-        .hist-body {
-            padding: 10px 12px;
-            flex: 1;
-        }
-
-        .hist-name {
-            font-weight: 800;
-            font-size: .88rem;
-        }
-
-        .hist-meta {
-            font-size: .7rem;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        .hist-right {
-            padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 5px;
-        }
-
-        .hist-amt {
-            font-size: .95rem;
-            font-weight: 800;
-            color: var(--m3);
-        }
-
-        .hist-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .hist-btn {
-            background: none;
-            border: 1.5px solid var(--m3);
-            border-radius: 6px;
-            padding: 3px 8px;
-            font-size: .68rem;
-            cursor: pointer;
-            color: var(--m3);
-            font-weight: 700;
-        }
-
-        .hist-wa {
-            background: none;
-            border: 1.5px solid #25D366;
-            border-radius: 6px;
-            padding: 3px 8px;
-            font-size: .68rem;
-            cursor: pointer;
-            color: #25D366;
-            font-weight: 700;
         }
 
         /* ═══════════════════════════════════════
@@ -953,7 +883,6 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('entry')">Entry</button>
         <button class="tab-btn" onclick="switchTab('receipt')">Receipt</button>
-        <button class="tab-btn" onclick="switchTab('history')">History</button>
         <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
     </div>
 
@@ -1120,15 +1049,6 @@
     <!-- ══════════════════════════════════
      HISTORY TAB
 ══════════════════════════════════ -->
-    <section id="tab-history" class="section">
-        <div class="card">
-            <div class="card-title">Recent Receipts</div>
-            <div id="history-list">
-                <p style="color:#ccc;text-align:center;padding:20px 0;font-size:.85rem;">No entries yet</p>
-            </div>
-        </div>
-    </section>
-
     <!-- ══════════════════════════════════
      SETTINGS TAB
 ══════════════════════════════════ -->
@@ -1254,13 +1174,13 @@
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + t).classList.add('active');
-            const map = { entry: 0, receipt: 1, history: 2, settings: 3 };
+            const map = { entry: 0, receipt: 1, settings: 2 };
             document.querySelectorAll('.tab-btn')[map[t]].classList.add('active');
         }
 
         /* ── State ── */
         let current = null;
-        const histArr = [];
+        const histArr = []; // kept for session reprint reference
 
         /* ── Title-case helper ── */
         function titleCase(s) {
@@ -1294,7 +1214,6 @@
 
             current = { no, date, donor, amount: amt, words, mode, receiver };
             histArr.unshift({ ...current });
-            renderHistory();
             bumpNo();
 
             document.getElementById('action-status').textContent = '';
@@ -1376,20 +1295,18 @@
                 }
                 el.style.width = origWidth;
 
-                /* Step 5 — compose onto A6 paper canvas (300 DPI: 1240×1748 px, ~4 mm margins) */
-                const A6W = 1240, A6H = 1748, MARG = 1;
-                const maxW = A6W - MARG * 2, maxH = A6H - MARG * 2;
-                const fit = Math.min(maxW / rcpCanvas.width, maxH / rcpCanvas.height, 1);
-                const dW = Math.round(rcpCanvas.width * fit);
-                const dH = Math.round(rcpCanvas.height * fit);
-                const dX = Math.round((A6W - dW) / 2);
-                const dY = Math.round((A6H - dH) / 2);
+                /* Step 5 — compose with fixed margin; size is always receipt-exact
+                   (capture is always 380px CSS × scale:3 = ~1140px wide, screen-size independent) */
+                const MARGX = 20; // left & right
+                const MARGY = 10; // top & bottom
+                const canvasW = rcpCanvas.width + MARGX * 2;
+                const canvasH = rcpCanvas.height + MARGY * 1;
                 const a6 = document.createElement('canvas');
-                a6.width = A6W; a6.height = A6H;
+                a6.width = canvasW; a6.height = canvasH;
                 const a6ctx = a6.getContext('2d');
                 a6ctx.fillStyle = '#FFFFFF';
-                a6ctx.fillRect(0, 0, A6W, A6H);
-                a6ctx.drawImage(rcpCanvas, dX, dY, dW, dH);
+                a6ctx.fillRect(0, 0, canvasW, canvasH);
+                a6ctx.drawImage(rcpCanvas, MARGX, MARGY, rcpCanvas.width, rcpCanvas.height);
 
                 /* Step 6 — download */
                 const link = document.createElement('a');
@@ -1447,40 +1364,6 @@
                     el.innerHTML = '<span class="badge badge-err">Unexpected response</span>';
                 }
             } catch (e) { el.innerHTML = '<span class="badge badge-err">Cannot reach server</span>'; }
-        }
-
-        /* ── History ── */
-        function renderHistory() {
-            const el = document.getElementById('history-list');
-            if (!histArr.length) {
-                el.innerHTML = '<p style="color:#ccc;text-align:center;padding:20px 0;">No entries yet</p>'; return;
-            }
-            el.innerHTML = histArr.map((h, i) => `
-    <div class="hist-item">
-      <div class="hist-body">
-        <div class="hist-name">${esc(h.donor)}</div>
-        <div class="hist-meta">#${h.no} &nbsp;·&nbsp; ${fmtDate(h.date)} &nbsp;·&nbsp; ${h.mode} &nbsp;·&nbsp; ${esc(h.receiver)}</div>
-      </div>
-      <div class="hist-right">
-        <div class="hist-amt">Rs. ${inr(h.amount)}</div>
-        <div class="hist-actions">
-          <button class="hist-btn" onclick="reprint(${i})">Reprint</button>
-        </div>
-      </div>
-    </div>`).join('');
-        }
-
-        function reprint(i) {
-            const h = histArr[i]; current = h;
-            document.getElementById('r-no').textContent = h.no;
-            document.getElementById('r-date').textContent = fmtDate(h.date);
-            document.getElementById('r-donor').textContent = h.donor;
-            document.getElementById('r-words').textContent = h.words;
-            document.getElementById('r-mode').textContent = h.mode;
-            document.getElementById('r-amount').textContent = `${inr(h.amount)} /-`;
-            document.getElementById('r-receiver').textContent = h.receiver;
-            document.getElementById('action-status').textContent = '';
-            switchTab('receipt');
         }
 
         /* ── Utilities ── */
