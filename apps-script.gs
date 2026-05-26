@@ -1,213 +1,152 @@
 /**
- * Sri Ponniamman Temple Trust (R)
- * Google Apps Script – Sheet + Drive Integration
- * Aadi Festival 2026 – Donation Receipt System
+ * Sri Ponniamman Temple Trust – Donation Receipt System
+ * Aadi Festival 2026
  *
- * SETUP:
- * 1. Open the Google Sheet → Extensions → Apps Script → paste this code
- * 2. Deploy → New Deployment → Web App
- *    Execute as: Me  |  Access: Anyone
- * 3. Copy the Web App URL → paste in PWA Settings tab
- *
- * SHEET COLUMNS (💰 Donations):
- *  A  Receipt No.      B  Date           C  Donor Name
- *  D  Total (₹)        E  Received (₹)   F  Balance (₹)
- *  G  Payment Mode     H  Date Received  I  Received By
- *  J  Payment Status   K  Phone          L  Drive Link
- *  M  Timestamp
+ * DEPLOY STEPS (do this ONCE):
+ * 1. In this editor → click Save (💾)
+ * 2. Click Deploy → Manage deployments
+ * 3. Click the ✏️ pencil on your existing deployment
+ * 4. Version → "New version" → Deploy
+ * Same URL, new code. Done.
  */
 
-const SHEET_NAME   = '💰 Donations';
-const DRIVE_FOLDER = 'SPTT Donation Receipts';
+// ── Spreadsheet wired directly by ID ──────────────────────
+var SPREADSHEET_ID = '12PgU-zwv8gBrFfxvJpoPIPcxUHWup-vsxMH3HWUigZ8';
+var SHEET_NAME     = '💰 Donations';
+var HEADER_ROW     = 3;
+var DATA_START     = 4;
 
-const HEADERS = [
-  'Receipt No.',
-  'Date',
-  'Donor Name',
-  'Total (₹)',
-  'Received (₹)',
-  'Balance (₹)',
-  'Payment Mode',
-  'Date Received',
-  'Received By',
-  'Payment Status',
-  'Phone',
-  'Drive Link',
-  'Timestamp'
-];
-
-// ═══════════════════════════════════════════════════════════
-//  ENTRY POINTS
-// ═══════════════════════════════════════════════════════════
 function doGet(e) {
   try {
-    const action = (e.parameter.action || '').trim();
-    if (action === 'ping')          return ok({ message: 'Connected ✓' });
-    if (action === 'addDonation')   return addDonation(e.parameter);
-    if (action === 'saveToDrive')   return saveReceiptToDrive(e.parameter);
-    if (action === 'getReceipts')   return getReceipts();
-    return ok({ message: 'Unknown action' });
-  } catch (err) {
+    var action = (e.parameter.action || '').trim();
+    if (action === 'ping')        return ok({ status: 'ok', message: 'Connected ✓', version: 4 });
+    if (action === 'addDonation') return addDonation(e.parameter);
+    if (action === 'getReceipts') return getReceipts();
+    if (action === 'getLastSeq')  return getLastSeq();
+    return ok({ message: 'unknown action' });
+  } catch(err) {
     return ok({ status: 'error', message: err.toString() });
   }
 }
 
 function doPost(e) { return doGet(e); }
 
-// ═══════════════════════════════════════════════════════════
-//  ADD ROW TO SHEET
-// ═══════════════════════════════════════════════════════════
 function addDonation(p) {
-  const sheet = getSheet();
-  ensureHeaders(sheet);
+  var ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) return ok({ status: 'error', message: 'Sheet not found: ' + SHEET_NAME });
 
-  const amount   = parseFloat(p.amount)   || 0;
-  const received = parseFloat(p.received) || amount;   // if not supplied, full amount received
-  const balance  = amount - received;
+  var amount = parseFloat(p.amount) || 0;
 
-  const row = [
-    p.receiptNo      || '',           // A – Receipt No.
-    formatDate(p.date),               // B – Date
-    p.donor          || '',           // C – Donor Name
-    amount,                           // D – Total (₹)
-    received,                         // E – Received (₹)
-    balance,                          // F – Balance (₹)
-    p.mode           || 'Cash',       // G – Payment Mode
-    formatDate(p.date),               // H – Date Received
-    p.receivedBy     || '',           // I – Received By
-    balance <= 0 ? 'Paid' : 'Partial',// J – Payment Status
-    p.phone          || '',           // K – Phone
-    p.driveLink      || '',           // L – Drive Link
-    new Date()                        // M – Timestamp
-  ];
+  // ── Find last row with an actual donor name in col B ──────
+  var lastRow = sheet.getLastRow();
+  var bVals   = lastRow >= DATA_START
+    ? sheet.getRange(DATA_START, 2, lastRow - DATA_START + 1, 1).getValues()
+    : [];
+  var lastDataRow = DATA_START - 1;
+  for (var i = 0; i < bVals.length; i++) {
+    if (bVals[i][0] !== '') lastDataRow = DATA_START + i;
+  }
+  var newRow = lastDataRow + 1;
+  var seqNo  = newRow - HEADER_ROW;
 
-  sheet.appendRow(row);
-
-  const lr = sheet.getLastRow();
-
-  // Number formatting
-  sheet.getRange(lr, 4).setNumberFormat('₹#,##,##0.00');   // Total
-  sheet.getRange(lr, 5).setNumberFormat('₹#,##,##0.00');   // Received
-  sheet.getRange(lr, 6).setNumberFormat('₹#,##,##0.00');   // Balance
-  sheet.getRange(lr, 13).setNumberFormat('dd/MM/yyyy HH:mm:ss'); // Timestamp
-
-  // Alternating row colours
-  const bg = lr % 2 === 0 ? '#FFFDE7' : '#FFFFFF';
-  sheet.getRange(lr, 1, 1, HEADERS.length).setBackground(bg);
-
-  // Colour-code Payment Status
-  const statusCell = sheet.getRange(lr, 10);
-  if (balance <= 0) {
-    statusCell.setBackground('#C8E6C9').setFontColor('#1B5E20'); // green – Paid
-  } else {
-    statusCell.setBackground('#FFF9C4').setFontColor('#F57F17'); // amber – Partial
+  // ── Read header row → map name → column number ────────────
+  var lastCol = sheet.getLastColumn();
+  var hdrVals = sheet.getRange(HEADER_ROW, 1, 1, lastCol).getValues()[0];
+  var col = {};
+  for (var c = 0; c < hdrVals.length; c++) {
+    var k = (hdrVals[c] || '').toString().trim();
+    if (k) col[k] = c + 1;
   }
 
-  return ok({ status: 'success', receiptNo: p.receiptNo, row: lr });
+  // ── Insert row after last data row (copies format from above)
+  sheet.insertRowAfter(lastDataRow);
+
+  // ── Write values into the correct columns by header name ───
+  function set(name, val) {
+    if (col[name]) sheet.getRange(newRow, col[name]).setValue(val);
+  }
+
+  set('#',                 p.receiptNo || seqNo);
+  set('Donor Name',        p.donor     || '');
+  set('Total (₹)',         amount);
+  set('Received (₹)',      amount);
+  set('Payment Mode',      p.mode      || 'Cash');
+  set('Date Received',     makeDate(p.date));
+  set('Received By',       p.receivedBy || '');
+  set('Purpose / Notes',   'Towards Aadi Festival');
+  set('Expected Pay Date', '');
+
+  return ok({ status: 'success', receiptNo: p.receiptNo, row: newRow, seq: seqNo });
 }
 
-// ═══════════════════════════════════════════════════════════
-//  SAVE RECEIPT HTML TO GOOGLE DRIVE
-// ═══════════════════════════════════════════════════════════
-function saveReceiptToDrive(p) {
-  const folder = getOrCreateFolder(DRIVE_FOLDER);
+function getLastSeq() {
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  if (!sheet) return ok({ status: 'error', message: 'Sheet not found' });
 
-  const [y, m, d] = (p.date || '2026-01-01').split('-');
-  const safeName   = (p.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
-  const fileName   = `Receipt_${p.receiptNo}_${safeName}_${d}${m}${y}.html`;
+  var lastRow = sheet.getLastRow();
+  if (lastRow < DATA_START) return ok({ status: 'success', lastSeq: 0 });
 
-  const html = p.receiptHtml || buildFallbackHTML(p);
-  const blob = Utilities.newBlob(html, 'text/html', fileName);
-  const file = folder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  // Find last row with actual donor name in col B
+  var bVals = sheet.getRange(DATA_START, 2, lastRow - DATA_START + 1, 1).getValues();
+  var lastDataRow = DATA_START - 1;
+  for (var i = 0; i < bVals.length; i++) {
+    if (bVals[i][0] !== '') lastDataRow = DATA_START + i;
+  }
+  if (lastDataRow < DATA_START) return ok({ status: 'success', lastSeq: 0 });
 
-  const link = file.getUrl();
+  // Find the '#' column dynamically
+  var lastCol = sheet.getLastColumn();
+  var hdrVals = sheet.getRange(HEADER_ROW, 1, 1, lastCol).getValues()[0];
+  var seqCol = 1;
+  for (var c = 0; c < hdrVals.length; c++) {
+    if ((hdrVals[c] || '').toString().trim() === '#') { seqCol = c + 1; break; }
+  }
 
-  // Record in sheet with drive link
-  p.driveLink = link;
-  addDonation(p);
-
-  return ok({ status: 'success', fileName: fileName, link: link });
+  var lastSeq = sheet.getRange(lastDataRow, seqCol).getValue();
+  return ok({ status: 'success', lastSeq: parseInt(lastSeq) || 0 });
 }
 
-// ═══════════════════════════════════════════════════════════
-//  GET ALL RECEIPTS (for PWA history)
-// ═══════════════════════════════════════════════════════════
 function getReceipts() {
-  const sheet = getSheet();
-  if (sheet.getLastRow() <= 1) return ok({ status: 'success', data: [] });
+  var sheet   = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  if (!sheet) return ok({ status: 'success', data: [] });
+  var lastRow = sheet.getLastRow();
+  if (lastRow < DATA_START) return ok({ status: 'success', data: [] });
 
-  const data = sheet.getRange(2, 1, sheet.getLastRow() - 1, HEADERS.length).getValues();
-  const rows = data.map(r => ({
-    receiptNo   : r[0],
-    date        : r[1],
-    donor       : r[2],
-    total       : r[3],
-    received    : r[4],
-    balance     : r[5],
-    mode        : r[6],
-    dateReceived: r[7],
-    receivedBy  : r[8],
-    status      : r[9],
-    phone       : r[10],
-    driveLink   : r[11],
-    timestamp   : r[12]
-  }));
+  // ── Dynamic header → column index map ──────────────────────
+  var lastCol = sheet.getLastColumn();
+  var hdrVals = sheet.getRange(HEADER_ROW, 1, 1, lastCol).getValues()[0];
+  var col = {};
+  for (var c = 0; c < hdrVals.length; c++) {
+    var k = (hdrVals[c] || '').toString().trim();
+    if (k) col[k] = c; // 0-based index for array access
+  }
 
+  var vals = sheet.getRange(DATA_START, 1, lastRow - DATA_START + 1, lastCol).getValues();
+  var rows = vals.filter(function(r){ return r[col['Donor Name'] || 1] !== ''; }).map(function(r){
+    return {
+      receiptNo  : r[col['#']                || 0],
+      donor      : r[col['Donor Name']       || 1],
+      total      : r[col['Total (₹)']        || 2],
+      received   : r[col['Received (₹)']     || 3],
+      balance    : r[col['Balance (₹)']      || 4],
+      mode       : r[col['Payment Mode']     || 5],
+      date       : r[col['Date Received']    || 6],
+      receivedBy : r[col['Received By']      || 7],
+      status     : r[col['Status']           || 8],
+      notes      : r[col['Purpose / Notes']  || 10]
+    };
+  });
   return ok({ status: 'success', data: rows });
 }
 
-// ═══════════════════════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════════════════════
-function getSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  return ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
-}
-
-function getOrCreateFolder(name) {
-  const iter = DriveApp.getFoldersByName(name);
-  return iter.hasNext() ? iter.next() : DriveApp.createFolder(name);
-}
-
-function ensureHeaders(sheet) {
-  if (sheet.getLastRow() === 0 || !sheet.getRange(1, 1).getValue()) {
-    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
-    const hr = sheet.getRange(1, 1, 1, HEADERS.length);
-    hr.setBackground('#1A0010');
-    hr.setFontColor('#E8D5A3');
-    hr.setFontWeight('bold');
-    hr.setFontSize(10);
-    sheet.setFrozenRows(1);
-
-    const widths = [100, 90, 200, 110, 110, 100, 110, 110, 150, 110, 120, 200, 150];
-    widths.forEach((w, i) => sheet.setColumnWidth(i + 1, w));
-  }
-}
-
-function formatDate(iso) {
+function makeDate(iso) {
   if (!iso) return '';
-  const [y, m, d] = iso.split('-');
-  return `${d}/${m}/${y}`;
-}
-
-function buildFallbackHTML(p) {
-  const [y, m, d] = (p.date || '').split('-');
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Receipt #${p.receiptNo}</title></head>
-<body style="font-family:Georgia;background:#fffde7;padding:20px;">
-<h2 style="color:#7B0D3E;">Sri Ponniamman Temple Trust (R)</h2>
-<p><b>Receipt No:</b> ${p.receiptNo} &nbsp;&nbsp; <b>Date:</b> ${d}/${m}/${y}</p>
-<p><b>Donor:</b> ${p.donor}</p>
-<p><b>Amount:</b> ₹${parseFloat(p.amount || 0).toLocaleString('en-IN', {minimumFractionDigits:2})}</p>
-<p><b>In Words:</b> ${p.amountWords}</p>
-<p><b>Payment Mode:</b> ${p.mode}</p>
-<p><b>Received By:</b> ${p.receivedBy}</p>
-</body></html>`;
+  var p = iso.split('-');
+  return new Date(+p[0], +p[1] - 1, +p[2]);
 }
 
 function ok(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
+  return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
