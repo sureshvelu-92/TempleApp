@@ -601,12 +601,12 @@
         }
 
         .rcp-meta-no span {
-            font-size: .95rem;
+            font-size: .72rem;
             color: var(--m2);
         }
 
         .rcp-meta-date span {
-            font-size: .9rem;
+            font-size: .72rem;
             color: var(--m2);
             border-bottom: 1.5px solid var(--m3);
             padding-bottom: 1px;
@@ -2265,7 +2265,7 @@
                 wmOrigSrc = wmImg.src;
                 wmImg.src = c.toDataURL('image/png');
                 // force square so html2canvas doesn't stretch
-                wmDiv.style.width  = size + 'px';
+                wmDiv.style.width = size + 'px';
                 wmDiv.style.height = size + 'px';
                 wmDiv.style.borderRadius = '0';
                 wmDiv.style.overflow = 'visible';
