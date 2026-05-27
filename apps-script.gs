@@ -22,9 +22,11 @@ var IK_HEADER_ROW = 3;
 var IK_DATA_START = 4;
 
 // ── Expenses sheet ─────────────────────────────────────────
+// Row 1: Title, Row 2: blank, Row 3: "Detailed Logs" (not headers!)
+// Row 4: actual column headers (#, Date, Vendor/Payee, …)
 var EX_SHEET_NAME = '💸 Expenses';
-var EX_HEADER_ROW = 3;
-var EX_DATA_START = 4;
+var EX_HEADER_ROW = 4;
+var EX_DATA_START = 5;
 
 // ── Auth token — must match API_TOKEN in index.html ────────
 var AUTH_TOKEN = 'SPTT@1985';
