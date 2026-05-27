@@ -1313,6 +1313,7 @@
 
         /* ── Settings ── */
         const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbw1e9kxzZYHHxE-tU0fcJ4yp-_CnWS0nPM_k53fqUatbUEWY3h5EDEITIHlmNybF2qm_g/exec';
+        const API_TOKEN      = 'SPTT@1985';   // must match AUTH_TOKEN in apps-script.gs
 
         /* ── Auth guard — all Google calls require PIN session ── */
         function isAuth() { return sessionStorage.getItem('sptt_auth') === '1'; }
@@ -1557,7 +1558,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             if (!url) return;
             try {
                 const p = new URLSearchParams({
-                    action: 'addDonation',
+                    action: 'addDonation', token: API_TOKEN,
                     receiptNo: d.no, date: d.date, donor: d.donor,
                     phone: d.phone || '',
                     amount: d.amount, amountWords: d.words, mode: d.mode,
@@ -1584,7 +1585,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const el = document.getElementById('conn-st');
             el.innerHTML = '<span class="badge badge-wait">Testing…</span>';
             try {
-                const res = await fetch(DEFAULT_GS_URL + '?action=ping', { redirect: 'follow' });
+                const res = await fetch(DEFAULT_GS_URL + '?action=ping&token=' + API_TOKEN, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'ok') {
                     el.innerHTML = '<span class="badge badge-ok">Connected ✓ (v' + json.version + ')</span>';
@@ -1633,7 +1634,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         async function fetchLastSeqFromSheet() {
             if (!isAuth()) return;
             try {
-                const res = await fetch(DEFAULT_GS_URL + '?action=getLastSeq', { redirect: 'follow' });
+                const res = await fetch(DEFAULT_GS_URL + '?action=getLastSeq&token=' + API_TOKEN, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'success' && typeof json.lastSeq === 'number') {
                     currentNo = json.lastSeq + 1;

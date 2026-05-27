@@ -16,10 +16,20 @@ var SHEET_NAME     = '💰 Donations';
 var HEADER_ROW     = 3;
 var DATA_START     = 4;
 
+// ── Auth token — must match API_TOKEN in index.html ────────
+var AUTH_TOKEN = 'SPTT@1985';
+
 function doGet(e) {
   try {
     var action = (e.parameter.action || '').trim();
-    if (action === 'ping')        return ok({ status: 'ok', message: 'Connected ✓', version: 5 });
+    var token  = (e.parameter.token  || '').trim();
+
+    // ── Reject every request without the correct token ────────
+    if (token !== AUTH_TOKEN) {
+      return ok({ status: 'error', message: 'Unauthorized' });
+    }
+
+    if (action === 'ping')        return ok({ status: 'ok', message: 'Connected ✓', version: 6 });
     if (action === 'addDonation') return addDonation(e.parameter);
     if (action === 'getReceipts') return getReceipts();
     if (action === 'getLastSeq')  return getLastSeq();
