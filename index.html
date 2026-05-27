@@ -32,6 +32,11 @@
             --iv3: #FFF8F0;
             --iv4: #FFFDF8;
             --body-bg: #F5EFE8;
+            /* Semantic aliases */
+            --border:   #e6d5c8;
+            --surface:  var(--iv3);
+            --lbl:      var(--m4);
+            --txt-muted: rgba(74,0,40,.45);
         }
 
         body {
@@ -168,24 +173,25 @@
    FORM CARDS
 ═══════════════════════════════════════ */
         .card {
-            background: #fff;
+            background: var(--iv4);
             border-radius: 12px;
-            box-shadow: 0 3px 16px rgba(123, 13, 62, .10);
+            box-shadow: 0 2px 14px rgba(74, 0, 40, .09);
             padding: 16px 14px;
             margin-bottom: 12px;
+            border: 1px solid var(--iv2);
             border-top: 3px solid var(--m3);
         }
 
         .card-title {
-            font-size: .88rem;
+            font-size: .67rem;
             font-weight: 800;
             color: var(--m3);
-            margin-bottom: 12px;
-            padding-bottom: 7px;
-            border-bottom: 1.5px solid var(--iv2);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
         }
 
         .form-row {
@@ -200,23 +206,24 @@
         }
 
         label {
-            font-size: .7rem;
-            color: #666;
-            font-weight: 700;
+            font-size: .62rem;
+            color: var(--lbl);
+            font-weight: 800;
             display: block;
-            margin-bottom: 3px;
-            text-transform: capitalize;
-            letter-spacing: .4px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
         }
 
         input,
         select {
             width: 100%;
             padding: 9px 11px;
-            border: 1.5px solid #e0cfc8;
-            border-radius: 7px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
             font-size: .88rem;
-            background: #FFFDF8;
+            background: var(--iv4);
+            color: var(--m1);
             transition: .2s;
         }
 
@@ -224,25 +231,41 @@
         select:focus {
             outline: none;
             border-color: var(--m3);
-            box-shadow: 0 0 0 3px rgba(123, 13, 62, .1);
+            box-shadow: 0 0 0 3px rgba(123, 13, 62, .10);
         }
 
         input[readonly] {
-            background: #f5f0f0;
-            color: #999;
+            background: var(--iv3);
+            color: var(--txt-muted);
         }
 
-        .amount-live {
-            margin-top: 5px;
-            padding: 6px 10px;
-            border-radius: 6px;
-            background: linear-gradient(90deg, rgba(123, 13, 62, .06), rgba(232, 213, 163, .12));
-            border-left: 3px solid var(--m3);
-            font-size: .72rem;
-            color: var(--m2);
-            font-weight: 700;
-            min-height: 26px;
+        /* Receipt / Voucher number chip */
+        input#f-no, input#fx-no {
+            background: linear-gradient(135deg, var(--iv3), var(--iv2));
+            border: 1.5px solid var(--m3);
+            color: var(--m3);
+            font-weight: 800;
+            border-radius: 20px;
+            text-align: center;
+            letter-spacing: .5px;
+            font-size: .86rem;
         }
+
+        /* Field group inset */
+        .fld-grp {
+            background: var(--surface);
+            border: 1px solid var(--iv2);
+            border-radius: 10px;
+            padding: 10px 13px 11px;
+            margin-bottom: 8px;
+        }
+        .fld-grp .form-row { margin-bottom: 0; }
+
+        /* Amount inline layout */
+        .amt-inline { display:flex; gap:12px; align-items:center; }
+        .amt-inline input { width: 48%; flex-shrink:0; }
+        .amt-words-inline { font-size:.72rem; color:var(--m2); font-weight:700; flex:1; line-height:1.35; }
+
 
         /* ═══════════════════════════════════════
    BUTTONS
@@ -569,7 +592,7 @@
         /* Fields */
         .rcp-field {
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             gap: 7px;
             margin: 10px 0;
         }
@@ -586,10 +609,11 @@
         .rcp-dotline {
             flex: 1;
             border-bottom: 1.5px dotted rgba(123, 13, 62, .4);
-            padding-bottom: 2px;
+            padding-bottom: 3px;
             min-height: 20px;
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
 
         .rcp-val {
@@ -597,6 +621,9 @@
             color: #111;
             font-size: .7rem;
             letter-spacing: .2px;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.5;
         }
 
         /* Footer row */
@@ -894,11 +921,13 @@
             overflow: hidden;
             margin-bottom: 14px;
             background: radial-gradient(circle, var(--iv2) 20%, var(--iv1) 55%, var(--m3));
-            box-shadow: 0 0 20px rgba(232,213,163,.35);
+            box-shadow: 0 0 20px rgba(232, 213, 163, .35);
         }
 
         .login-logo img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .login-title {
@@ -911,7 +940,7 @@
 
         .login-sub {
             font-size: .72rem;
-            color: rgba(232,213,163,.7);
+            color: rgba(232, 213, 163, .7);
             margin-top: 4px;
             margin-bottom: 28px;
         }
@@ -953,8 +982,8 @@
             width: 68px;
             height: 68px;
             border-radius: 50%;
-            border: 2px solid rgba(232,213,163,.35);
-            background: rgba(255,255,255,.07);
+            border: 2px solid rgba(232, 213, 163, .35);
+            background: rgba(255, 255, 255, .07);
             color: var(--iv1);
             font-size: 1.4rem;
             font-weight: 700;
@@ -963,7 +992,7 @@
         }
 
         .pin-key:active {
-            background: rgba(232,213,163,.25);
+            background: rgba(232, 213, 163, .25);
             transform: scale(.93);
         }
 
@@ -977,12 +1006,129 @@
             font-size: 1.1rem;
         }
 
+        /* ═══════════════════════════════════════
+   SEGMENTED CONTROL
+═══════════════════════════════════════ */
+        .seg-ctrl {
+            display: flex;
+            background: var(--iv2);
+            border-radius: 50px;
+            padding: 4px;
+            gap: 0;
+            border: 1.5px solid var(--iv1);
+        }
+
+        .seg-btn {
+            flex: 1;
+            padding: 10px 8px;
+            border: none;
+            border-radius: 50px;
+            background: transparent;
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--txt-muted);
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .seg-btn.active {
+            background: linear-gradient(135deg, var(--m2), var(--m3));
+            color: var(--iv1);
+            box-shadow: 0 2px 10px rgba(123, 13, 62, .28);
+        }
+
+        /* ── Entry sub-tabs (Donation | Expense) ── */
+        .entry-tab-bar {
+            display: flex;
+            max-width: 620px;
+            margin: 0 auto 0;
+            border-bottom: 2px solid var(--iv2);
+            background: var(--iv3);
+        }
+        .entry-tab {
+            flex: 1;
+            padding: 9px 8px;
+            border: none;
+            background: transparent;
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--txt-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: color .2s, border-color .2s;
+            letter-spacing: .3px;
+        }
+        .entry-tab.active {
+            color: var(--m3);
+            border-bottom-color: var(--m3);
+        }
+
+        /* ── Records list ── */
+        .records-empty { text-align:center; color:var(--txt-muted); font-size:.8rem; padding:14px 0; }
+        /* Donor record card */
+        .rec-row {
+            background: var(--iv4);
+            border-radius: 12px;
+            border: 1px solid var(--iv2);
+            padding: 11px 13px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 5px rgba(74,0,40,.07);
+        }
+        /* Top: donor name + amount */
+        .rc-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:5px; }
+        .rec-main { font-size:.84rem; font-weight:700; color:var(--m1); flex:1; min-width:0; }
+        .rec-amt  { font-size:.9rem; font-weight:800; color:var(--m3); white-space:nowrap; flex-shrink:0; }
+        /* Middle: sub info + status pill */
+        .rc-mid { display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:8px; }
+        .rec-sub  { font-size:.69rem; color:var(--txt-muted); flex:1; min-width:0; }
+        .rec-info { font-size:.69rem; color:var(--txt-muted); }
+        .rec-note { font-size:.69rem; color:var(--txt-muted); font-style:italic; }
+        /* Status pills */
+        .spill { display:inline-flex; align-items:center; padding:2px 8px; border-radius:20px; font-size:.63rem; font-weight:700; white-space:nowrap; flex-shrink:0; }
+        .spill-green { background:#e8f5e9; color:#2e7d32; }
+        .spill-amber { background:#fff8e1; color:#e65100; }
+        .spill-red   { background:#fce4ec; color:#c62828; }
+        .spill-blue  { background:#e3f2fd; color:#1565c0; }
+        /* Bottom: receipt # + balance + action buttons */
+        .rec-actions { display:flex; align-items:center; gap:6px; padding-top:8px; border-top:1px solid var(--iv2); flex-wrap:nowrap; }
+        .rec-no  { font-size:.65rem; color:var(--txt-muted); font-weight:600; margin-right:auto; }
+        .rec-bal { font-size:.65rem; font-weight:700; color:#c0392b; white-space:nowrap; }
+        .rbtn { border:none; border-radius:20px; padding:4px 12px; font-size:.67rem; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+        .rbtn-wa  { background:#25D366; color:#fff; }
+        .rbtn-upd { background:var(--m3); color:var(--iv1); }
+        /* Search */
+        .rec-search-row { margin-bottom:10px; }
+        .rec-search-inp { width:100%; border:1.5px solid var(--border); border-radius:8px; padding:7px 11px; font-size:.82rem; outline:none; background:var(--surface); color:var(--m1); }
+        .rec-search-inp:focus { border-color:var(--m3); box-shadow:0 0 0 3px rgba(123,13,62,.10); outline:none; }
+        /* Pagination */
+        .rec-pgn { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:12px; padding-top:10px; border-top:1px solid var(--iv2); }
+        .pgn-btn { border:1.5px solid var(--m3); background:none; color:var(--m3); border-radius:7px; padding:5px 16px; font-size:.8rem; font-weight:700; cursor:pointer; }
+        .pgn-btn:disabled { opacity:.35; cursor:default; }
+        .pgn-info { font-size:.75rem; color:var(--txt-muted); }
+
         @keyframes shake {
-            0%,100% { transform: translateX(0); }
-            20%      { transform: translateX(-8px); }
-            40%      { transform: translateX(8px); }
-            60%      { transform: translateX(-6px); }
-            80%      { transform: translateX(6px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-6px);
+            }
+
+            80% {
+                transform: translateX(6px);
+            }
         }
     </style>
 </head>
@@ -1033,6 +1179,13 @@
                 width:11px;height:11px;border-radius:50%;flex-shrink:0;
                 background:#555;border:2px solid rgba(255,255,255,.3);
                 transition:background .4s;margin-right:6px;"></div>
+            <button onclick="openSettings()" title="Settings" style="
+    background:rgba(255,255,255,.1);border:1.5px solid rgba(232,213,163,.4);
+    border-radius:7px;color:var(--iv1);font-size:.75rem;
+    width:32px;height:32px;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;margin-right:6px;">
+    ⚙️
+</button>
             <button onclick="logout()" title="Logout" style="
                 background:rgba(255,255,255,.1);border:1.5px solid rgba(232,213,163,.4);
                 border-radius:7px;color:var(--iv1);font-size:.75rem;
@@ -1045,62 +1198,250 @@
 
     <!-- ── TABS ── -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('entry')">Entry</button>
+        <button class="tab-btn active" id="tab-btn-donation" onclick="switchTab('donation')">🙏 Donation</button>
+        <button class="tab-btn" id="tab-btn-expense" onclick="switchTab('expense')">💸 Expense</button>
         <button class="tab-btn hidden" id="tab-btn-receipt" onclick="switchTab('receipt')">Receipt</button>
-        <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
     </div>
 
     <!-- ══════════════════════════════════
-     ENTRY TAB
+     DONATION TAB
 ══════════════════════════════════ -->
-    <section id="tab-entry" class="section active">
-        <div class="card">
-            <div class="card-title">New Donation Entry</div>
+    <section id="tab-donation" class="section active">
 
-            <div class="form-row">
-                <div>
-                    <label>Receipt No.</label>
-                    <input id="f-no" type="text" readonly />
-                </div>
-                <div>
-                    <label>Date *</label>
-                    <input id="f-date" type="date" required />
+        <!-- Donation sub-tabs: Entry | Records -->
+        <div class="entry-tab-bar">
+            <button class="entry-tab active" id="dtab-entry"   onclick="switchDonationTab('entry')">✏️ Entry</button>
+            <button class="entry-tab"        id="dtab-records" onclick="switchDonationTab('records')">📋 Records</button>
+        </div>
+
+        <!-- Entry panel -->
+        <div id="donation-entry-panel">
+        <div class="card">
+            <div class="card-title" id="lbl-card-title" style="justify-content:space-between;">
+                <span>✦ New Donation Entry</span>
+                <button onclick="clearForm()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
+            </div>
+
+            <!-- Donation Type dropdown -->
+            <div class="fld-grp" style="margin-bottom:14px;">
+                <label>Donation Type</label>
+                <select id="f-dtype" onchange="setDonationType(this.value)">
+                    <option value="cash">💰 Cash / UPI</option>
+                    <option value="kind">🎁 In Kind</option>
+                </select>
+            </div>
+
+            <!-- Receipt No + Date -->
+            <div class="fld-grp">
+                <div class="form-row" style="margin-bottom:0;">
+                    <div>
+                        <label id="lbl-no">Receipt No.</label>
+                        <input id="f-no" type="text" readonly />
+                    </div>
+                    <div>
+                        <label>Date *</label>
+                        <input id="f-date" type="date" required />
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row full">
-                <label>Received from Sri / Smt. *</label>
+            <!-- Donor name -->
+            <div class="fld-grp">
+                <label id="lbl-donor">Received from Sri / Smt. *</label>
                 <input id="f-donor" type="text" placeholder="e.g. Mahadevan, Chennai" required />
             </div>
 
-            <div class="form-row full">
-                <label>Amount (Rs.) *</label>
-                <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" required oninput="liveAmt()" />
-            </div>
-
-            <div class="amount-live" id="amt-live" style="margin-bottom:10px;display:none;"></div>
-
-            <div class="form-row">
-                <div>
-                    <label>Payment Mode</label>
-                    <select id="f-mode">
-                        <option>Cash</option>
-                        <option>UPI</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Received by *</label>
-                    <select id="f-receiver" required>
-                        <option value="">— Select Receiver —</option>
-                    </select>
+            <!-- Cash: Amount field -->
+            <div class="fld-grp" id="row-amount">
+                <label>Amount (₹) *</label>
+                <div class="amt-inline">
+                    <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" oninput="liveAmt()" style="width:48%;" />
+                    <div class="amt-words-inline" id="amt-live"></div>
                 </div>
             </div>
 
-            <div class="action-row">
-                <button class="btn btn-primary" onclick="generateReceipt()">Generate Receipt</button>
-                <button class="btn btn-outline" onclick="clearForm()">Clear</button>
+            <!-- In Kind: Item description -->
+            <div class="fld-grp" id="row-kind" style="display:none;">
+                <label>Item Description *</label>
+                <input id="f-kind" type="text" placeholder="e.g. Saree for Deity, Rice 50 Kg" />
             </div>
+
+            <!-- In Kind: Qty + Category -->
+            <div class="fld-grp" id="row-kind2" style="display:none;">
+                <div class="form-row" style="margin-bottom:0;">
+                    <div>
+                        <label>Qty</label>
+                        <input id="f-qty" type="text" placeholder="e.g. 1 Set / 50 Kg" />
+                    </div>
+                    <div>
+                        <label>Category</label>
+                        <select id="f-category">
+                            <option value="">— Select —</option>
+                            <option>Clothing</option>
+                            <option>Food</option>
+                            <option>Flowers</option>
+                            <option>Vessels</option>
+                            <option>Misc</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Kind: Est. Value (optional) -->
+            <div class="fld-grp" id="row-estval" style="display:none;">
+                <label>Est. Value (₹) &nbsp;<span style="font-weight:400;color:var(--txt-muted);">optional</span></label>
+                <input id="f-estval" type="number" placeholder="e.g. 5000" min="0" />
+            </div>
+
+            <!-- Mode (cash) + Receiver -->
+            <div class="fld-grp" id="row-mode-recv">
+                <div class="form-row" style="margin-bottom:0;">
+                    <div id="wrap-mode">
+                        <label>Payment Mode</label>
+                        <select id="f-mode">
+                            <option>Cash</option>
+                            <option>UPI</option>
+                            <option>Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="lbl-receiver">Received By *</label>
+                        <select id="f-receiver" required>
+                            <option value="">— Select Receiver —</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-row" style="justify-content:flex-end;">
+                <button class="btn btn-primary" id="btn-generate" onclick="generateReceipt()">Received</button>
+                <button class="btn btn-outline" id="btn-draft" onclick="saveDraft()">📋 Payment Pending</button>
+            </div>
+            <div id="donation-status" style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;"></div>
         </div>
+        </div><!-- /donation-entry-panel -->
+
+        <!-- Records panel -->
+        <div id="donation-records-panel" style="display:none;">
+        <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div class="card-title" style="margin-bottom:0;">Donation Records</div>
+                <button onclick="refreshDonationRecords()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻ Refresh</button>
+            </div>
+            <div class="rec-search-row">
+                <input class="rec-search-inp" id="drec-search" type="text" placeholder="🔍 Search donor name…" oninput="_applyDonFilter()">
+            </div>
+            <div id="donation-records-list"><p class="records-empty">Loading…</p></div>
+            <div id="drec-pgn" class="rec-pgn" style="display:none;"></div>
+        </div>
+        </div><!-- /donation-records-panel -->
+
+    </section>
+
+    <!-- ══════════════════════════════════
+     EXPENSE TAB
+══════════════════════════════════ -->
+    <section id="tab-expense" class="section">
+
+        <!-- Expense sub-tabs: Entry | Records -->
+        <div class="entry-tab-bar">
+            <button class="entry-tab active" id="etab-entry"   onclick="switchExpenseTab('entry')">✏️ Entry</button>
+            <button class="entry-tab"        id="etab-records" onclick="switchExpenseTab('records')">📋 Records</button>
+        </div>
+
+        <!-- Entry panel -->
+        <div id="expense-entry-panel">
+        <div class="card">
+            <div class="card-title" style="justify-content:space-between;">
+                <span>✦ New Expense Entry</span>
+                <button onclick="clearExpenseForm()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
+            </div>
+
+            <!-- Voucher No + Date -->
+            <div class="fld-grp">
+                <div class="form-row" style="margin-bottom:0;">
+                    <div>
+                        <label>Voucher No.</label>
+                        <input id="fx-no" type="text" readonly />
+                    </div>
+                    <div>
+                        <label>Date *</label>
+                        <input id="fx-date" type="date" required />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendor -->
+            <div class="fld-grp">
+                <label>Vendor / Payee *</label>
+                <input id="fx-vendor" type="text" placeholder="e.g. Flower Shop, Caterer" required />
+            </div>
+
+            <!-- Amount -->
+            <div class="fld-grp">
+                <label>Amount (₹) *</label>
+                <input id="fx-amount" type="number" placeholder="e.g. 5000" min="1" />
+            </div>
+
+            <!-- Description -->
+            <div class="fld-grp">
+                <label>Description *</label>
+                <input id="fx-desc" type="text" placeholder="e.g. Garland purchase for Utsav" />
+            </div>
+
+            <!-- Category + Mode + Paid By -->
+            <div class="fld-grp">
+                <div class="form-row" style="margin-bottom:8px;">
+                    <div>
+                        <label>Category</label>
+                        <select id="fx-cat">
+                            <option value="">— Select —</option>
+                            <option>Puja &amp; Rituals</option>
+                            <option>Decorations &amp; Flowers</option>
+                            <option>Food &amp; Catering</option>
+                            <option>Infrastructure &amp; Logistics</option>
+                            <option>Miscellaneous</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Payment Mode</label>
+                        <select id="fx-mode">
+                            <option>Cash</option>
+                            <option>UPI</option>
+                            <option>Bank Transfer</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label>Paid By *</label>
+                    <select id="fx-receiver" required>
+                        <option value="">— Select Payer —</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="action-row" style="justify-content:flex-end;">
+                <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+            </div>
+            <div id="expense-status" style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;"></div>
+        </div>
+        </div><!-- /expense-entry-panel -->
+
+        <!-- Records panel -->
+        <div id="expense-records-panel" style="display:none;">
+        <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div class="card-title" style="margin-bottom:0;">Expense Records</div>
+                <button onclick="refreshExpenseRecords()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻ Refresh</button>
+            </div>
+            <div class="rec-search-row">
+                <input class="rec-search-inp" id="erec-search" type="text" placeholder="🔍 Search vendor / description…" oninput="_applyExpFilter()">
+            </div>
+            <div id="expense-records-list"><p class="records-empty">Loading…</p></div>
+            <div id="erec-pgn" class="rec-pgn" style="display:none;"></div>
+        </div>
+        </div><!-- /expense-records-panel -->
+
     </section>
 
     <!-- ══════════════════════════════════
@@ -1142,7 +1483,7 @@
 
                 <!-- Donation Receipt — below motif -->
                 <div class="rcp-title-band">
-                    <div class="rcp-title-text">Donation Receipt</div>
+                    <div class="rcp-title-text" id="rcp-receipt-type">Donation Receipt</div>
                 </div>
 
                 <!-- Body -->
@@ -1163,20 +1504,26 @@
                         </div>
 
                         <div class="rcp-field">
-                            <span class="rcp-lbl">Sum of Rupees</span>
+                            <span class="rcp-lbl" id="rcp-lbl-words">Sum of Rupees</span>
                             <div class="rcp-dotline"><span class="rcp-val" id="r-words"></span></div>
                         </div>
 
+                        <!-- In-kind only: Qty -->
+                        <div class="rcp-field" id="rcp-row-qtycat" style="display:none;">
+                            <span class="rcp-lbl">Quantity</span>
+                            <div class="rcp-dotline"><span class="rcp-val" id="r-qtycat"></span></div>
+                        </div>
+
                         <div class="rcp-field">
-                            <span class="rcp-lbl">Payment Mode</span>
+                            <span class="rcp-lbl" id="rcp-lbl-mode">Payment Mode</span>
                             <div class="rcp-dotline"><span class="rcp-val" id="r-mode"></span></div>
                         </div>
 
                         <div class="rcp-footer">
                             <div class="rcp-amt">
-                                <div class="rcp-amt-lbl">Amount</div>
+                                <div class="rcp-amt-lbl" id="rcp-amt-lbl">Amount</div>
                                 <div class="rcp-amt-val">
-                                    <div class="rcp-rupee">&#8377;</div>
+                                    <div class="rcp-rupee" id="rcp-rupee">&#8377;</div>
                                     <div class="rcp-amt-num" id="r-amount">0</div>
                                 </div>
                             </div>
@@ -1202,7 +1549,7 @@
         <!-- Receipt actions -->
         <div class="action-row" style="max-width:620px;margin:14px auto 0;justify-content:center;">
             <button class="btn btn-img" onclick="downloadAsImage()">⬇ Download</button>
-            <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
+            <button class="btn btn-wa" onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
         <div style="max-width:620px;margin:8px auto 0;text-align:center;font-size:.72rem;color:#888;line-height:1.5;">
             <strong>WhatsApp</strong>: share sheet opens with receipt image &amp; message attached —
@@ -1213,16 +1560,48 @@
         </div>
     </section>
 
-    <!-- ══════════════════════════════════
-     HISTORY TAB
-══════════════════════════════════ -->
-    <!-- ══════════════════════════════════
-     SETTINGS TAB
-══════════════════════════════════ -->
-    <section id="tab-settings" class="section">
+    <!-- ── Update Received Modal ── -->
+    <div id="upd-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:902;" onclick="closeUpdateModal()"></div>
+    <div id="upd-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:903;padding:20px 16px 32px;box-shadow:0 -4px 24px rgba(74,0,40,.18);border-top:3px solid var(--m3);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:.95rem;font-weight:800;color:var(--m2);">✏️ Update Amount Received</div>
+            <button onclick="closeUpdateModal()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
+        </div>
+        <div id="upd-donor-info" style="background:var(--surface);border:1px solid var(--iv2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.82rem;line-height:1.5;color:var(--m1);"></div>
+        <input type="hidden" id="upd-receipt-no">
+        <input type="hidden" id="upd-total-val">
+        <div class="fld-grp">
+            <div class="form-row" style="margin-bottom:0;">
+                <div>
+                    <label>Amount Received (₹) *</label>
+                    <input type="number" id="upd-amount" placeholder="e.g. 5000" min="0">
+                </div>
+                <div>
+                    <label>Date Received *</label>
+                    <input type="date" id="upd-date">
+                </div>
+            </div>
+        </div>
+        <div class="fld-grp" style="margin-bottom:18px;">
+            <label>Received By *</label>
+            <select id="upd-receiver">
+                <option value="">— Select Receiver —</option>
+            </select>
+        </div>
+        <button onclick="saveUpdateReceived()" class="btn btn-primary" style="width:100%;margin-bottom:8px;">Update Sheet</button>
+        <div id="upd-status" style="text-align:center;font-size:.78rem;color:var(--txt-muted);min-height:18px;"></div>
+    </div>
 
-        <div class="card">
-            <div class="card-title">Volunteers / Receivers</div>
+    <!-- Settings Panel Overlay -->
+    <div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;" onclick="closeSettings()"></div>
+    <div id="settings-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:901;max-height:80vh;overflow-y:auto;padding:20px 16px 32px;border-top:3px solid var(--m3);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-size:1rem;font-weight:800;color:var(--m2);">⚙️ Settings</div>
+            <button onclick="closeSettings()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
+        </div>
+
+        <div class="card" style="margin-bottom:12px;">
+            <div class="card-title">Volunteers / Receivers / Payers</div>
             <div class="form-row">
                 <div>
                     <label>Name</label>
@@ -1242,8 +1621,7 @@
             </div>
             <div id="conn-st" style="margin-top:8px;"></div>
         </div>
-
-    </section>
+    </div>
 
     <div id="toast"></div>
 
@@ -1269,26 +1647,40 @@
         function liveAmt() {
             const v = parseFloat(document.getElementById('f-amount').value) || 0;
             const el = document.getElementById('amt-live');
-            if (!v) { el.innerHTML = ''; el.style.display = 'none'; return; }
+            if (!v) { el.innerHTML = ''; return; }
             const rp = Math.floor(v), pa = Math.round((v - rp) * 100);
             let w = toWords(rp); if (pa) w += ` and ${toWords(pa)} Paise`;
-            el.innerHTML = `<strong>Rs. ${inr(rp)}</strong> &rarr; ${w} Only`;
-            el.style.display = 'block';
+            el.innerHTML = `<strong>₹${inr(rp)}</strong><br>${w} Only`;
         }
 
 
         /* ── Receiver management ── */
         const DEFAULT_RECEIVERS = ['Sunil Kumar', 'Suresh Velu'];
+        function getReceivers() {
+            const extra = JSON.parse(localStorage.getItem('receiverNames') || '[]');
+            return [...DEFAULT_RECEIVERS, ...extra.filter(n => !DEFAULT_RECEIVERS.includes(n))];
+        }
         function loadReceivers() {
             const stored = localStorage.getItem('receiverNames');
             const extra = stored ? JSON.parse(stored) : [];
-            // Defaults always first; user-added names appended (no duplicates)
             const names = [...DEFAULT_RECEIVERS, ...extra.filter(n => !DEFAULT_RECEIVERS.includes(n))];
+
+            // Donation receiver
             const sel = document.getElementById('f-receiver');
             const prev = sel.value;
             sel.innerHTML = '<option value="">— Select Receiver —</option>';
             names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
             if (prev) sel.value = prev;
+
+            // Expense payer
+            const fxSel = document.getElementById('fx-receiver');
+            const fxPrev = fxSel ? fxSel.value : '';
+            if (fxSel) {
+                fxSel.innerHTML = '<option value="">— Select Payer —</option>';
+                names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; fxSel.appendChild(o); });
+                if (fxPrev) fxSel.value = fxPrev;
+            }
+
             renderReceiverList(names);
         }
         function renderReceiverList(names) {
@@ -1322,7 +1714,7 @@
 
         /* ── Settings ── */
         const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbw1e9kxzZYHHxE-tU0fcJ4yp-_CnWS0nPM_k53fqUatbUEWY3h5EDEITIHlmNybF2qm_g/exec';
-        const API_TOKEN      = 'SPTT@1985';   // must match AUTH_TOKEN in apps-script.gs
+        const API_TOKEN = 'SPTT@1985';   // must match AUTH_TOKEN in apps-script.gs
 
         /* ── Auth guard — all Google calls require PIN session ── */
         function isAuth() { return sessionStorage.getItem('sptt_auth') === '1'; }
@@ -1344,9 +1736,30 @@
             syncNo(); toast('Settings saved', 'success');
         }
         let currentNo = 155;
-        function syncNo() { document.getElementById('f-no').value = currentNo; }
-        function getNo() { return currentNo; }
-        function bumpNo() { currentNo++; syncNo(); }
+        let currentInKindNo = 1;
+        let currentExpenseNo = 1;
+
+        /* ── Records state ── */
+        let _allDonRows = [], _filtDonRows = [], _donPage = 0;
+        let _allExpRows = [], _filtExpRows = [], _expPage = 0;
+        const REC_PAGE = 5;
+        const RCP_YEAR = '2026';
+        function syncNo() {
+            document.getElementById('f-no').value =
+                donationType === 'kind'
+                    ? RCP_YEAR + '/IK/' + currentInKindNo
+                    : RCP_YEAR + '/' + currentNo;
+        }
+        function getNo() {
+            return donationType === 'kind'
+                ? RCP_YEAR + '/IK/' + currentInKindNo
+                : RCP_YEAR + '/' + currentNo;
+        }
+        function bumpNo() {
+            if (donationType === 'kind') currentInKindNo++;
+            else currentNo++;
+            syncNo();
+        }
         function todayISO() { return new Date().toISOString().split('T')[0]; }
         function fmtDate(iso) { if (!iso) return '—'; const [y, m, d] = iso.split('-'); return `${d} / ${m} / ${y}`; }
 
@@ -1355,14 +1768,45 @@
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + t).classList.add('active');
-            const btn = t === 'receipt'
-                ? document.getElementById('tab-btn-receipt')
-                : document.querySelector(`.tab-btn[onclick="switchTab('${t}')"]`);
+            const btn = document.getElementById('tab-btn-' + t);
             if (btn) btn.classList.add('active');
+            // Expense tab: receipt is not applicable — keep Receipt tab hidden
+            if (t === 'expense') {
+                document.getElementById('tab-btn-receipt').classList.add('hidden');
+            }
         }
 
         function showReceiptTab() {
             document.getElementById('tab-btn-receipt').classList.remove('hidden');
+        }
+
+        /* ── Donation Entry | Records sub-tabs ── */
+        function switchDonationTab(tab) {
+            const isEntry = tab === 'entry';
+            document.getElementById('dtab-entry').classList.toggle('active', isEntry);
+            document.getElementById('dtab-records').classList.toggle('active', !isEntry);
+            document.getElementById('donation-entry-panel').style.display   = isEntry ? '' : 'none';
+            document.getElementById('donation-records-panel').style.display = isEntry ? 'none' : '';
+            if (!isEntry) refreshDonationRecords();
+        }
+
+        /* ── Expense Entry | Records sub-tabs ── */
+        function switchExpenseTab(tab) {
+            const isEntry = tab === 'entry';
+            document.getElementById('etab-entry').classList.toggle('active', isEntry);
+            document.getElementById('etab-records').classList.toggle('active', !isEntry);
+            document.getElementById('expense-entry-panel').style.display   = isEntry ? '' : 'none';
+            document.getElementById('expense-records-panel').style.display = isEntry ? 'none' : '';
+            if (!isEntry) refreshExpenseRecords();
+        }
+
+        function openSettings() {
+            document.getElementById('settings-overlay').style.display = '';
+            document.getElementById('settings-panel').style.display = '';
+        }
+        function closeSettings() {
+            document.getElementById('settings-overlay').style.display = 'none';
+            document.getElementById('settings-panel').style.display = 'none';
         }
 
         function logout() {
@@ -1377,7 +1821,32 @@
 
         /* ── State ── */
         let current = null;
+        let donationType = 'cash';   // 'cash' | 'kind'
         const histArr = []; // kept for session reprint reference
+
+        /* ── Donation sub-type: cash | kind ── */
+        function setDonationType(type) {
+            donationType = type;
+            const isCash = type === 'cash';
+            const isKind = type === 'kind';
+            const sel = document.getElementById('f-dtype');
+            if (sel && sel.value !== type) sel.value = type;
+            // Amount row
+            document.getElementById('row-amount').style.display = isCash ? '' : 'none';
+            const al = document.getElementById('amt-live');
+            if (isKind) { al.innerHTML = ''; }
+            // In-kind rows
+            document.getElementById('row-kind').style.display    = isKind ? '' : 'none';
+            document.getElementById('row-kind2').style.display   = isKind ? '' : 'none';
+            document.getElementById('row-estval').style.display  = isKind ? '' : 'none';
+            // Mode div: hide for in-kind
+            document.getElementById('wrap-mode').style.display = isKind ? 'none' : '';
+            document.getElementById('row-mode-recv').style.gridTemplateColumns = isKind ? '1fr' : '';
+            // Draft button: cash only
+            const draftBtn = document.getElementById('btn-draft');
+            if (draftBtn) draftBtn.style.display = isKind ? 'none' : '';
+            syncNo();
+        }
 
         /* ── Title-case helper ── */
         function titleCase(s) {
@@ -1388,29 +1857,78 @@
         function generateReceipt() {
             if (!requireAuth('generateReceipt')) return;
             const donor = titleCase(document.getElementById('f-donor').value.trim());
-            const amt = parseFloat(document.getElementById('f-amount').value);
-            const mode = document.getElementById('f-mode').value;
             const receiver = document.getElementById('f-receiver').value;
             const date = document.getElementById('f-date').value;
             const no = getNo();
+            const isKind = donationType === 'kind';
 
             if (!donor) { toast('Enter donor name', 'error'); return; }
-            if (!amt || amt <= 0) { toast('Enter valid amount', 'error'); return; }
             if (!receiver) { toast('Select receiver', 'error'); return; }
             if (!date) { toast('Select date', 'error'); return; }
 
-            const rp = Math.floor(amt), pa = Math.round((amt - rp) * 100);
-            let words = toWords(rp); if (pa) words += ` and ${toWords(pa)} Paise`; words += ' Only';
+            let amt = 0, words = '', mode = '', kindDesc = '';
 
+            if (isKind) {
+                kindDesc = document.getElementById('f-kind').value.trim();
+                const qty = document.getElementById('f-qty').value.trim();
+                const category = document.getElementById('f-category').value;
+                const estval = parseFloat(document.getElementById('f-estval').value) || 0;
+                if (!kindDesc) { toast('Enter item description', 'error'); return; }
+                mode = 'In Kind Donation';
+                words = qty ? `${kindDesc} — ${qty}` : kindDesc;
+                // Store extras on current object (set after block)
+                current = {
+                    no, date, donor, amount: estval, words, mode, receiver,
+                    kindDesc, qty, category, estval, isKind: true
+                };
+            } else {
+                amt = parseFloat(document.getElementById('f-amount').value);
+                if (!amt || amt <= 0) { toast('Enter valid amount', 'error'); return; }
+                mode = document.getElementById('f-mode').value;
+                const rp = Math.floor(amt), pa = Math.round((amt - rp) * 100);
+                words = toWords(rp); if (pa) words += ` and ${toWords(pa)} Paise`; words += ' Only';
+            }
+
+            /* ── Populate receipt ── */
+            const qtycat = ''; // Qty merged into Donated Items line
+
+            // Static fields
             document.getElementById('r-no').textContent = no;
             document.getElementById('r-date').textContent = fmtDate(date);
             document.getElementById('r-donor').textContent = donor;
             document.getElementById('r-words').textContent = words;
-            document.getElementById('r-mode').textContent = mode;
-            document.getElementById('r-amount').textContent = `${inr(amt)} /-`;
             document.getElementById('r-receiver').textContent = receiver;
 
-            current = { no, date, donor, amount: amt, words, mode, receiver };
+            // Dynamic labels + values based on type
+            if (isKind) {
+                document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
+                document.getElementById('rcp-lbl-words').textContent = 'Donated Items';
+                document.getElementById('rcp-lbl-mode').textContent = 'Est. Value (₹)';
+                document.getElementById('r-mode').textContent = current.estval
+                    ? '₹ ' + inr(current.estval)
+                    : '— Not Assessed';
+                document.getElementById('rcp-amt-lbl').textContent = 'In Kind';
+                document.getElementById('rcp-rupee').style.display = 'none';
+                document.getElementById('r-amount').textContent = 'Donation';
+            } else {
+                document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
+                document.getElementById('rcp-lbl-words').textContent = 'Sum of Rupees';
+                document.getElementById('rcp-lbl-mode').textContent = 'Payment Mode';
+                document.getElementById('r-mode').textContent = mode;
+                document.getElementById('rcp-amt-lbl').textContent = 'Amount';
+                document.getElementById('rcp-rupee').style.display = '';
+                document.getElementById('r-amount').textContent = `${inr(amt)} /-`;
+            }
+
+            // Qty/Category row — in-kind only
+            const qtycatRow = document.getElementById('rcp-row-qtycat');
+            qtycatRow.style.display = isKind && qtycat ? '' : 'none';
+            document.getElementById('r-qtycat').textContent = qtycat;
+
+
+            if (!isKind) {
+                current = { no, date, donor, amount: amt, words, mode, receiver, isKind: false };
+            }
             histArr.unshift({ ...current });
             bumpNo();
 
@@ -1453,7 +1971,7 @@
                 const ctx = c.getContext('2d');
                 const tmp = new Image();
                 await new Promise(r => { tmp.onload = r; tmp.src = dataUrl; });
-                ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.clip();
+                ctx.beginPath(); ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); ctx.clip();
                 ctx.drawImage(tmp, 0, 0, size, size);
                 wmOrigSrc = wmImg.src;
                 wmImg.src = c.toDataURL('image/png');
@@ -1490,7 +2008,7 @@
             /* Step 6 — compose with fixed margin (left/right 20px, top/bottom 10px) */
             const MARGX = 20, MARGY = 10;
             const out = document.createElement('canvas');
-            out.width  = rcpCanvas.width  + MARGX * 2;
+            out.width = rcpCanvas.width + MARGX * 2;
             out.height = rcpCanvas.height + MARGY * 2;
             const octx = out.getContext('2d');
             octx.fillStyle = '#FFFFFF';
@@ -1514,7 +2032,7 @@
                 document.body.removeChild(link);
                 status.textContent = 'Image downloaded!';
                 toast('Image saved ✓', 'success');
-            } catch(e) {
+            } catch (e) {
                 status.textContent = 'Download failed: ' + e.message;
                 toast('Download failed', 'error');
                 console.error('downloadAsImage error:', e);
@@ -1527,7 +2045,7 @@
             status.textContent = 'Preparing receipt…';
             try {
                 const waMsg =
-`🙏 We humbly thank you for your generous support.
+                    `🙏 We humbly thank you for your generous support.
 The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 
 📎 Receipt is attached.
@@ -1536,11 +2054,11 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 — Sri Ponniamman Temple Trust (R)`;
 
                 /* Build PNG */
-                const canvas   = await buildReceiptCanvas();
-                const donor    = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const canvas = await buildReceiptCanvas();
+                const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
                 const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
-                const blob     = await new Promise(r => canvas.toBlob(r, 'image/png'));
-                const file     = new File([blob], fileName, { type: 'image/png' });
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const file = new File([blob], fileName, { type: 'image/png' });
 
                 /* ── Path 1: Native share — image + message ── */
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -1559,7 +2077,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                 status.textContent = 'Image downloaded — share in WhatsApp manually';
                 toast('Image saved ✓', 'success');
 
-            } catch(e) {
+            } catch (e) {
                 if (e.name === 'AbortError') { status.textContent = ''; return; }
                 status.textContent = 'Failed: ' + e.message;
                 toast('Share failed', 'error');
@@ -1570,19 +2088,30 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         /* ── Auto-save to Sheet ── */
         async function autoSaveSheet(d) {
             if (!requireAuth('autoSaveSheet')) return;
-            const url = DEFAULT_GS_URL;
-            if (!url) return;
             try {
-                const p = new URLSearchParams({
-                    action: 'addDonation', token: API_TOKEN,
-                    receiptNo: d.no, date: d.date, donor: d.donor,
-                    amount: d.amount, amountWords: d.words, mode: d.mode,
-                    receivedBy: d.receiver
-                });
-                const res = await fetch(url + '?' + p, { redirect: 'follow' });
+                let p;
+                if (d.isKind) {
+                    p = new URLSearchParams({
+                        action: 'addInKindDonation', token: API_TOKEN,
+                        receiptNo: d.no, date: d.date, donor: d.donor,
+                        itemDesc: d.kindDesc, qty: d.qty || '',
+                        estValue: d.estval || '', category: d.category || '',
+                        receivedBy: d.receiver
+                    });
+                } else {
+                    p = new URLSearchParams({
+                        action: 'addDonation', token: API_TOKEN,
+                        receiptNo: d.no, date: d.date, donor: d.donor,
+                        amount: d.amount || 0, amountWords: d.words, mode: d.mode,
+                        receivedBy: d.receiver,
+                        notes: 'Towards Aadi Festival'
+                    });
+                }
+                const res = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'success') {
                     toast('Saved to Sheet ✓', 'success');
+                    refreshDonationRecords();
                 } else {
                     toast('Sheet error: ' + (json.message || 'unknown'), 'error');
                     console.error('Sheet error:', json);
@@ -1593,6 +2122,70 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             }
         }
 
+
+        /* ── Save as Draft (Pending) ── */
+        async function autoSaveDraft(d) {
+            if (!requireAuth('autoSaveDraft')) return;
+            try {
+                const p = new URLSearchParams({
+                    action: 'addDonation', token: API_TOKEN,
+                    receiptNo: d.no, date: d.date, donor: d.donor,
+                    amount: d.amount || 0, amountWords: d.words || '', mode: d.mode || 'Cash',
+                    received: 0, status: 'Pending',
+                    receivedBy: d.receiver,
+                    notes: 'Towards Aadi Festival'
+                });
+                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    toast('Saved as Pending ✓', 'success');
+                    refreshDonationRecords();
+                } else {
+                    toast('Sheet error: ' + (json.message || 'unknown'), 'error');
+                }
+            } catch (e) {
+                toast('Save failed — check connection', 'error');
+            }
+        }
+
+        async function saveDraft() {
+            if (!requireAuth('saveDraft')) return;
+            const donor    = titleCase(document.getElementById('f-donor').value.trim());
+            const receiver = document.getElementById('f-receiver').value;
+            const date     = document.getElementById('f-date').value;
+            const no       = getNo();
+            const isKind   = donationType === 'kind';
+            const statusEl = document.getElementById('donation-status');
+
+            if (!donor)    { toast('Enter donor name', 'error'); return; }
+            if (!receiver) { toast('Select receiver', 'error'); return; }
+            if (!date)     { toast('Select date', 'error'); return; }
+
+            statusEl.textContent = 'Saving…';
+
+            if (isKind) {
+                const kindDesc = document.getElementById('f-kind').value.trim();
+                if (!kindDesc) { toast('Enter item description', 'error'); statusEl.textContent=''; return; }
+                const qty      = document.getElementById('f-qty').value.trim();
+                const category = document.getElementById('f-category').value;
+                const estval   = parseFloat(document.getElementById('f-estval').value) || 0;
+                await autoSaveSheet({ no, date, donor, kindDesc, qty, category, estval, receiver, isKind: true });
+                currentInKindNo++;
+            } else {
+                const amt = parseFloat(document.getElementById('f-amount').value);
+                if (!amt || amt <= 0) { toast('Enter amount', 'error'); statusEl.textContent=''; return; }
+                const mode = document.getElementById('f-mode').value;
+                const rp = Math.floor(amt), pa = Math.round((amt - rp) * 100);
+                let words = toWords(rp);
+                if (pa) words += ` and ${toWords(pa)} Paise`;
+                words += ' Only';
+                await autoSaveDraft({ no, date, donor, amount: amt, words, mode, receiver });
+                currentNo++;
+            }
+            syncNo();
+            statusEl.textContent = 'Saved as Pending ✓';
+            setTimeout(() => { statusEl.textContent = ''; clearForm(); }, 2500);
+        }
 
         /* ── Auto-upload receipt image to Google Drive ── */
         /* ── Connection dot helper ── */
@@ -1638,12 +2231,13 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         /* ── Utilities ── */
         function clearForm() {
-            ['f-donor', 'f-amount'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('f-receiver').value = '';
-            document.getElementById('f-mode').value = 'Cash';
+            ['f-donor', 'f-amount', 'f-kind', 'f-qty', 'f-estval'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('f-category').value  = '';
+            document.getElementById('f-receiver').value  = '';
+            document.getElementById('f-mode').value      = 'Cash';
             document.getElementById('f-date').value = todayISO();
-            const al = document.getElementById('amt-live');
-            al.innerHTML = ''; al.style.display = 'none';
+            document.getElementById('amt-live').innerHTML = '';
+            setDonationType('cash');
         }
         function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
@@ -1685,6 +2279,500 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             } catch (e) { console.warn('fetchLastSeq:', e); }
         }
 
+        async function fetchLastInKindSeqFromSheet() {
+            if (!isAuth()) return;
+            try {
+                const res = await fetch(DEFAULT_GS_URL + '?action=getLastInKindSeq&token=' + API_TOKEN, { redirect: 'follow' });
+                const json = await res.json();
+                if (json.status === 'success' && typeof json.lastSeq === 'number') {
+                    currentInKindNo = json.lastSeq + 1;
+                    if (donationType === 'kind') syncNo();
+                }
+            } catch (e) { console.warn('fetchLastInKindSeq:', e); }
+        }
+
+        async function fetchLastExpenseSeqFromSheet() {
+            if (!isAuth()) return;
+            try {
+                const res = await fetch(DEFAULT_GS_URL + '?action=getLastExpenseSeq&token=' + API_TOKEN, { redirect: 'follow' });
+                const json = await res.json();
+                if (json.status === 'success' && typeof json.lastSeq === 'number') {
+                    currentExpenseNo = json.lastSeq + 1;
+                    syncExpenseNo();
+                }
+            } catch (e) { console.warn('fetchLastExpenseSeq:', e); }
+        }
+
+        function syncExpenseNo() {
+            const el = document.getElementById('fx-no');
+            if (el) el.value = RCP_YEAR + '/EX/' + currentExpenseNo;
+        }
+
+        function clearExpenseForm() {
+            ['fx-vendor', 'fx-amount', 'fx-desc'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            const cat = document.getElementById('fx-cat');
+            if (cat) cat.value = '';
+            const recv = document.getElementById('fx-receiver');
+            if (recv) recv.value = '';
+            const mode = document.getElementById('fx-mode');
+            if (mode) mode.value = 'Cash';
+            const date = document.getElementById('fx-date');
+            if (date) date.value = todayISO();
+        }
+
+        /* ── Records: fetch and render ── */
+        async function refreshDonationRecords() {
+            if (!isAuth()) return;
+            const listEl = document.getElementById('donation-records-list');
+            listEl.innerHTML = '<p class="records-empty">Loading…</p>';
+            document.getElementById('drec-pgn').style.display = 'none';
+            document.getElementById('drec-search').value = '';
+            try {
+                const [cashRes, ikRes] = await Promise.all([
+                    fetch(DEFAULT_GS_URL + '?action=getReceipts&token=' + API_TOKEN, { redirect: 'follow' }),
+                    fetch(DEFAULT_GS_URL + '?action=getInKindDonations&token=' + API_TOKEN, { redirect: 'follow' })
+                ]);
+                const cashJson = await cashRes.json();
+                const ikJson   = await ikRes.json();
+                const cashRows = (cashJson.data || []).map(r => ({ ...r, _type: 'cash' }));
+                const ikRows   = (ikJson.data   || []).map(r => ({ ...r, _type: 'kind' }));
+                _allDonRows = [...cashRows, ...ikRows].reverse();
+                if (ikJson.status === 'error' || !ikJson.data) {
+                    console.warn('In-Kind endpoint not available — deploy Apps Script v11');
+                }
+                _applyDonFilter();
+            } catch (e) {
+                listEl.innerHTML = '<p class="records-empty">Failed to load</p>';
+                console.error('refreshDonationRecords:', e);
+            }
+        }
+
+        function _applyDonFilter() {
+            const q = (document.getElementById('drec-search').value || '').toLowerCase().trim();
+            _filtDonRows = q
+                ? _allDonRows.filter(r =>
+                    (r.donor || '').toLowerCase().includes(q) ||
+                    (r.notes || '').toLowerCase().includes(q) ||
+                    (r.itemDesc || '').toLowerCase().includes(q))
+                : _allDonRows;
+            _donPage = 0;
+            _renderDonPage();
+        }
+
+        function _renderDonPage() {
+            const listEl = document.getElementById('donation-records-list');
+            const pgnEl  = document.getElementById('drec-pgn');
+            if (!_filtDonRows.length) {
+                listEl.innerHTML = '<p class="records-empty">No records found</p>';
+                pgnEl.style.display = 'none';
+                return;
+            }
+            const start = _donPage * REC_PAGE;
+            const slice = _filtDonRows.slice(start, start + REC_PAGE);
+            let html = '';
+            slice.forEach(r => {
+                const gIdx   = _allDonRows.indexOf(r);
+                const isCash = r._type === 'cash';
+                const badge  = isCash ? '💰' : '🎁';
+                const status = isCash ? (r.status || 'Pending') : (r.status || 'In Stock');
+                const isPend = status === 'Pending' || status === 'Partial';
+                let pillCls  = 'spill-green', pillTxt = '✓ Received';
+                if (status === 'Pending')  { pillCls = 'spill-red';   pillTxt = '⏳ Pending'; }
+                if (status === 'Partial')  { pillCls = 'spill-amber'; pillTxt = '◑ Partial'; }
+                if (status === 'In Stock') { pillCls = 'spill-blue';  pillTxt = '📦 In Stock'; }
+                const amt  = isCash ? '₹' + inr(r.total || 0)
+                                    : (r.estValue ? '₹' + inr(r.estValue) : '—');
+                const date = esc(fmtDate2(r.date));
+                const no   = esc(String(r.receiptNo || ''));
+                let subParts = [];
+                if (isCash) {
+                    if (r.mode) subParts.push(esc(r.mode));
+                    if (date !== '—') subParts.push(date);
+                    if (r.receivedBy) subParts.push('By: ' + esc(r.receivedBy));
+                } else {
+                    const item = [esc(r.itemDesc || ''), r.qty ? esc(r.qty) : ''].filter(Boolean).join(' × ');
+                    if (item) subParts.push(item);
+                    if (date !== '—') subParts.push(date);
+                }
+                const sub  = subParts.join(' · ');
+                const note = isCash ? esc(r.notes || '') : esc(r.category || '');
+                let balLine = '';
+                if (isCash && isPend) {
+                    const bal = parseFloat(r.balance) || (parseFloat(r.total || 0) - parseFloat(r.received || 0));
+                    balLine = `<span class="rec-bal">Bal: ₹${inr(bal)}</span>`;
+                }
+                html += `<div class="rec-row">
+                    <div class="rc-top">
+                        <div class="rec-main">${badge} ${esc(r.donor || '—')}</div>
+                        <div class="rec-amt">${amt}</div>
+                    </div>
+                    <div class="rc-mid">
+                        <div class="rec-sub">${sub || '—'}</div>
+                        <span class="spill ${pillCls}">${pillTxt}</span>
+                    </div>
+                    <div class="rec-actions">
+                        <span class="rec-no">Receipt No: #${no}</span>
+                        ${balLine}
+                        <button class="rbtn rbtn-wa" onclick="_waShareFromRecord(${gIdx})">📤 Share</button>
+                        ${isCash && isPend ? `<button class="rbtn rbtn-upd" onclick="openUpdateModal(${gIdx})">✏️ Update</button>` : ''}
+                    </div>
+                </div>`;
+            });
+            listEl.innerHTML = html;
+            // Pagination
+            const total = _filtDonRows.length, pages = Math.ceil(total / REC_PAGE);
+            if (pages <= 1) { pgnEl.style.display = 'none'; return; }
+            pgnEl.style.display = '';
+            const showing = `${start + 1}–${Math.min(start + REC_PAGE, total)} of ${total}`;
+            pgnEl.innerHTML = `
+                <button class="pgn-btn" onclick="_donPrev()" ${_donPage === 0 ? 'disabled' : ''}>‹ Prev</button>
+                <span class="pgn-info">${showing}</span>
+                <button class="pgn-btn" onclick="_donNext()" ${_donPage >= pages - 1 ? 'disabled' : ''}>Next ›</button>`;
+        }
+        function _donPrev() { if (_donPage > 0) { _donPage--; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({behavior:'smooth',block:'start'}); } }
+        function _donNext() { if (_donPage < Math.ceil(_filtDonRows.length / REC_PAGE) - 1) { _donPage++; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({behavior:'smooth',block:'start'}); } }
+
+        async function refreshExpenseRecords() {
+            if (!isAuth()) return;
+            const listEl = document.getElementById('expense-records-list');
+            listEl.innerHTML = '<p class="records-empty">Loading…</p>';
+            document.getElementById('erec-pgn').style.display = 'none';
+            document.getElementById('erec-search').value = '';
+            try {
+                const res  = await fetch(DEFAULT_GS_URL + '?action=getExpenses&token=' + API_TOKEN, { redirect: 'follow' });
+                const json = await res.json();
+                _allExpRows = (json.data || []).slice().reverse();
+                _applyExpFilter();
+            } catch (e) {
+                listEl.innerHTML = '<p class="records-empty">Failed to load</p>';
+                console.error('refreshExpenseRecords:', e);
+            }
+        }
+
+        function _applyExpFilter() {
+            const q = (document.getElementById('erec-search').value || '').toLowerCase().trim();
+            _filtExpRows = q
+                ? _allExpRows.filter(r =>
+                    (r.vendor || '').toLowerCase().includes(q) ||
+                    (r.description || '').toLowerCase().includes(q) ||
+                    (r.category || '').toLowerCase().includes(q))
+                : _allExpRows;
+            _expPage = 0;
+            _renderExpPage();
+        }
+
+        function _renderExpPage() {
+            const listEl = document.getElementById('expense-records-list');
+            const pgnEl  = document.getElementById('erec-pgn');
+            if (!_filtExpRows.length) {
+                listEl.innerHTML = '<p class="records-empty">No expenses recorded yet</p>';
+                pgnEl.style.display = 'none';
+                return;
+            }
+            const catColor = {
+                'Puja & Rituals':           '#e91e63',
+                'Decorations & Flowers':    '#8e24aa',
+                'Food & Catering':          '#ef6c00',
+                'Infrastructure & Logistics':'#1565c0',
+                'Miscellaneous':            '#546e7a'
+            };
+            const start = _expPage * REC_PAGE;
+            const slice = _filtExpRows.slice(start, start + REC_PAGE);
+            let html = '';
+            slice.forEach(r => {
+                const clr = catColor[r.category] || '#666';
+                const catBadge = r.category
+                    ? `<span style="font-size:.63rem;font-weight:700;color:${clr};background:${clr}18;padding:2px 7px;border-radius:20px;">${esc(r.category)}</span>`
+                    : '';
+                html += `<div class="rec-row">
+                    <div style="min-width:0;flex:1;">
+                        <div class="rec-main">🧾 ${esc(r.vendor || '—')}</div>
+                        <div class="rec-sub">${esc(r.description || '')} · ${esc(fmtDate2(r.date))}</div>
+                        <div class="rec-info">${esc(r.mode || 'Cash')} · Paid by: ${esc(r.paidBy || '—')}</div>
+                    </div>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <div class="rec-amt">₹${inr(r.amount || 0)}</div>
+                        ${catBadge ? `<div style="margin-top:3px;">${catBadge}</div>` : ''}
+                        <div class="rec-no">${esc(String(r.voucherNo || ''))}</div>
+                    </div>
+                </div>`;
+            });
+            listEl.innerHTML = html;
+            const total = _filtExpRows.length, pages = Math.ceil(total / REC_PAGE);
+            if (pages <= 1) { pgnEl.style.display = 'none'; return; }
+            pgnEl.style.display = '';
+            const showing = `${start + 1}–${Math.min(start + REC_PAGE, total)} of ${total}`;
+            pgnEl.innerHTML = `
+                <button class="pgn-btn" onclick="_expPrev()" ${_expPage === 0 ? 'disabled' : ''}>‹ Prev</button>
+                <span class="pgn-info">${showing}</span>
+                <button class="pgn-btn" onclick="_expNext()" ${_expPage >= pages - 1 ? 'disabled' : ''}>Next ›</button>`;
+        }
+        function _expPrev() { if (_expPage > 0) { _expPage--; _renderExpPage(); } }
+        function _expNext() { if (_expPage < Math.ceil(_filtExpRows.length / REC_PAGE) - 1) { _expPage++; _renderExpPage(); } }
+
+        /* ── Generate receipt from a records-list row ── */
+        /* ── Shared: fill receipt template from a record row ── */
+        function _fillReceiptForRecord(r) {
+            const isKind = r._type === 'kind';
+            const dateParts = fmtDate2(r.date).split('/');
+            const dateDisplay = dateParts.length === 3
+                ? dateParts.map(p => p.trim()).join(' / ')
+                : fmtDate2(r.date);
+            const no = String(r.receiptNo || '');
+            document.getElementById('r-no').textContent        = no;
+            document.getElementById('r-date').textContent      = dateDisplay;
+            document.getElementById('r-donor').textContent     = r.donor || '—';
+            document.getElementById('r-receiver').textContent  = r.receivedBy || '';
+            document.getElementById('rcp-row-qtycat').style.display = 'none';
+            if (isKind) {
+                const words = (r.itemDesc || '') + (r.qty ? ' — ' + r.qty : '');
+                document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
+                document.getElementById('rcp-lbl-words').textContent    = 'Donated Items';
+                document.getElementById('rcp-lbl-mode').textContent     = 'Est. Value (₹)';
+                document.getElementById('r-words').textContent  = words;
+                document.getElementById('r-mode').textContent   = r.estValue ? '₹ ' + inr(r.estValue) : '— Not Assessed';
+                document.getElementById('rcp-amt-lbl').textContent   = 'In Kind';
+                document.getElementById('rcp-rupee').style.display   = 'none';
+                document.getElementById('r-amount').textContent      = 'Donation';
+                current = { no, date: '', donor: r.donor, amount: r.estValue || 0, words,
+                            mode: 'In Kind Donation', receiver: r.receivedBy || '',
+                            kindDesc: r.itemDesc, qty: r.qty, category: r.category,
+                            estval: r.estValue, isKind: true };
+            } else {
+                const amt  = parseFloat(r.received) > 0 ? parseFloat(r.received) : parseFloat(r.total || 0);
+                const rp   = Math.floor(amt), pa = Math.round((amt - rp) * 100);
+                let words  = toWords(rp);
+                if (pa) words += ` and ${toWords(pa)} Paise`;
+                words += ' Only';
+                document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
+                document.getElementById('rcp-lbl-words').textContent    = 'Sum of Rupees';
+                document.getElementById('rcp-lbl-mode').textContent     = 'Payment Mode';
+                document.getElementById('r-words').textContent = words;
+                document.getElementById('r-mode').textContent  = r.mode || 'Cash';
+                document.getElementById('rcp-amt-lbl').textContent = 'Amount';
+                document.getElementById('rcp-rupee').style.display = '';
+                document.getElementById('r-amount').textContent    = inr(amt) + ' /-';
+                current = { no, date: '', donor: r.donor, amount: amt, words,
+                            mode: r.mode || 'Cash', receiver: r.receivedBy || '', isKind: false };
+            }
+            document.getElementById('action-status').textContent = '';
+        }
+
+        /* ── One-tap WA share from any record row ──────────────────────────
+           Builds receipt PNG off-screen (no tab switch) then uses
+           Web Share API to open WhatsApp with image + message pre-filled.
+           On desktop / unsupported browsers → downloads the PNG.
+        ─────────────────────────────────────────────────────────────────── */
+        async function _waShareFromRecord(idx) {
+            const r = _allDonRows[idx];
+            if (!r || !isAuth()) return;
+
+            const btn = event && event.currentTarget;
+            const origTxt = btn ? btn.textContent : '';
+            if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+
+            // Fill receipt template fields
+            _fillReceiptForRecord(r);
+
+            // Reveal receipt section off-screen so html2canvas can measure it
+            const sec = document.getElementById('tab-receipt');
+            const wasActive = sec.classList.contains('active');
+            if (!wasActive) {
+                sec.classList.add('active');
+                sec.style.cssText = 'position:fixed;left:-6000px;top:0;visibility:hidden;z-index:-1;';
+            }
+            try {
+                const canvas   = await buildReceiptCanvas();
+                const donor    = (r.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const fileName = `Receipt_${r.receiptNo}_${donor}.png`;
+                const blob     = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                const file     = new File([blob], fileName, { type: 'image/png' });
+
+                const waMsg =
+`🙏 We humbly thank you for your generous support.
+The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
+
+📎 Receipt is attached.
+
+May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
+— Sri Ponniamman Temple Trust (R)`;
+
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ files: [file], text: waMsg });
+                    toast('Receipt shared ✓', 'success');
+                } else {
+                    // Desktop fallback: download PNG
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                    toast('Receipt downloaded — share manually in WhatsApp', 'info');
+                }
+            } catch (e) {
+                if (e.name !== 'AbortError') toast('Failed: ' + e.message, 'error');
+            } finally {
+                if (!wasActive) {
+                    sec.classList.remove('active');
+                    sec.style.cssText = '';
+                }
+                if (btn) { btn.textContent = origTxt; btn.disabled = false; }
+            }
+        }
+
+        /* ── View on Receipt tab (kept for Update modal button) ── */
+        function generateReceiptFromRecord(idx) {
+            const r = _allDonRows[idx];
+            if (!r || !isAuth()) return;
+            _fillReceiptForRecord(r);
+            showReceiptTab();
+            switchTab('receipt');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ── WhatsApp share from records list ── */
+        function sendWAFromRec(idx) {
+            const r = _allDonRows[idx];
+            if (!r) return;
+            const isCash = r._type === 'cash';
+            let msg  = `🙏 *Sri Ponniamman Temple Trust (R)*\n`;
+                msg += `42nd Aadi Festival 2026\n`;
+                msg += `${'─'.repeat(28)}\n`;
+                msg += `📋 *Receipt No:* ${r.receiptNo}\n`;
+                msg += `📅 *Date:* ${fmtDate2(r.date)}\n`;
+                msg += `👤 *Donor:* ${r.donor}\n`;
+            if (isCash) {
+                msg += `💰 *Amount:* ₹${inr(r.total || 0)}\n`;
+                msg += `💳 *Mode:* ${r.mode || 'Cash'}\n`;
+                if (r.notes) msg += `📝 *Purpose:* ${r.notes}\n`;
+            } else {
+                msg += `🎁 *Item:* ${r.itemDesc || ''}${r.qty ? ' — ' + r.qty : ''}\n`;
+                if (r.estValue) msg += `💰 *Est. Value:* ₹${inr(r.estValue)}\n`;
+            }
+            msg += `${'─'.repeat(28)}\n`;
+            msg += `✨ *May Goddess Ponniamman bless you always!* 🙏\n`;
+            msg += `— Sri Ponniamman Temple Trust (R)`;
+            window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+        }
+
+        /* ── Update Received modal ── */
+        function openUpdateModal(idx) {
+            const r = _allDonRows[idx];
+            if (!r) return;
+            document.getElementById('upd-receipt-no').value = r.receiptNo;
+            document.getElementById('upd-total-val').value  = r.total || 0;
+            document.getElementById('upd-donor-info').innerHTML =
+                `<b>${esc(r.donor)}</b> &nbsp;·&nbsp; Receipt <b>#${r.receiptNo}</b><br>` +
+                `Total: <b>₹${inr(r.total || 0)}</b> &nbsp;|&nbsp; ` +
+                `Received: <b>₹${inr(r.received || 0)}</b> &nbsp;|&nbsp; ` +
+                `Balance: <b style="color:#c0392b;">₹${inr(r.balance || (r.total - (r.received||0)))}</b>`;
+            document.getElementById('upd-amount').value = r.received || '';
+            document.getElementById('upd-date').value   = todayISO();
+            document.getElementById('upd-status').textContent = '';
+            // Populate receiver dropdown from saved list
+            const names  = getReceivers();
+            const selEl  = document.getElementById('upd-receiver');
+            selEl.innerHTML = '<option value="">— Select Receiver —</option>' +
+                names.map(n => `<option value="${esc(n)}" ${n === r.receivedBy ? 'selected' : ''}>${esc(n)}</option>`).join('');
+            document.getElementById('upd-overlay').style.display = '';
+            document.getElementById('upd-panel').style.display   = '';
+        }
+        function closeUpdateModal() {
+            document.getElementById('upd-overlay').style.display = 'none';
+            document.getElementById('upd-panel').style.display   = 'none';
+        }
+        async function saveUpdateReceived() {
+            const receiptNo  = document.getElementById('upd-receipt-no').value;
+            const amount     = parseFloat(document.getElementById('upd-amount').value) || 0;
+            const date       = document.getElementById('upd-date').value;
+            const receivedBy = document.getElementById('upd-receiver').value;
+            const statusEl   = document.getElementById('upd-status');
+            if (!amount)     { toast('Enter received amount', 'error'); return; }
+            if (!date)       { toast('Select date', 'error'); return; }
+            if (!receivedBy) { toast('Select receiver', 'error'); return; }
+            statusEl.textContent = 'Updating…';
+            try {
+                const p = new URLSearchParams({ action:'updateReceived', token:API_TOKEN, receiptNo, amount, date, receivedBy });
+                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect:'follow' });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    const updIdx = _allDonRows.findIndex(r => String(r.receiptNo) === String(receiptNo));
+                    if (updIdx >= 0) {
+                        _allDonRows[updIdx].received   = amount;
+                        _allDonRows[updIdx].balance    = parseFloat(_allDonRows[updIdx].total || 0) - amount;
+                        _allDonRows[updIdx].status     = _allDonRows[updIdx].balance <= 0 ? 'Received' : 'Partial';
+                        _allDonRows[updIdx].receivedBy = receivedBy;
+                    }
+                    statusEl.innerHTML = `Saved ✓ &nbsp;<button onclick="closeUpdateModal();generateReceiptFromRecord(${updIdx})" style="border:none;background:var(--m3);color:var(--iv1);border-radius:6px;padding:3px 10px;font-size:.75rem;font-weight:700;cursor:pointer;">🧾 Generate Receipt</button>`;
+                    toast('Updated ✓', 'success');
+                    refreshDonationRecords();
+                } else {
+                    statusEl.textContent = 'Error: ' + (json.message || 'unknown');
+                    toast('Update failed', 'error');
+                }
+            } catch (e) {
+                statusEl.textContent = 'Network error';
+                toast('Update failed', 'error');
+            }
+        }
+
+        function fmtDate2(val) {
+            if (!val) return '—';
+            // val may be a JS Date object (from Sheets) or a string "DD-MM-YYYY"
+            if (val instanceof Date) {
+                const d = val.getDate().toString().padStart(2,'0');
+                const m = (val.getMonth()+1).toString().padStart(2,'0');
+                return d + '/' + m + '/' + val.getFullYear();
+            }
+            const s = String(val);
+            // DD-MM-YYYY → DD/MM/YYYY
+            return s.replace(/-/g, '/');
+        }
+
+        /* ── Save Expense (no receipt — sheet only) ── */
+        async function saveExpense() {
+            const vendor = titleCase(document.getElementById('fx-vendor').value.trim());
+            const paidBy = document.getElementById('fx-receiver').value;
+            if (!vendor)  { toast('Enter vendor / payee name', 'error'); return; }
+            if (!paidBy)  { toast('Select Paid By', 'error'); return; }
+            const description = document.getElementById('fx-desc').value.trim();
+            if (!description) { toast('Enter description', 'error'); return; }
+            const amount = parseFloat(document.getElementById('fx-amount').value) || 0;
+            if (!amount)  { toast('Enter amount', 'error'); return; }
+            const no       = RCP_YEAR + '/EX/' + currentExpenseNo;
+            const date     = document.getElementById('fx-date').value;
+            const category = document.getElementById('fx-cat').value;
+            const mode     = document.getElementById('fx-mode').value;
+
+            const p = new URLSearchParams({
+                action: 'addExpense', token: API_TOKEN,
+                voucherNo: no, date, vendor, description, category, amount, mode, paidBy
+            });
+            const statusEl = document.getElementById('expense-status');
+            statusEl.textContent = 'Saving…';
+            try {
+                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    currentExpenseNo++;
+                    syncExpenseNo();
+                    toast('Expense saved ✓', 'success');
+                    statusEl.textContent = 'Saved to Sheet ✓';
+                    clearExpenseForm();
+                    refreshExpenseRecords();
+                } else {
+                    toast('Sheet error: ' + (json.message || 'unknown'), 'error');
+                    statusEl.textContent = '';
+                }
+            } catch (e) {
+                toast('Sheet sync failed', 'error');
+                statusEl.textContent = '';
+                console.error('saveExpense:', e);
+            }
+        }
+
         /* ── PIN Login ── */
         const CORRECT_PIN = '1985';
         let pinEntry = '';
@@ -1712,8 +2800,10 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             if (pinEntry === CORRECT_PIN) {
                 sessionStorage.setItem('sptt_auth', '1');
                 document.getElementById('login-screen').classList.add('hide');
-                autoCheckConn();           /* check connection & update dot */
-                fetchLastSeqFromSheet();   /* sync receipt # from sheet */
+                autoCheckConn();                  /* check connection & update dot */
+                fetchLastSeqFromSheet();          /* sync cash receipt # from sheet */
+                fetchLastInKindSeqFromSheet();    /* sync in-kind # from sheet */
+                fetchLastExpenseSeqFromSheet();   /* sync expense voucher # from sheet */
             } else {
                 document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
                 pinEntry = '';
@@ -1734,7 +2824,11 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         /* ── Init ── */
         loadSettings();
+        syncExpenseNo();
+        document.getElementById('fx-date').value = todayISO();
         fetchLastSeqFromSheet();
+        fetchLastInKindSeqFromSheet();
+        fetchLastExpenseSeqFromSheet();
     </script>
 </body>
 
