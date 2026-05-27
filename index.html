@@ -2042,12 +2042,12 @@
             window.matchMedia('(display-mode: standalone)').matches
             || window.navigator.standalone === true;
 
-        // Show banner immediately unless already installed or dismissed
-        (function () {
+        // Show banner after page load so display-mode is correctly detected
+        window.addEventListener('load', () => {
             if (!_isStandalone() && !localStorage.getItem('spt_install_dismissed')) {
                 document.getElementById('install-banner').style.display = 'flex';
             }
-        })();
+        });
 
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
