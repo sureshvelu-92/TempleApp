@@ -1321,17 +1321,18 @@
     <!-- ── INSTALL BANNER ── -->
     <div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
         background:linear-gradient(135deg,#7B0D3E,#a01550);color:#fff;
-        padding:12px 16px;align-items:center;gap:12px;
-        box-shadow:0 -3px 16px rgba(0,0,0,.3);">
-        <img src="images/icon-192.png" style="width:40px;height:40px;border-radius:10px;flex-shrink:0;" />
+        padding:12px 16px;flex-direction:row;align-items:center;gap:12px;
+        box-shadow:0 -3px 16px rgba(0,0,0,.35);">
+        <img src="images/icon-192.png" style="width:42px;height:42px;border-radius:10px;flex-shrink:0;" />
         <div style="flex:1;min-width:0;">
             <div style="font-weight:700;font-size:.9rem;">Install SPT App</div>
-            <div style="font-size:.75rem;opacity:.85;">Add to home screen for quick access</div>
+            <div style="font-size:.73rem;opacity:.85;">Add to home screen for quick access</div>
         </div>
-        <button onclick="triggerInstall()" style="background:#fff;color:#7B0D3E;border:none;border-radius:8px;
-            padding:7px 14px;font-weight:700;font-size:.8rem;cursor:pointer;flex-shrink:0;">Install</button>
-        <button onclick="dismissBanner()" style="background:none;border:none;color:#fff;font-size:1.2rem;
-            cursor:pointer;opacity:.7;flex-shrink:0;padding:0 4px;">✕</button>
+        <button onclick="triggerInstall()" style="background:#fff;color:#7B0D3E;border:none;
+            border-radius:8px;padding:7px 16px;font-weight:700;font-size:.82rem;
+            cursor:pointer;flex-shrink:0;">Install</button>
+        <button onclick="dismissInstallBanner()" style="background:none;border:none;color:#fff;
+            font-size:1.3rem;cursor:pointer;opacity:.75;flex-shrink:0;padding:0 4px;line-height:1;">✕</button>
     </div>
 
     <!-- ── LOGIN SCREEN ── -->
@@ -2034,39 +2035,50 @@
             if (!isEntry) refreshExpenseRecords();
         }
 
+
         /* ── PWA Install ── */
         let _deferredInstall = null;
+        const _isStandalone = () =>
+            window.matchMedia('(display-mode: standalone)').matches
+            || window.navigator.standalone === true;
+
+        // Show banner immediately unless already installed or dismissed
+        (function () {
+            if (!_isStandalone() && !localStorage.getItem('spt_install_dismissed')) {
+                document.getElementById('install-banner').style.display = 'flex';
+            }
+        })();
 
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             _deferredInstall = e;
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-                || window.navigator.standalone === true;
-            if (!isStandalone && !localStorage.getItem('install_banner_dismissed')) {
-                const b = document.getElementById('install-banner');
-                b.style.display = 'flex';
-            }
         });
 
         window.addEventListener('appinstalled', () => {
             _deferredInstall = null;
             document.getElementById('install-banner').style.display = 'none';
+            localStorage.setItem('spt_install_dismissed', '1');
         });
 
         function triggerInstall() {
-            if (!_deferredInstall) return;
-            _deferredInstall.prompt();
-            _deferredInstall.userChoice.then(r => {
-                if (r.outcome === 'accepted') {
-                    document.getElementById('install-banner').style.display = 'none';
-                }
-                _deferredInstall = null;
-            });
+            if (_deferredInstall) {
+                _deferredInstall.prompt();
+                _deferredInstall.userChoice.then(r => {
+                    if (r.outcome === 'accepted') {
+                        document.getElementById('install-banner').style.display = 'none';
+                        localStorage.setItem('spt_install_dismissed', '1');
+                    }
+                    _deferredInstall = null;
+                });
+            } else {
+                // Fallback: show instructions toast
+                toast('Tap browser menu ⋮ → "Add to Home Screen"', 'info');
+            }
         }
 
-        function dismissBanner() {
+        function dismissInstallBanner() {
             document.getElementById('install-banner').style.display = 'none';
-            localStorage.setItem('install_banner_dismissed', '1');
+            localStorage.setItem('spt_install_dismissed', '1');
         }
 
         function openSettings() {
@@ -3128,6 +3140,11 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         fetchLastSeqFromSheet();
         fetchLastInKindSeqFromSheet();
         fetchLastExpenseSeqFromSheet();
+
+        /* ── Service Worker ── */
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/TempleApp/sw.js');
+        }
     </script>
 </body>
 
