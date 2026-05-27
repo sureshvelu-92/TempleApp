@@ -89,11 +89,13 @@ function addDonation(p) {
     if (k) col[k] = c + 1;
   }
 
-  // Insert row, copy format from last data row
+  // Insert row — immediately clear full width, then copy format only
   sheet.insertRowAfter(lastDataRow);
+  var totalColsDon = Math.max(sheet.getLastColumn(), lastCol);
+  sheet.getRange(newRow, 1, 1, totalColsDon).clearContent();
   var src = sheet.getRange(lastDataRow, 1, 1, lastCol);
   var dst = sheet.getRange(newRow,      1, 1, lastCol);
-  src.copyTo(dst, SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+  src.copyTo(dst, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
 
   function set(name, val) {
     if (col[name]) sheet.getRange(newRow, col[name]).setValue(val);
@@ -178,11 +180,13 @@ function addInKindDonation(p) {
     if (k) col[k] = c + 1;
   }
 
-  // Insert row, copy format from last data row — cols A–I only
+  // Insert row — immediately clear full width, then copy format only (cols A–I)
   sheet.insertRowAfter(lastDataRow);
+  var totalColsIk = Math.max(sheet.getLastColumn(), IK_WRITE_COL);
+  sheet.getRange(newRow, 1, 1, totalColsIk).clearContent();
   var src = sheet.getRange(lastDataRow, 1, 1, IK_WRITE_COL);
   var dst = sheet.getRange(newRow,      1, 1, IK_WRITE_COL);
-  src.copyTo(dst, SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+  src.copyTo(dst, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
 
   function set(name, val) {
     if (col[name]) sheet.getRange(newRow, col[name]).setValue(val);
@@ -195,8 +199,8 @@ function addInKindDonation(p) {
   set('Est. Value (₹)',   parseFloat(p.estValue) || '');
   set('Category',         p.category   || '');
   set('Date Received',    makeDate(p.date));
+  set('Received By',      p.receivedBy || '');
   set('Status',           'In Stock');
-  set('Remarks',          '');
 
   return ok({ status: 'success', receiptNo: p.receiptNo, row: newRow, seq: seqNo });
 }
@@ -260,9 +264,14 @@ function addExpense(p) {
   }
 
   sheet.insertRowAfter(lastDataRow);
+  // 1. Clear the ENTIRE new row first (full sheet width) — prevents any values
+  //    inherited from the adjacent row during insertion from leaking through.
+  var totalColsEx = Math.max(sheet.getLastColumn(), EX_WRITE_COL);
+  sheet.getRange(newRow, 1, 1, totalColsEx).clearContent();
+  // 2. Copy formatting only from the previous data row (keeps visual style)
   sheet.getRange(lastDataRow, 1, 1, EX_WRITE_COL)
        .copyTo(sheet.getRange(newRow, 1, 1, EX_WRITE_COL),
-               SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+               SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
 
   function set(name, val) {
     if (col[name]) sheet.getRange(newRow, col[name]).setValue(val);
@@ -367,7 +376,8 @@ function getInKindDonations() {
       estValue   : r[col['Est. Value (₹)']   || 4],
       category   : r[col['Category']         || 5],
       date       : r[col['Date Received']    || 6],
-      status     : r[col['Status']           || 7]
+      receivedBy : r[col['Received By']      || 7],
+      status     : r[col['Status']           || 8]
     };
   });
   return ok({ status: 'success', data: rows });
@@ -388,7 +398,11 @@ function getExpenses() {
   }
 
   var vals = sheet.getRange(EX_DATA_START, 1, lastRow - EX_DATA_START + 1, lastCol).getValues();
-  var rows = vals.filter(function(r){ return r[col['Vendor/Payee'] || 2] !== ''; }).map(function(r){
+  var vendorIdx = col['Vendor/Payee'] !== undefined ? col['Vendor/Payee'] : 2;
+  var amtIdx    = col['Amount(₹)']    !== undefined ? col['Amount(₹)']    : 5;
+  var rows = vals.filter(function(r){
+    return r[vendorIdx] !== '' && (parseFloat(r[amtIdx]) || 0) > 0;
+  }).map(function(r){
     return {
       voucherNo   : r[col['#']             || 0],
       date        : r[col['Date']          || 1],
@@ -441,7 +455,8 @@ function updateReceived(p) {
   if (col['Received (₹)'])   sheet.getRange(targetRow, col['Received (₹)']).setValue(amount);
   if (col['Balance (₹)'])    sheet.getRange(targetRow, col['Balance (₹)']).setValue(Math.max(balance, 0));
   if (col['Payment Status']) sheet.getRange(targetRow, col['Payment Status']).setValue(balance <= 0 ? 'Received' : 'Partial');
-  if (date && col['Date Received']) sheet.getRange(targetRow, col['Date Received']).setValue(makeDate(date));
+  if (date && col['Date Received'])  sheet.getRange(targetRow, col['Date Received']).setValue(makeDate(date));
+  if (p.mode && col['Payment Mode']) sheet.getRange(targetRow, col['Payment Mode']).setValue(p.mode);
   if (p.receivedBy && col['Received By']) sheet.getRange(targetRow, col['Received By']).setValue(p.receivedBy);
 
   return ok({ status: 'success', receiptNo: receiptNo, received: amount, balance: Math.max(balance, 0) });

@@ -33,10 +33,10 @@
             --iv4: #FFFDF8;
             --body-bg: #F5EFE8;
             /* Semantic aliases */
-            --border:   #e6d5c8;
-            --surface:  var(--iv3);
-            --lbl:      var(--m4);
-            --txt-muted: rgba(74,0,40,.45);
+            --border: #e6d5c8;
+            --surface: var(--iv3);
+            --lbl: var(--m4);
+            --txt-muted: rgba(74, 0, 40, .45);
         }
 
         body {
@@ -240,7 +240,8 @@
         }
 
         /* Receipt / Voucher number chip */
-        input#f-no, input#fx-no {
+        input#f-no,
+        input#fx-no {
             background: linear-gradient(135deg, var(--iv3), var(--iv2));
             border: 1.5px solid var(--m3);
             color: var(--m3);
@@ -259,12 +260,30 @@
             padding: 10px 13px 11px;
             margin-bottom: 8px;
         }
-        .fld-grp .form-row { margin-bottom: 0; }
+
+        .fld-grp .form-row {
+            margin-bottom: 0;
+        }
 
         /* Amount inline layout */
-        .amt-inline { display:flex; gap:12px; align-items:center; }
-        .amt-inline input { width: 48%; flex-shrink:0; }
-        .amt-words-inline { font-size:.72rem; color:var(--m2); font-weight:700; flex:1; line-height:1.35; }
+        .amt-inline {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .amt-inline input {
+            width: 48%;
+            flex-shrink: 0;
+        }
+
+        .amt-words-inline {
+            font-size: .72rem;
+            color: var(--m2);
+            font-weight: 700;
+            flex: 1;
+            line-height: 1.35;
+        }
 
 
         /* ═══════════════════════════════════════
@@ -1045,6 +1064,7 @@
             border-bottom: 2px solid var(--iv2);
             background: var(--iv3);
         }
+
         .entry-tab {
             flex: 1;
             padding: 9px 8px;
@@ -1059,13 +1079,20 @@
             transition: color .2s, border-color .2s;
             letter-spacing: .3px;
         }
+
         .entry-tab.active {
             color: var(--m3);
             border-bottom-color: var(--m3);
         }
 
         /* ── Records list ── */
-        .records-empty { text-align:center; color:var(--txt-muted); font-size:.8rem; padding:14px 0; }
+        .records-empty {
+            text-align: center;
+            color: var(--txt-muted);
+            font-size: .8rem;
+            padding: 14px 0;
+        }
+
         /* Donor record card */
         .rec-row {
             background: var(--iv4);
@@ -1073,39 +1100,191 @@
             border: 1px solid var(--iv2);
             padding: 11px 13px;
             margin-bottom: 8px;
-            box-shadow: 0 1px 5px rgba(74,0,40,.07);
+            box-shadow: 0 1px 5px rgba(74, 0, 40, .07);
         }
+
         /* Top: donor name + amount */
-        .rc-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:5px; }
-        .rec-main { font-size:.84rem; font-weight:700; color:var(--m1); flex:1; min-width:0; }
-        .rec-amt  { font-size:.9rem; font-weight:800; color:var(--m3); white-space:nowrap; flex-shrink:0; }
+        .rc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .rec-main {
+            font-size: .84rem;
+            font-weight: 700;
+            color: var(--m1);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rec-amt {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--m3);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
         /* Middle: sub info + status pill */
-        .rc-mid { display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:8px; }
-        .rec-sub  { font-size:.69rem; color:var(--txt-muted); flex:1; min-width:0; }
-        .rec-info { font-size:.69rem; color:var(--txt-muted); }
-        .rec-note { font-size:.69rem; color:var(--txt-muted); font-style:italic; }
+        .rc-mid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .rec-sub {
+            font-size: .69rem;
+            color: var(--txt-muted);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rec-info {
+            font-size: .69rem;
+            color: var(--txt-muted);
+        }
+
+        .rec-note {
+            font-size: .69rem;
+            color: var(--txt-muted);
+            font-style: italic;
+        }
+
         /* Status pills */
-        .spill { display:inline-flex; align-items:center; padding:2px 8px; border-radius:20px; font-size:.63rem; font-weight:700; white-space:nowrap; flex-shrink:0; }
-        .spill-green { background:#e8f5e9; color:#2e7d32; }
-        .spill-amber { background:#fff8e1; color:#e65100; }
-        .spill-red   { background:#fce4ec; color:#c62828; }
-        .spill-blue  { background:#e3f2fd; color:#1565c0; }
+        .spill {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: .63rem;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .spill-green {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .spill-amber {
+            background: #fff8e1;
+            color: #e65100;
+        }
+
+        .spill-red {
+            background: #fce4ec;
+            color: #c62828;
+        }
+
+        .spill-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
         /* Bottom: receipt # + balance + action buttons */
-        .rec-actions { display:flex; align-items:center; gap:6px; padding-top:8px; border-top:1px solid var(--iv2); flex-wrap:nowrap; }
-        .rec-no  { font-size:.65rem; color:var(--txt-muted); font-weight:600; margin-right:auto; }
-        .rec-bal { font-size:.65rem; font-weight:700; color:#c0392b; white-space:nowrap; }
-        .rbtn { border:none; border-radius:20px; padding:4px 12px; font-size:.67rem; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0; }
-        .rbtn-wa  { background:#25D366; color:#fff; }
-        .rbtn-upd { background:var(--m3); color:var(--iv1); }
+        .rec-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-top: 8px;
+            border-top: 1px solid var(--iv2);
+            flex-wrap: nowrap;
+        }
+
+        .rec-no {
+            font-size: .65rem;
+            color: var(--txt-muted);
+            font-weight: 600;
+            margin-right: auto;
+        }
+
+        .rec-bal {
+            font-size: .65rem;
+            font-weight: 700;
+            color: #c0392b;
+            white-space: nowrap;
+        }
+
+        .rbtn {
+            border: none;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: .67rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .rbtn-wa {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .rbtn-upd {
+            background: var(--m3);
+            color: var(--iv1);
+        }
+
         /* Search */
-        .rec-search-row { margin-bottom:10px; }
-        .rec-search-inp { width:100%; border:1.5px solid var(--border); border-radius:8px; padding:7px 11px; font-size:.82rem; outline:none; background:var(--surface); color:var(--m1); }
-        .rec-search-inp:focus { border-color:var(--m3); box-shadow:0 0 0 3px rgba(123,13,62,.10); outline:none; }
+        .rec-search-row {
+            margin-bottom: 10px;
+        }
+
+        .rec-search-inp {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 11px;
+            font-size: .82rem;
+            outline: none;
+            background: var(--surface);
+            color: var(--m1);
+        }
+
+        .rec-search-inp:focus {
+            border-color: var(--m3);
+            box-shadow: 0 0 0 3px rgba(123, 13, 62, .10);
+            outline: none;
+        }
+
         /* Pagination */
-        .rec-pgn { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:12px; padding-top:10px; border-top:1px solid var(--iv2); }
-        .pgn-btn { border:1.5px solid var(--m3); background:none; color:var(--m3); border-radius:7px; padding:5px 16px; font-size:.8rem; font-weight:700; cursor:pointer; }
-        .pgn-btn:disabled { opacity:.35; cursor:default; }
-        .pgn-info { font-size:.75rem; color:var(--txt-muted); }
+        .rec-pgn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--iv2);
+        }
+
+        .pgn-btn {
+            border: 1.5px solid var(--m3);
+            background: none;
+            color: var(--m3);
+            border-radius: 7px;
+            padding: 5px 16px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pgn-btn:disabled {
+            opacity: .35;
+            cursor: default;
+        }
+
+        .pgn-info {
+            font-size: .75rem;
+            color: var(--txt-muted);
+        }
 
         @keyframes shake {
 
@@ -1184,8 +1363,8 @@
     border-radius:7px;color:var(--iv1);font-size:.75rem;
     width:32px;height:32px;cursor:pointer;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;margin-right:6px;">
-    ⚙️
-</button>
+                ⚙️
+            </button>
             <button onclick="logout()" title="Logout" style="
                 background:rgba(255,255,255,.1);border:1.5px solid rgba(232,213,163,.4);
                 border-radius:7px;color:var(--iv1);font-size:.75rem;
@@ -1210,130 +1389,135 @@
 
         <!-- Donation sub-tabs: Entry | Records -->
         <div class="entry-tab-bar">
-            <button class="entry-tab active" id="dtab-entry"   onclick="switchDonationTab('entry')">✏️ Entry</button>
-            <button class="entry-tab"        id="dtab-records" onclick="switchDonationTab('records')">📋 Records</button>
+            <button class="entry-tab active" id="dtab-entry" onclick="switchDonationTab('entry')">✏️ Entry</button>
+            <button class="entry-tab" id="dtab-records" onclick="switchDonationTab('records')">📋 Records</button>
         </div>
 
         <!-- Entry panel -->
         <div id="donation-entry-panel">
-        <div class="card">
-            <div class="card-title" id="lbl-card-title" style="justify-content:space-between;">
-                <span>✦ New Donation Entry</span>
-                <button onclick="clearForm()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
-            </div>
+            <div class="card">
+                <div class="card-title" id="lbl-card-title" style="justify-content:space-between;">
+                    <span>✦ New Donation Entry</span>
+                    <button onclick="clearForm()"
+                        style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
+                </div>
 
-            <!-- Donation Type dropdown -->
-            <div class="fld-grp" style="margin-bottom:14px;">
-                <label>Donation Type</label>
-                <select id="f-dtype" onchange="setDonationType(this.value)">
-                    <option value="cash">💰 Cash / UPI</option>
-                    <option value="kind">🎁 In Kind</option>
-                </select>
-            </div>
+                <!-- Donation Type dropdown -->
+                <div class="fld-grp" style="margin-bottom:14px;">
+                    <label>Donation Type</label>
+                    <select id="f-dtype" onchange="setDonationType(this.value)">
+                        <option value="cash">💰 Cash / UPI</option>
+                        <option value="kind">🎁 In Kind</option>
+                    </select>
+                </div>
 
-            <!-- Receipt No + Date -->
-            <div class="fld-grp">
-                <div class="form-row" style="margin-bottom:0;">
-                    <div>
-                        <label id="lbl-no">Receipt No.</label>
-                        <input id="f-no" type="text" readonly />
-                    </div>
-                    <div>
-                        <label>Date *</label>
-                        <input id="f-date" type="date" required />
+                <!-- Receipt No + Date -->
+                <div class="fld-grp">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div>
+                            <label id="lbl-no">Receipt No.</label>
+                            <input id="f-no" type="text" readonly />
+                        </div>
+                        <div>
+                            <label>Date *</label>
+                            <input id="f-date" type="date" required />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Donor name -->
-            <div class="fld-grp">
-                <label id="lbl-donor">Received from Sri / Smt. *</label>
-                <input id="f-donor" type="text" placeholder="e.g. Mahadevan, Chennai" required />
-            </div>
-
-            <!-- Cash: Amount field -->
-            <div class="fld-grp" id="row-amount">
-                <label>Amount (₹) *</label>
-                <div class="amt-inline">
-                    <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" oninput="liveAmt()" style="width:48%;" />
-                    <div class="amt-words-inline" id="amt-live"></div>
+                <!-- Donor name -->
+                <div class="fld-grp">
+                    <label id="lbl-donor">Received from Sri / Smt. *</label>
+                    <input id="f-donor" type="text" placeholder="e.g. Mahadevan, Chennai" required />
                 </div>
-            </div>
 
-            <!-- In Kind: Item description -->
-            <div class="fld-grp" id="row-kind" style="display:none;">
-                <label>Item Description *</label>
-                <input id="f-kind" type="text" placeholder="e.g. Saree for Deity, Rice 50 Kg" />
-            </div>
+                <!-- Cash: Amount field -->
+                <div class="fld-grp" id="row-amount">
+                    <label>Amount (₹) *</label>
+                    <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" oninput="liveAmt()" />
+                    <div class="amt-words-inline" id="amt-live" style="margin-top:6px;"></div>
+                </div>
 
-            <!-- In Kind: Qty + Category -->
-            <div class="fld-grp" id="row-kind2" style="display:none;">
-                <div class="form-row" style="margin-bottom:0;">
-                    <div>
-                        <label>Qty</label>
-                        <input id="f-qty" type="text" placeholder="e.g. 1 Set / 50 Kg" />
-                    </div>
-                    <div>
-                        <label>Category</label>
-                        <select id="f-category">
-                            <option value="">— Select —</option>
-                            <option>Clothing</option>
-                            <option>Food</option>
-                            <option>Flowers</option>
-                            <option>Vessels</option>
-                            <option>Misc</option>
-                        </select>
+                <!-- In Kind: Item description -->
+                <div class="fld-grp" id="row-kind" style="display:none;">
+                    <label>Item Description *</label>
+                    <input id="f-kind" type="text" placeholder="e.g. Saree for Deity, Rice 50 Kg" />
+                </div>
+
+                <!-- In Kind: Qty + Category -->
+                <div class="fld-grp" id="row-kind2" style="display:none;">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div>
+                            <label>Qty</label>
+                            <input id="f-qty" type="text" placeholder="e.g. 1 Set / 50 Kg" />
+                        </div>
+                        <div>
+                            <label>Category</label>
+                            <select id="f-category">
+                                <option value="">— Select —</option>
+                                <option>Clothing</option>
+                                <option>Food</option>
+                                <option>Flowers</option>
+                                <option>Vessels</option>
+                                <option>Misc</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- In Kind: Est. Value (optional) -->
-            <div class="fld-grp" id="row-estval" style="display:none;">
-                <label>Est. Value (₹) &nbsp;<span style="font-weight:400;color:var(--txt-muted);">optional</span></label>
-                <input id="f-estval" type="number" placeholder="e.g. 5000" min="0" />
-            </div>
+                <!-- Mode (cash) + Receiver / Est.Value (in-kind) + Receiver -->
+                <div class="fld-grp" id="row-mode-recv">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div id="wrap-mode">
+                            <label>Payment Mode</label>
+                            <select id="f-mode">
+                                <option>Cash</option>
+                                <option>UPI</option>
 
-            <!-- Mode (cash) + Receiver -->
-            <div class="fld-grp" id="row-mode-recv">
-                <div class="form-row" style="margin-bottom:0;">
-                    <div id="wrap-mode">
-                        <label>Payment Mode</label>
-                        <select id="f-mode">
-                            <option>Cash</option>
-                            <option>UPI</option>
-                            <option>Bank Transfer</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label id="lbl-receiver">Received By *</label>
-                        <select id="f-receiver" required>
-                            <option value="">— Select Receiver —</option>
-                        </select>
+                            </select>
+                        </div>
+                        <div id="row-estval" style="display:none;">
+                            <label>Est. Value (₹) &nbsp;<span
+                                    style="font-weight:400;color:var(--txt-muted);">optional</span></label>
+                            <input id="f-estval" type="number" placeholder="e.g. 5000" min="0" />
+                        </div>
+                        <div>
+                            <label id="lbl-receiver">Received By *</label>
+                            <select id="f-receiver" required>
+                                <option value="">— Select Receiver —</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="action-row" style="justify-content:flex-end;">
-                <button class="btn btn-primary" id="btn-generate" onclick="generateReceipt()">Received</button>
-                <button class="btn btn-outline" id="btn-draft" onclick="saveDraft()">📋 Payment Pending</button>
+                <div class="action-row" style="justify-content:flex-end;">
+                    <button class="btn btn-primary" id="btn-generate" onclick="generateReceipt()">Received</button>
+                    <button class="btn btn-outline" id="btn-draft" onclick="saveDraft()">📋 Payment Pending</button>
+                </div>
+                <div id="donation-status"
+                    style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;">
+                </div>
             </div>
-            <div id="donation-status" style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;"></div>
-        </div>
         </div><!-- /donation-entry-panel -->
 
         <!-- Records panel -->
         <div id="donation-records-panel" style="display:none;">
-        <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                <div class="card-title" style="margin-bottom:0;">Donation Records</div>
-                <button onclick="refreshDonationRecords()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻ Refresh</button>
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                    <div class="card-title" style="margin-bottom:0;">Donation Records</div>
+                    <button onclick="refreshDonationRecords()"
+                        style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻
+                        Refresh</button>
+                </div>
+                <div class="rec-search-row">
+                    <input class="rec-search-inp" id="drec-search" type="text" placeholder="🔍 Search donor name…"
+                        oninput="_applyDonFilter()">
+                </div>
+                <div id="donation-records-list">
+                    <p class="records-empty">Loading…</p>
+                </div>
+                <div id="drec-pgn" class="rec-pgn" style="display:none;"></div>
             </div>
-            <div class="rec-search-row">
-                <input class="rec-search-inp" id="drec-search" type="text" placeholder="🔍 Search donor name…" oninput="_applyDonFilter()">
-            </div>
-            <div id="donation-records-list"><p class="records-empty">Loading…</p></div>
-            <div id="drec-pgn" class="rec-pgn" style="display:none;"></div>
-        </div>
         </div><!-- /donation-records-panel -->
 
     </section>
@@ -1345,101 +1529,109 @@
 
         <!-- Expense sub-tabs: Entry | Records -->
         <div class="entry-tab-bar">
-            <button class="entry-tab active" id="etab-entry"   onclick="switchExpenseTab('entry')">✏️ Entry</button>
-            <button class="entry-tab"        id="etab-records" onclick="switchExpenseTab('records')">📋 Records</button>
+            <button class="entry-tab active" id="etab-entry" onclick="switchExpenseTab('entry')">✏️ Entry</button>
+            <button class="entry-tab" id="etab-records" onclick="switchExpenseTab('records')">📋 Records</button>
         </div>
 
         <!-- Entry panel -->
         <div id="expense-entry-panel">
-        <div class="card">
-            <div class="card-title" style="justify-content:space-between;">
-                <span>✦ New Expense Entry</span>
-                <button onclick="clearExpenseForm()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
-            </div>
+            <div class="card">
+                <div class="card-title" style="justify-content:space-between;">
+                    <span>✦ New Expense Entry</span>
+                    <button onclick="clearExpenseForm()"
+                        style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-size:.6rem;font-weight:700;color:var(--txt-muted);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;">Clear</button>
+                </div>
 
-            <!-- Voucher No + Date -->
-            <div class="fld-grp">
-                <div class="form-row" style="margin-bottom:0;">
-                    <div>
-                        <label>Voucher No.</label>
-                        <input id="fx-no" type="text" readonly />
-                    </div>
-                    <div>
-                        <label>Date *</label>
-                        <input id="fx-date" type="date" required />
+                <!-- Voucher No + Date -->
+                <div class="fld-grp">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div>
+                            <label>Voucher No.</label>
+                            <input id="fx-no" type="text" readonly />
+                        </div>
+                        <div>
+                            <label>Date *</label>
+                            <input id="fx-date" type="date" required />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Vendor -->
-            <div class="fld-grp">
-                <label>Vendor / Payee *</label>
-                <input id="fx-vendor" type="text" placeholder="e.g. Flower Shop, Caterer" required />
-            </div>
+                <!-- Vendor -->
+                <div class="fld-grp">
+                    <label>Vendor / Payee *</label>
+                    <input id="fx-vendor" type="text" placeholder="e.g. Flower Shop, Caterer" required />
+                </div>
 
-            <!-- Amount -->
-            <div class="fld-grp">
-                <label>Amount (₹) *</label>
-                <input id="fx-amount" type="number" placeholder="e.g. 5000" min="1" />
-            </div>
+                <!-- Amount -->
+                <div class="fld-grp">
+                    <label>Amount (₹) *</label>
+                    <input id="fx-amount" type="number" placeholder="e.g. 5000" min="1" />
+                </div>
 
-            <!-- Description -->
-            <div class="fld-grp">
-                <label>Description *</label>
-                <input id="fx-desc" type="text" placeholder="e.g. Garland purchase for Utsav" />
-            </div>
+                <!-- Description -->
+                <div class="fld-grp">
+                    <label>Description *</label>
+                    <input id="fx-desc" type="text" placeholder="e.g. Garland purchase for Utsav" />
+                </div>
 
-            <!-- Category + Mode + Paid By -->
-            <div class="fld-grp">
-                <div class="form-row" style="margin-bottom:8px;">
+                <!-- Category + Mode + Paid By -->
+                <div class="fld-grp">
+                    <div class="form-row" style="margin-bottom:8px;">
+                        <div>
+                            <label>Category</label>
+                            <select id="fx-cat">
+                                <option value="">— Select —</option>
+                                <option>Puja &amp; Rituals</option>
+                                <option>Decorations &amp; Flowers</option>
+                                <option>Food &amp; Catering</option>
+                                <option>Infrastructure &amp; Logistics</option>
+                                <option>Miscellaneous</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Payment Mode</label>
+                            <select id="fx-mode">
+                                <option>Cash</option>
+                                <option>UPI</option>
+
+                            </select>
+                        </div>
+                    </div>
                     <div>
-                        <label>Category</label>
-                        <select id="fx-cat">
-                            <option value="">— Select —</option>
-                            <option>Puja &amp; Rituals</option>
-                            <option>Decorations &amp; Flowers</option>
-                            <option>Food &amp; Catering</option>
-                            <option>Infrastructure &amp; Logistics</option>
-                            <option>Miscellaneous</option>
+                        <label>Paid By *</label>
+                        <select id="fx-receiver" required>
+                            <option value="">— Select Payer —</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Payment Mode</label>
-                        <select id="fx-mode">
-                            <option>Cash</option>
-                            <option>UPI</option>
-                            <option>Bank Transfer</option>
-                        </select>
-                    </div>
                 </div>
-                <div>
-                    <label>Paid By *</label>
-                    <select id="fx-receiver" required>
-                        <option value="">— Select Payer —</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="action-row" style="justify-content:flex-end;">
-                <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+                <div class="action-row" style="justify-content:flex-end;">
+                    <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+                </div>
+                <div id="expense-status"
+                    style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;">
+                </div>
             </div>
-            <div id="expense-status" style="font-size:.78rem;color:var(--txt-muted);text-align:center;margin-top:6px;min-height:18px;"></div>
-        </div>
         </div><!-- /expense-entry-panel -->
 
         <!-- Records panel -->
         <div id="expense-records-panel" style="display:none;">
-        <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                <div class="card-title" style="margin-bottom:0;">Expense Records</div>
-                <button onclick="refreshExpenseRecords()" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻ Refresh</button>
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                    <div class="card-title" style="margin-bottom:0;">Expense Records</div>
+                    <button onclick="refreshExpenseRecords()"
+                        style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--m3);font-weight:700;">↻
+                        Refresh</button>
+                </div>
+                <div class="rec-search-row">
+                    <input class="rec-search-inp" id="erec-search" type="text"
+                        placeholder="🔍 Search vendor / description…" oninput="_applyExpFilter()">
+                </div>
+                <div id="expense-records-list">
+                    <p class="records-empty">Loading…</p>
+                </div>
+                <div id="erec-pgn" class="rec-pgn" style="display:none;"></div>
             </div>
-            <div class="rec-search-row">
-                <input class="rec-search-inp" id="erec-search" type="text" placeholder="🔍 Search vendor / description…" oninput="_applyExpFilter()">
-            </div>
-            <div id="expense-records-list"><p class="records-empty">Loading…</p></div>
-            <div id="erec-pgn" class="rec-pgn" style="display:none;"></div>
-        </div>
         </div><!-- /expense-records-panel -->
 
     </section>
@@ -1561,13 +1753,18 @@
     </section>
 
     <!-- ── Update Received Modal ── -->
-    <div id="upd-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:902;" onclick="closeUpdateModal()"></div>
-    <div id="upd-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:903;padding:20px 16px 32px;box-shadow:0 -4px 24px rgba(74,0,40,.18);border-top:3px solid var(--m3);">
+    <div id="upd-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:902;"
+        onclick="closeUpdateModal()"></div>
+    <div id="upd-panel"
+        style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:903;padding:20px 16px 32px;box-shadow:0 -4px 24px rgba(74,0,40,.18);border-top:3px solid var(--m3);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
             <div style="font-size:.95rem;font-weight:800;color:var(--m2);">✏️ Update Amount Received</div>
-            <button onclick="closeUpdateModal()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
+            <button onclick="closeUpdateModal()"
+                style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
         </div>
-        <div id="upd-donor-info" style="background:var(--surface);border:1px solid var(--iv2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.82rem;line-height:1.5;color:var(--m1);"></div>
+        <div id="upd-donor-info"
+            style="background:var(--surface);border:1px solid var(--iv2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.82rem;line-height:1.5;color:var(--m1);">
+        </div>
         <input type="hidden" id="upd-receipt-no">
         <input type="hidden" id="upd-total-val">
         <div class="fld-grp">
@@ -1583,21 +1780,37 @@
             </div>
         </div>
         <div class="fld-grp" style="margin-bottom:18px;">
-            <label>Received By *</label>
-            <select id="upd-receiver">
-                <option value="">— Select Receiver —</option>
-            </select>
+            <div class="form-row" style="margin-bottom:8px;">
+                <div>
+                    <label>Payment Mode *</label>
+                    <select id="upd-mode">
+                        <option value="">— Select —</option>
+                        <option>Cash</option>
+                        <option>UPI</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Received By *</label>
+                    <select id="upd-receiver">
+                        <option value="">— Select Receiver —</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <button onclick="saveUpdateReceived()" class="btn btn-primary" style="width:100%;margin-bottom:8px;">Update Sheet</button>
+        <button onclick="saveUpdateReceived()" class="btn btn-primary" style="width:100%;margin-bottom:8px;">Update
+            Sheet</button>
         <div id="upd-status" style="text-align:center;font-size:.78rem;color:var(--txt-muted);min-height:18px;"></div>
     </div>
 
     <!-- Settings Panel Overlay -->
-    <div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;" onclick="closeSettings()"></div>
-    <div id="settings-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:901;max-height:80vh;overflow-y:auto;padding:20px 16px 32px;border-top:3px solid var(--m3);">
+    <div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;"
+        onclick="closeSettings()"></div>
+    <div id="settings-panel"
+        style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--iv4);border-radius:18px 18px 0 0;z-index:901;max-height:80vh;overflow-y:auto;padding:20px 16px 32px;border-top:3px solid var(--m3);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
             <div style="font-size:1rem;font-weight:800;color:var(--m2);">⚙️ Settings</div>
-            <button onclick="closeSettings()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
+            <button onclick="closeSettings()"
+                style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt-muted);">✕</button>
         </div>
 
         <div class="card" style="margin-bottom:12px;">
@@ -1785,7 +1998,7 @@
             const isEntry = tab === 'entry';
             document.getElementById('dtab-entry').classList.toggle('active', isEntry);
             document.getElementById('dtab-records').classList.toggle('active', !isEntry);
-            document.getElementById('donation-entry-panel').style.display   = isEntry ? '' : 'none';
+            document.getElementById('donation-entry-panel').style.display = isEntry ? '' : 'none';
             document.getElementById('donation-records-panel').style.display = isEntry ? 'none' : '';
             if (!isEntry) refreshDonationRecords();
         }
@@ -1795,7 +2008,7 @@
             const isEntry = tab === 'entry';
             document.getElementById('etab-entry').classList.toggle('active', isEntry);
             document.getElementById('etab-records').classList.toggle('active', !isEntry);
-            document.getElementById('expense-entry-panel').style.display   = isEntry ? '' : 'none';
+            document.getElementById('expense-entry-panel').style.display = isEntry ? '' : 'none';
             document.getElementById('expense-records-panel').style.display = isEntry ? 'none' : '';
             if (!isEntry) refreshExpenseRecords();
         }
@@ -1836,12 +2049,14 @@
             const al = document.getElementById('amt-live');
             if (isKind) { al.innerHTML = ''; }
             // In-kind rows
-            document.getElementById('row-kind').style.display    = isKind ? '' : 'none';
-            document.getElementById('row-kind2').style.display   = isKind ? '' : 'none';
-            document.getElementById('row-estval').style.display  = isKind ? '' : 'none';
-            // Mode div: hide for in-kind
+            document.getElementById('row-kind').style.display = isKind ? '' : 'none';
+            document.getElementById('row-kind2').style.display = isKind ? '' : 'none';
+            document.getElementById('row-estval').style.display = isKind ? '' : 'none';
+            // Mode div: hide for in-kind; est-value: show for in-kind
             document.getElementById('wrap-mode').style.display = isKind ? 'none' : '';
-            document.getElementById('row-mode-recv').style.gridTemplateColumns = isKind ? '1fr' : '';
+            document.getElementById('row-estval').style.display = isKind ? '' : 'none';
+            // Grid: cash = mode+receiver (2 cols), in-kind = estval+receiver (2 cols)
+            document.getElementById('row-mode-recv').style.gridTemplateColumns = '';
             // Draft button: cash only
             const draftBtn = document.getElementById('btn-draft');
             if (draftBtn) draftBtn.style.display = isKind ? 'none' : '';
@@ -2135,7 +2350,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                     receivedBy: d.receiver,
                     notes: 'Towards Aadi Festival'
                 });
-                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
+                const res = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'success') {
                     toast('Saved as Pending ✓', 'success');
@@ -2150,30 +2365,30 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         async function saveDraft() {
             if (!requireAuth('saveDraft')) return;
-            const donor    = titleCase(document.getElementById('f-donor').value.trim());
+            const donor = titleCase(document.getElementById('f-donor').value.trim());
             const receiver = document.getElementById('f-receiver').value;
-            const date     = document.getElementById('f-date').value;
-            const no       = getNo();
-            const isKind   = donationType === 'kind';
+            const date = document.getElementById('f-date').value;
+            const no = getNo();
+            const isKind = donationType === 'kind';
             const statusEl = document.getElementById('donation-status');
 
-            if (!donor)    { toast('Enter donor name', 'error'); return; }
+            if (!donor) { toast('Enter donor name', 'error'); return; }
             if (!receiver) { toast('Select receiver', 'error'); return; }
-            if (!date)     { toast('Select date', 'error'); return; }
+            if (!date) { toast('Select date', 'error'); return; }
 
             statusEl.textContent = 'Saving…';
 
             if (isKind) {
                 const kindDesc = document.getElementById('f-kind').value.trim();
-                if (!kindDesc) { toast('Enter item description', 'error'); statusEl.textContent=''; return; }
-                const qty      = document.getElementById('f-qty').value.trim();
+                if (!kindDesc) { toast('Enter item description', 'error'); statusEl.textContent = ''; return; }
+                const qty = document.getElementById('f-qty').value.trim();
                 const category = document.getElementById('f-category').value;
-                const estval   = parseFloat(document.getElementById('f-estval').value) || 0;
+                const estval = parseFloat(document.getElementById('f-estval').value) || 0;
                 await autoSaveSheet({ no, date, donor, kindDesc, qty, category, estval, receiver, isKind: true });
                 currentInKindNo++;
             } else {
                 const amt = parseFloat(document.getElementById('f-amount').value);
-                if (!amt || amt <= 0) { toast('Enter amount', 'error'); statusEl.textContent=''; return; }
+                if (!amt || amt <= 0) { toast('Enter amount', 'error'); statusEl.textContent = ''; return; }
                 const mode = document.getElementById('f-mode').value;
                 const rp = Math.floor(amt), pa = Math.round((amt - rp) * 100);
                 let words = toWords(rp);
@@ -2232,9 +2447,9 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         /* ── Utilities ── */
         function clearForm() {
             ['f-donor', 'f-amount', 'f-kind', 'f-qty', 'f-estval'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('f-category').value  = '';
-            document.getElementById('f-receiver').value  = '';
-            document.getElementById('f-mode').value      = 'Cash';
+            document.getElementById('f-category').value = '';
+            document.getElementById('f-receiver').value = '';
+            document.getElementById('f-mode').value = 'Cash';
             document.getElementById('f-date').value = todayISO();
             document.getElementById('amt-live').innerHTML = '';
             setDonationType('cash');
@@ -2336,9 +2551,9 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                     fetch(DEFAULT_GS_URL + '?action=getInKindDonations&token=' + API_TOKEN, { redirect: 'follow' })
                 ]);
                 const cashJson = await cashRes.json();
-                const ikJson   = await ikRes.json();
+                const ikJson = await ikRes.json();
                 const cashRows = (cashJson.data || []).map(r => ({ ...r, _type: 'cash' }));
-                const ikRows   = (ikJson.data   || []).map(r => ({ ...r, _type: 'kind' }));
+                const ikRows = (ikJson.data || []).map(r => ({ ...r, _type: 'kind' }));
                 _allDonRows = [...cashRows, ...ikRows].reverse();
                 if (ikJson.status === 'error' || !ikJson.data) {
                     console.warn('In-Kind endpoint not available — deploy Apps Script v11');
@@ -2364,7 +2579,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         function _renderDonPage() {
             const listEl = document.getElementById('donation-records-list');
-            const pgnEl  = document.getElementById('drec-pgn');
+            const pgnEl = document.getElementById('drec-pgn');
             if (!_filtDonRows.length) {
                 listEl.innerHTML = '<p class="records-empty">No records found</p>';
                 pgnEl.style.display = 'none';
@@ -2374,19 +2589,19 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const slice = _filtDonRows.slice(start, start + REC_PAGE);
             let html = '';
             slice.forEach(r => {
-                const gIdx   = _allDonRows.indexOf(r);
+                const gIdx = _allDonRows.indexOf(r);
                 const isCash = r._type === 'cash';
-                const badge  = isCash ? '💰' : '🎁';
+                const badge = isCash ? '💰' : '🎁';
                 const status = isCash ? (r.status || 'Pending') : (r.status || 'In Stock');
                 const isPend = status === 'Pending' || status === 'Partial';
-                let pillCls  = 'spill-green', pillTxt = '✓ Received';
-                if (status === 'Pending')  { pillCls = 'spill-red';   pillTxt = '⏳ Pending'; }
-                if (status === 'Partial')  { pillCls = 'spill-amber'; pillTxt = '◑ Partial'; }
-                if (status === 'In Stock') { pillCls = 'spill-blue';  pillTxt = '📦 In Stock'; }
-                const amt  = isCash ? '₹' + inr(r.total || 0)
-                                    : (r.estValue ? '₹' + inr(r.estValue) : '—');
+                let pillCls = 'spill-green', pillTxt = '✓ Received';
+                if (status === 'Pending') { pillCls = 'spill-red'; pillTxt = '⏳ Pending'; }
+                if (status === 'Partial') { pillCls = 'spill-amber'; pillTxt = '◑ Partial'; }
+                if (status === 'In Stock') { pillCls = 'spill-blue'; pillTxt = '📦 In Stock'; }
+                const amt = isCash ? '₹' + inr(r.total || 0)
+                    : (r.estValue ? '₹' + inr(r.estValue) : '—');
                 const date = esc(fmtDate2(r.date));
-                const no   = esc(String(r.receiptNo || ''));
+                const no = esc(String(r.receiptNo || ''));
                 let subParts = [];
                 if (isCash) {
                     if (r.mode) subParts.push(esc(r.mode));
@@ -2397,7 +2612,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                     if (item) subParts.push(item);
                     if (date !== '—') subParts.push(date);
                 }
-                const sub  = subParts.join(' · ');
+                const sub = subParts.join(' · ');
                 const note = isCash ? esc(r.notes || '') : esc(r.category || '');
                 let balLine = '';
                 if (isCash && isPend) {
@@ -2416,7 +2631,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                     <div class="rec-actions">
                         <span class="rec-no">Receipt No: #${no}</span>
                         ${balLine}
-                        <button class="rbtn rbtn-wa" onclick="_waShareFromRecord(${gIdx})">📤 Share</button>
+                        ${(!isCash || !isPend) ? `<button class="rbtn rbtn-wa" onclick="_waShareFromRecord(${gIdx})">📤 Share</button>` : ''}
                         ${isCash && isPend ? `<button class="rbtn rbtn-upd" onclick="openUpdateModal(${gIdx})">✏️ Update</button>` : ''}
                     </div>
                 </div>`;
@@ -2432,8 +2647,8 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                 <span class="pgn-info">${showing}</span>
                 <button class="pgn-btn" onclick="_donNext()" ${_donPage >= pages - 1 ? 'disabled' : ''}>Next ›</button>`;
         }
-        function _donPrev() { if (_donPage > 0) { _donPage--; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({behavior:'smooth',block:'start'}); } }
-        function _donNext() { if (_donPage < Math.ceil(_filtDonRows.length / REC_PAGE) - 1) { _donPage++; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({behavior:'smooth',block:'start'}); } }
+        function _donPrev() { if (_donPage > 0) { _donPage--; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+        function _donNext() { if (_donPage < Math.ceil(_filtDonRows.length / REC_PAGE) - 1) { _donPage++; _renderDonPage(); document.getElementById('donation-records-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
 
         async function refreshExpenseRecords() {
             if (!isAuth()) return;
@@ -2442,7 +2657,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             document.getElementById('erec-pgn').style.display = 'none';
             document.getElementById('erec-search').value = '';
             try {
-                const res  = await fetch(DEFAULT_GS_URL + '?action=getExpenses&token=' + API_TOKEN, { redirect: 'follow' });
+                const res = await fetch(DEFAULT_GS_URL + '?action=getExpenses&token=' + API_TOKEN, { redirect: 'follow' });
                 const json = await res.json();
                 _allExpRows = (json.data || []).slice().reverse();
                 _applyExpFilter();
@@ -2466,18 +2681,18 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         function _renderExpPage() {
             const listEl = document.getElementById('expense-records-list');
-            const pgnEl  = document.getElementById('erec-pgn');
+            const pgnEl = document.getElementById('erec-pgn');
             if (!_filtExpRows.length) {
                 listEl.innerHTML = '<p class="records-empty">No expenses recorded yet</p>';
                 pgnEl.style.display = 'none';
                 return;
             }
             const catColor = {
-                'Puja & Rituals':           '#e91e63',
-                'Decorations & Flowers':    '#8e24aa',
-                'Food & Catering':          '#ef6c00',
-                'Infrastructure & Logistics':'#1565c0',
-                'Miscellaneous':            '#546e7a'
+                'Puja & Rituals': '#e91e63',
+                'Decorations & Flowers': '#8e24aa',
+                'Food & Catering': '#ef6c00',
+                'Infrastructure & Logistics': '#1565c0',
+                'Miscellaneous': '#546e7a'
             };
             const start = _expPage * REC_PAGE;
             const slice = _filtExpRows.slice(start, start + REC_PAGE);
@@ -2485,18 +2700,26 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             slice.forEach(r => {
                 const clr = catColor[r.category] || '#666';
                 const catBadge = r.category
-                    ? `<span style="font-size:.63rem;font-weight:700;color:${clr};background:${clr}18;padding:2px 7px;border-radius:20px;">${esc(r.category)}</span>`
+                    ? `<span class="spill" style="color:${clr};background:${clr}18;">${esc(r.category)}</span>`
                     : '';
+                const date = esc(fmtDate2(r.date));
+                const no = esc(String(r.voucherNo || ''));
+                let subParts = [];
+                if (r.description) subParts.push(esc(r.description));
+                if (date !== '—') subParts.push(date);
+                const sub = subParts.join(' · ');
                 html += `<div class="rec-row">
-                    <div style="min-width:0;flex:1;">
+                    <div class="rc-top">
                         <div class="rec-main">🧾 ${esc(r.vendor || '—')}</div>
-                        <div class="rec-sub">${esc(r.description || '')} · ${esc(fmtDate2(r.date))}</div>
-                        <div class="rec-info">${esc(r.mode || 'Cash')} · Paid by: ${esc(r.paidBy || '—')}</div>
-                    </div>
-                    <div style="text-align:right;flex-shrink:0;">
                         <div class="rec-amt">₹${inr(r.amount || 0)}</div>
-                        ${catBadge ? `<div style="margin-top:3px;">${catBadge}</div>` : ''}
-                        <div class="rec-no">${esc(String(r.voucherNo || ''))}</div>
+                    </div>
+                    <div class="rc-mid">
+                        <div class="rec-sub">${sub || '—'}</div>
+                        ${catBadge}
+                    </div>
+                    <div class="rec-actions">
+                        <span class="rec-no">Voucher No: #${no}</span>
+                        <span style="font-size:.65rem;color:var(--txt-muted);font-weight:600;">${esc(r.mode || 'Cash')} · ${esc(r.paidBy || '—')}</span>
                     </div>
                 </div>`;
             });
@@ -2522,41 +2745,45 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                 ? dateParts.map(p => p.trim()).join(' / ')
                 : fmtDate2(r.date);
             const no = String(r.receiptNo || '');
-            document.getElementById('r-no').textContent        = no;
-            document.getElementById('r-date').textContent      = dateDisplay;
-            document.getElementById('r-donor').textContent     = r.donor || '—';
-            document.getElementById('r-receiver').textContent  = r.receivedBy || '';
+            document.getElementById('r-no').textContent = no;
+            document.getElementById('r-date').textContent = dateDisplay;
+            document.getElementById('r-donor').textContent = r.donor || '—';
+            document.getElementById('r-receiver').textContent = r.receivedBy || '';
             document.getElementById('rcp-row-qtycat').style.display = 'none';
             if (isKind) {
                 const words = (r.itemDesc || '') + (r.qty ? ' — ' + r.qty : '');
                 document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
-                document.getElementById('rcp-lbl-words').textContent    = 'Donated Items';
-                document.getElementById('rcp-lbl-mode').textContent     = 'Est. Value (₹)';
-                document.getElementById('r-words').textContent  = words;
-                document.getElementById('r-mode').textContent   = r.estValue ? '₹ ' + inr(r.estValue) : '— Not Assessed';
-                document.getElementById('rcp-amt-lbl').textContent   = 'In Kind';
-                document.getElementById('rcp-rupee').style.display   = 'none';
-                document.getElementById('r-amount').textContent      = 'Donation';
-                current = { no, date: '', donor: r.donor, amount: r.estValue || 0, words,
-                            mode: 'In Kind Donation', receiver: r.receivedBy || '',
-                            kindDesc: r.itemDesc, qty: r.qty, category: r.category,
-                            estval: r.estValue, isKind: true };
+                document.getElementById('rcp-lbl-words').textContent = 'Donated Items';
+                document.getElementById('rcp-lbl-mode').textContent = 'Est. Value (₹)';
+                document.getElementById('r-words').textContent = words;
+                document.getElementById('r-mode').textContent = r.estValue ? '₹ ' + inr(r.estValue) : '— Not Assessed';
+                document.getElementById('rcp-amt-lbl').textContent = 'In Kind';
+                document.getElementById('rcp-rupee').style.display = 'none';
+                document.getElementById('r-amount').textContent = 'Donation';
+                current = {
+                    no, date: '', donor: r.donor, amount: r.estValue || 0, words,
+                    mode: 'In Kind Donation', receiver: r.receivedBy || '',
+                    kindDesc: r.itemDesc, qty: r.qty, category: r.category,
+                    estval: r.estValue, isKind: true
+                };
             } else {
-                const amt  = parseFloat(r.received) > 0 ? parseFloat(r.received) : parseFloat(r.total || 0);
-                const rp   = Math.floor(amt), pa = Math.round((amt - rp) * 100);
-                let words  = toWords(rp);
+                const amt = parseFloat(r.received) > 0 ? parseFloat(r.received) : parseFloat(r.total || 0);
+                const rp = Math.floor(amt), pa = Math.round((amt - rp) * 100);
+                let words = toWords(rp);
                 if (pa) words += ` and ${toWords(pa)} Paise`;
                 words += ' Only';
                 document.getElementById('rcp-receipt-type').textContent = 'Donation Receipt';
-                document.getElementById('rcp-lbl-words').textContent    = 'Sum of Rupees';
-                document.getElementById('rcp-lbl-mode').textContent     = 'Payment Mode';
+                document.getElementById('rcp-lbl-words').textContent = 'Sum of Rupees';
+                document.getElementById('rcp-lbl-mode').textContent = 'Payment Mode';
                 document.getElementById('r-words').textContent = words;
-                document.getElementById('r-mode').textContent  = r.mode || 'Cash';
+                document.getElementById('r-mode').textContent = r.mode || 'Cash';
                 document.getElementById('rcp-amt-lbl').textContent = 'Amount';
                 document.getElementById('rcp-rupee').style.display = '';
-                document.getElementById('r-amount').textContent    = inr(amt) + ' /-';
-                current = { no, date: '', donor: r.donor, amount: amt, words,
-                            mode: r.mode || 'Cash', receiver: r.receivedBy || '', isKind: false };
+                document.getElementById('r-amount').textContent = inr(amt) + ' /-';
+                current = {
+                    no, date: '', donor: r.donor, amount: amt, words,
+                    mode: r.mode || 'Cash', receiver: r.receivedBy || '', isKind: false
+                };
             }
             document.getElementById('action-status').textContent = '';
         }
@@ -2570,29 +2797,27 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const r = _allDonRows[idx];
             if (!r || !isAuth()) return;
 
-            const btn = event && event.currentTarget;
-            const origTxt = btn ? btn.textContent : '';
-            if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+            /* Safely capture the button before any async work */
+            const clickedBtn = (typeof event !== 'undefined' && event && event.currentTarget)
+                ? event.currentTarget : null;
+            const origTxt = clickedBtn ? clickedBtn.textContent : '';
+            if (clickedBtn) { clickedBtn.textContent = '⏳'; clickedBtn.disabled = true; }
 
             // Fill receipt template fields
             _fillReceiptForRecord(r);
 
-            // Reveal receipt section off-screen so html2canvas can measure it
+            // Reveal receipt section off-screen so html2canvas can render it
+            // Must use opacity:0 (NOT visibility:hidden) — html2canvas skips hidden elements
             const sec = document.getElementById('tab-receipt');
             const wasActive = sec.classList.contains('active');
             if (!wasActive) {
                 sec.classList.add('active');
-                sec.style.cssText = 'position:fixed;left:-6000px;top:0;visibility:hidden;z-index:-1;';
+                sec.style.cssText = 'position:fixed;left:-6000px;top:0;opacity:0;pointer-events:none;z-index:-1;';
+                await new Promise(r => setTimeout(r, 150)); // let browser paint before capture
             }
-            try {
-                const canvas   = await buildReceiptCanvas();
-                const donor    = (r.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
-                const fileName = `Receipt_${r.receiptNo}_${donor}.png`;
-                const blob     = await new Promise(res => canvas.toBlob(res, 'image/png'));
-                const file     = new File([blob], fileName, { type: 'image/png' });
 
-                const waMsg =
-`🙏 We humbly thank you for your generous support.
+            const waMsg =
+                `🙏 We humbly thank you for your generous support.
 The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 
 📎 Receipt is attached.
@@ -2600,25 +2825,37 @@ The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 — Sri Ponniamman Temple Trust (R)`;
 
+            try {
+                const canvas = await buildReceiptCanvas();
+                const donor = (r.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const fileName = `Receipt_${r.receiptNo}_${donor}.png`;
+                const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                const file = new File([blob], fileName, { type: 'image/png' });
+
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    /* Native share sheet (mobile) — image + message */
+                    toast('📲 Choose WhatsApp contact…', 'info');
                     await navigator.share({ files: [file], text: waMsg });
                     toast('Receipt shared ✓', 'success');
                 } else {
-                    // Desktop fallback: download PNG
+                    /* Fallback: save image + open WhatsApp with pre-filled text */
                     const link = document.createElement('a');
                     link.download = fileName;
                     link.href = canvas.toDataURL('image/png');
                     document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                    toast('Receipt downloaded — share manually in WhatsApp', 'info');
+                    setTimeout(() => {
+                        window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
+                    }, 600);
+                    toast('Image saved — attach it in the WhatsApp chat that opens', 'info');
                 }
             } catch (e) {
-                if (e.name !== 'AbortError') toast('Failed: ' + e.message, 'error');
+                if (e.name !== 'AbortError') toast('Share failed: ' + e.message, 'error');
             } finally {
                 if (!wasActive) {
                     sec.classList.remove('active');
                     sec.style.cssText = '';
                 }
-                if (btn) { btn.textContent = origTxt; btn.disabled = false; }
+                if (clickedBtn) { clickedBtn.textContent = origTxt; clickedBtn.disabled = false; }
             }
         }
 
@@ -2637,12 +2874,12 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const r = _allDonRows[idx];
             if (!r) return;
             const isCash = r._type === 'cash';
-            let msg  = `🙏 *Sri Ponniamman Temple Trust (R)*\n`;
-                msg += `42nd Aadi Festival 2026\n`;
-                msg += `${'─'.repeat(28)}\n`;
-                msg += `📋 *Receipt No:* ${r.receiptNo}\n`;
-                msg += `📅 *Date:* ${fmtDate2(r.date)}\n`;
-                msg += `👤 *Donor:* ${r.donor}\n`;
+            let msg = `🙏 *Sri Ponniamman Temple Trust (R)*\n`;
+            msg += `42nd Aadi Festival 2026\n`;
+            msg += `${'─'.repeat(28)}\n`;
+            msg += `📋 *Receipt No:* ${r.receiptNo}\n`;
+            msg += `📅 *Date:* ${fmtDate2(r.date)}\n`;
+            msg += `👤 *Donor:* ${r.donor}\n`;
             if (isCash) {
                 msg += `💰 *Amount:* ₹${inr(r.total || 0)}\n`;
                 msg += `💳 *Mode:* ${r.mode || 'Cash'}\n`;
@@ -2662,47 +2899,53 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const r = _allDonRows[idx];
             if (!r) return;
             document.getElementById('upd-receipt-no').value = r.receiptNo;
-            document.getElementById('upd-total-val').value  = r.total || 0;
+            document.getElementById('upd-total-val').value = r.total || 0;
             document.getElementById('upd-donor-info').innerHTML =
                 `<b>${esc(r.donor)}</b> &nbsp;·&nbsp; Receipt <b>#${r.receiptNo}</b><br>` +
                 `Total: <b>₹${inr(r.total || 0)}</b> &nbsp;|&nbsp; ` +
                 `Received: <b>₹${inr(r.received || 0)}</b> &nbsp;|&nbsp; ` +
-                `Balance: <b style="color:#c0392b;">₹${inr(r.balance || (r.total - (r.received||0)))}</b>`;
+                `Balance: <b style="color:#c0392b;">₹${inr(r.balance || (r.total - (r.received || 0)))}</b>`;
             document.getElementById('upd-amount').value = r.received || '';
-            document.getElementById('upd-date').value   = todayISO();
+            document.getElementById('upd-date').value = todayISO();
             document.getElementById('upd-status').textContent = '';
+            // Pre-select payment mode if already set
+            const modeEl = document.getElementById('upd-mode');
+            if (modeEl) modeEl.value = r.mode || '';
             // Populate receiver dropdown from saved list
-            const names  = getReceivers();
-            const selEl  = document.getElementById('upd-receiver');
+            const names = getReceivers();
+            const selEl = document.getElementById('upd-receiver');
             selEl.innerHTML = '<option value="">— Select Receiver —</option>' +
                 names.map(n => `<option value="${esc(n)}" ${n === r.receivedBy ? 'selected' : ''}>${esc(n)}</option>`).join('');
             document.getElementById('upd-overlay').style.display = '';
-            document.getElementById('upd-panel').style.display   = '';
+            document.getElementById('upd-panel').style.display = '';
         }
         function closeUpdateModal() {
             document.getElementById('upd-overlay').style.display = 'none';
-            document.getElementById('upd-panel').style.display   = 'none';
+            document.getElementById('upd-panel').style.display = 'none';
         }
         async function saveUpdateReceived() {
-            const receiptNo  = document.getElementById('upd-receipt-no').value;
-            const amount     = parseFloat(document.getElementById('upd-amount').value) || 0;
-            const date       = document.getElementById('upd-date').value;
+            const receiptNo = document.getElementById('upd-receipt-no').value;
+            const amount = parseFloat(document.getElementById('upd-amount').value) || 0;
+            const date = document.getElementById('upd-date').value;
+            const mode = document.getElementById('upd-mode').value;
             const receivedBy = document.getElementById('upd-receiver').value;
-            const statusEl   = document.getElementById('upd-status');
-            if (!amount)     { toast('Enter received amount', 'error'); return; }
-            if (!date)       { toast('Select date', 'error'); return; }
+            const statusEl = document.getElementById('upd-status');
+            if (!amount) { toast('Enter received amount', 'error'); return; }
+            if (!date) { toast('Select date', 'error'); return; }
+            if (!mode) { toast('Select payment mode', 'error'); return; }
             if (!receivedBy) { toast('Select receiver', 'error'); return; }
             statusEl.textContent = 'Updating…';
             try {
-                const p = new URLSearchParams({ action:'updateReceived', token:API_TOKEN, receiptNo, amount, date, receivedBy });
-                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect:'follow' });
+                const p = new URLSearchParams({ action: 'updateReceived', token: API_TOKEN, receiptNo, amount, date, mode, receivedBy });
+                const res = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'success') {
                     const updIdx = _allDonRows.findIndex(r => String(r.receiptNo) === String(receiptNo));
                     if (updIdx >= 0) {
-                        _allDonRows[updIdx].received   = amount;
-                        _allDonRows[updIdx].balance    = parseFloat(_allDonRows[updIdx].total || 0) - amount;
-                        _allDonRows[updIdx].status     = _allDonRows[updIdx].balance <= 0 ? 'Received' : 'Partial';
+                        _allDonRows[updIdx].received = amount;
+                        _allDonRows[updIdx].balance = parseFloat(_allDonRows[updIdx].total || 0) - amount;
+                        _allDonRows[updIdx].status = _allDonRows[updIdx].balance <= 0 ? 'Received' : 'Partial';
+                        _allDonRows[updIdx].mode = mode;
                         _allDonRows[updIdx].receivedBy = receivedBy;
                     }
                     statusEl.innerHTML = `Saved ✓ &nbsp;<button onclick="closeUpdateModal();generateReceiptFromRecord(${updIdx})" style="border:none;background:var(--m3);color:var(--iv1);border-radius:6px;padding:3px 10px;font-size:.75rem;font-weight:700;cursor:pointer;">🧾 Generate Receipt</button>`;
@@ -2722,8 +2965,8 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             if (!val) return '—';
             // val may be a JS Date object (from Sheets) or a string "DD-MM-YYYY"
             if (val instanceof Date) {
-                const d = val.getDate().toString().padStart(2,'0');
-                const m = (val.getMonth()+1).toString().padStart(2,'0');
+                const d = val.getDate().toString().padStart(2, '0');
+                const m = (val.getMonth() + 1).toString().padStart(2, '0');
                 return d + '/' + m + '/' + val.getFullYear();
             }
             const s = String(val);
@@ -2735,16 +2978,16 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         async function saveExpense() {
             const vendor = titleCase(document.getElementById('fx-vendor').value.trim());
             const paidBy = document.getElementById('fx-receiver').value;
-            if (!vendor)  { toast('Enter vendor / payee name', 'error'); return; }
-            if (!paidBy)  { toast('Select Paid By', 'error'); return; }
+            if (!vendor) { toast('Enter vendor / payee name', 'error'); return; }
+            if (!paidBy) { toast('Select Paid By', 'error'); return; }
             const description = document.getElementById('fx-desc').value.trim();
             if (!description) { toast('Enter description', 'error'); return; }
             const amount = parseFloat(document.getElementById('fx-amount').value) || 0;
-            if (!amount)  { toast('Enter amount', 'error'); return; }
-            const no       = RCP_YEAR + '/EX/' + currentExpenseNo;
-            const date     = document.getElementById('fx-date').value;
+            if (!amount) { toast('Enter amount', 'error'); return; }
+            const no = RCP_YEAR + '/EX/' + currentExpenseNo;
+            const date = document.getElementById('fx-date').value;
             const category = document.getElementById('fx-cat').value;
-            const mode     = document.getElementById('fx-mode').value;
+            const mode = document.getElementById('fx-mode').value;
 
             const p = new URLSearchParams({
                 action: 'addExpense', token: API_TOKEN,
@@ -2753,7 +2996,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             const statusEl = document.getElementById('expense-status');
             statusEl.textContent = 'Saving…';
             try {
-                const res  = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
+                const res = await fetch(DEFAULT_GS_URL + '?' + p, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'success') {
                     currentExpenseNo++;
