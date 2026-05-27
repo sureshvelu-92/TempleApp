@@ -1029,7 +1029,17 @@
             <div class="app-title-wrap">
                 <div class="app-title">Sri Ponniamman Temple Trust (R)</div>
             </div>
-
+            <div id="conn-dot" title="Sheet connection" style="
+                width:11px;height:11px;border-radius:50%;flex-shrink:0;
+                background:#555;border:2px solid rgba(255,255,255,.3);
+                transition:background .4s;margin-right:6px;"></div>
+            <button onclick="logout()" title="Logout" style="
+                background:rgba(255,255,255,.1);border:1.5px solid rgba(232,213,163,.4);
+                border-radius:7px;color:var(--iv1);font-size:.75rem;
+                width:32px;height:32px;cursor:pointer;flex-shrink:0;
+                display:flex;align-items:center;justify-content:center;">
+                🔒
+            </button>
         </div>
     </div>
 
@@ -1201,8 +1211,7 @@
             <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
         <div style="max-width:620px;margin:8px auto 0;text-align:center;font-size:.72rem;color:#888;line-height:1.5;">
-            📋 Tap <strong>WhatsApp</strong> → image is copied to clipboard →
-            open chat → <strong>long-press → Paste</strong> to send
+            📋 Tap <strong>WhatsApp</strong> → image copied → open chat → <strong>long-press → Paste</strong>
         </div>
         <div id="action-status"
             style="max-width:620px;margin:6px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;">
@@ -1360,6 +1369,16 @@
             document.getElementById('tab-btn-receipt').classList.remove('hidden');
         }
 
+        function logout() {
+            sessionStorage.removeItem('sptt_auth');
+            setConnDot('checking');
+            /* Reset PIN entry */
+            pinEntry = '';
+            updatePinDots();
+            document.getElementById('pin-error').textContent = '';
+            document.getElementById('login-screen').classList.remove('hide');
+        }
+
         /* ── State ── */
         let current = null;
         const histArr = []; // kept for session reprint reference
@@ -1457,9 +1476,9 @@
             el.style.width = '380px';
             await new Promise(r => setTimeout(r, 120));
 
-            /* Step 4 — capture at scale:3 → always ~1140px wide */
+            /* Step 4 — capture at scale:2 → ~760px wide, smaller file */
             const rcpCanvas = await html2canvas(el, {
-                scale: 3, useCORS: false, allowTaint: false,
+                scale: 2, useCORS: false, allowTaint: false,
                 backgroundColor: '#FFFDF8', logging: false,
                 imageTimeout: 8000, windowWidth: 400
             });
@@ -1493,8 +1512,8 @@
                 const canvas = await buildReceiptCanvas();
                 const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
                 const link = document.createElement('a');
-                link.download = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
-                link.href = canvas.toDataURL('image/png');
+                link.download = current ? `Receipt_${current.no}_${donor}.jpg` : 'Receipt.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.88);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1529,21 +1548,50 @@ The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 — Sri Ponniamman Temple Trust (R)`;
 
-                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.88));
+                const jpgName = fileName.replace(/\.png$/i, '.jpg');
 
                 const waUrl = phone
                     ? `https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`
                     : `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
 
-                /* Copy image to clipboard → open WhatsApp → user pastes */
-                await navigator.clipboard.write([
-                    new ClipboardItem({ 'image/png': blob })
-                ]);
-                window.open(waUrl, '_blank');
+                const file = new File([blob], jpgName, { type: 'image/jpeg' });
+
+                /* ── Path 1: Native share with image + open wa.me to donor number ── */
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    /* Show donor phone so volunteer knows who to pick */
+                    if (phone) status.textContent = `📲 Send to: ${current.phone}`;
+                    /* Open WhatsApp to donor's number after short delay */
+                    if (phone) setTimeout(() => window.open(waUrl, '_blank'), 400);
+                    await navigator.share({ files: [file], text: waMsg });
+                    status.textContent = phone
+                        ? `Sent ✓ — opened WhatsApp to ${current.phone}`
+                        : 'Sent via WhatsApp ✓';
+                    toast('Image shared ✓', 'success');
+                    return;
+                }
+
+                /* ── Path 2: Clipboard → open WhatsApp to donor number ── */
+                try {
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': blob })]);
+                    window.open(waUrl, '_blank');
+                    status.textContent = phone
+                        ? `📋 Image copied — paste in WhatsApp to ${current.phone}`
+                        : '📋 Image copied — paste in WhatsApp';
+                    toast('Image copied to clipboard ✓', 'success');
+                    return;
+                } catch (clipErr) { console.warn('Clipboard failed:', clipErr); }
+
+                /* ── Path 3: Download + open WhatsApp ── */
+                const link = document.createElement('a');
+                link.download = jpgName;
+                link.href = canvas.toDataURL('image/jpeg', 0.88);
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                setTimeout(() => window.open(waUrl, '_blank'), 700);
                 status.textContent = phone
-                    ? `Image copied — paste in WhatsApp to ${current.phone} 📋`
-                    : 'Image copied — paste in WhatsApp 📋';
-                toast('Image copied to clipboard ✓', 'success');
+                    ? `Image saved — attach in WhatsApp to ${current.phone}`
+                    : 'Image saved — WhatsApp opened ✓';
+                toast('Image saved ✓', 'success');
 
             } catch(e) {
                 if (e.name === 'AbortError') { status.textContent = ''; return; }
@@ -1581,20 +1629,45 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         }
 
 
-        /* ── Test connection ── */
+        /* ── Connection dot helper ── */
+        function setConnDot(state) {
+            const dot = document.getElementById('conn-dot');
+            if (!dot) return;
+            const map = { checking: '#f0a500', ok: '#25D366', error: '#e53935' };
+            dot.style.background = map[state] || '#555';
+            dot.title = state === 'ok' ? 'Sheet connected ✓' : state === 'error' ? 'Sheet unreachable' : 'Checking…';
+        }
+
+        /* ── Test connection (manual — Settings tab) ── */
         async function testConn() {
             if (!requireAuth('testConn')) return;
             const el = document.getElementById('conn-st');
             el.innerHTML = '<span class="badge badge-wait">Testing…</span>';
+            setConnDot('checking');
             try {
                 const res = await fetch(DEFAULT_GS_URL + '?action=ping&token=' + API_TOKEN, { redirect: 'follow' });
                 const json = await res.json();
                 if (json.status === 'ok') {
                     el.innerHTML = '<span class="badge badge-ok">Connected ✓ (v' + json.version + ')</span>';
+                    setConnDot('ok');
                 } else {
-                    el.innerHTML = '<span class="badge badge-err">Unexpected response</span>';
+                    el.innerHTML = '<span class="badge badge-err">Unauthorized / error</span>';
+                    setConnDot('error');
                 }
-            } catch (e) { el.innerHTML = '<span class="badge badge-err">Cannot reach server</span>'; }
+            } catch (e) {
+                el.innerHTML = '<span class="badge badge-err">Cannot reach server</span>';
+                setConnDot('error');
+            }
+        }
+
+        /* ── Auto connection check on login (silent) ── */
+        async function autoCheckConn() {
+            setConnDot('checking');
+            try {
+                const res = await fetch(DEFAULT_GS_URL + '?action=ping&token=' + API_TOKEN, { redirect: 'follow' });
+                const json = await res.json();
+                setConnDot(json.status === 'ok' ? 'ok' : 'error');
+            } catch (e) { setConnDot('error'); }
         }
 
         /* ── Utilities ── */
@@ -1672,7 +1745,8 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
             if (pinEntry === CORRECT_PIN) {
                 sessionStorage.setItem('sptt_auth', '1');
                 document.getElementById('login-screen').classList.add('hide');
-                fetchLastSeqFromSheet();   /* sync sheet only after auth */
+                autoCheckConn();           /* check connection & update dot */
+                fetchLastSeqFromSheet();   /* sync receipt # from sheet */
             } else {
                 document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
                 pinEntry = '';
@@ -1688,6 +1762,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         /* Check session on load */
         if (sessionStorage.getItem('sptt_auth') === '1') {
             document.getElementById('login-screen').classList.add('hide');
+            autoCheckConn();
         }
 
         /* ── Init ── */
