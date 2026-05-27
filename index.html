@@ -1200,8 +1200,12 @@
             <button class="btn btn-img" onclick="downloadAsImage()">⬇ Download</button>
             <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
+        <div style="max-width:620px;margin:8px auto 0;text-align:center;font-size:.72rem;color:#888;line-height:1.5;">
+            📋 Tap <strong>WhatsApp</strong> → image is copied to clipboard →
+            open chat → <strong>long-press → Paste</strong> to send
+        </div>
         <div id="action-status"
-            style="max-width:620px;margin:8px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;">
+            style="max-width:620px;margin:6px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;">
         </div>
     </section>
 
@@ -1512,36 +1516,34 @@
                 const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
                 const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
 
-                /* Strip non-digits from phone; add India country code if 10 digits */
+                /* Strip non-digits; add India +91 for 10-digit numbers */
                 const rawPhone = (current?.phone || '').replace(/\D/g, '');
                 const phone = rawPhone.length === 10 ? '91' + rawPhone : rawPhone;
 
-                const msgText = encodeURIComponent(
+                const waMsg =
 `🙏 We humbly thank you for your generous support.
 The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 
 📎 Receipt is attached.
 
 May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
-— Sri Ponniamman Temple Trust (R)`);
+— Sri Ponniamman Temple Trust (R)`;
 
-                /* Save image to device first */
-                const link = document.createElement('a');
-                link.download = fileName;
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
 
-                /* Navigate to WhatsApp: specific contact if phone present, else generic */
                 const waUrl = phone
-                    ? `https://wa.me/${phone}?text=${msgText}`
-                    : `https://wa.me/?text=${msgText}`;
+                    ? `https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`
+                    : `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
 
-                setTimeout(() => window.open(waUrl, '_blank'), 600);
-
+                /* Copy image to clipboard → open WhatsApp → user pastes */
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+                window.open(waUrl, '_blank');
                 status.textContent = phone
-                    ? 'Image saved — tap + in WhatsApp to attach ✓'
-                    : 'Image saved — WhatsApp opened ✓';
-                toast(phone ? 'WhatsApp opened to donor ✓' : 'Saved & WhatsApp opened ✓', 'success');
+                    ? `Image copied — paste in WhatsApp to ${current.phone} 📋`
+                    : 'Image copied — paste in WhatsApp 📋';
+                toast('Image copied to clipboard ✓', 'success');
 
             } catch(e) {
                 if (e.name === 'AbortError') { status.textContent = ''; return; }
