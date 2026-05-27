@@ -2042,7 +2042,7 @@
             _deferredInstall = e;
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches
                 || window.navigator.standalone === true;
-            if (!isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
+            if (!isStandalone && !localStorage.getItem('install_banner_dismissed')) {
                 document.getElementById('install-banner').style.display = 'flex';
             }
         });
@@ -2065,7 +2065,7 @@
 
         function dismissBanner() {
             document.getElementById('install-banner').style.display = 'none';
-            sessionStorage.setItem('install_banner_dismissed', '1');
+            localStorage.setItem('install_banner_dismissed', '1');
         }
 
         function openSettings() {
