@@ -1073,18 +1073,12 @@
                 <input id="f-donor" type="text" placeholder="e.g. Mahadevan, Chennai" required />
             </div>
 
-            <div class="form-row">
-                <div>
-                    <label>Phone Number</label>
-                    <input id="f-phone" type="tel" placeholder="e.g. 9876543210" maxlength="15" />
-                </div>
-                <div>
-                    <label>Amount (Rs.) *</label>
-                    <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" required oninput="liveAmt()" />
-                </div>
+            <div class="form-row full">
+                <label>Amount (Rs.) *</label>
+                <input id="f-amount" type="number" placeholder="e.g. 10000" min="1" required oninput="liveAmt()" />
             </div>
 
-            <div class="amount-live" id="amt-live" style="margin-bottom:10px;"></div>
+            <div class="amount-live" id="amt-live" style="margin-bottom:10px;display:none;"></div>
 
             <div class="form-row">
                 <div>
@@ -1211,7 +1205,8 @@
             <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
         <div style="max-width:620px;margin:8px auto 0;text-align:center;font-size:.72rem;color:#888;line-height:1.5;">
-            📋 Tap <strong>WhatsApp</strong> → image copied → open chat → <strong>long-press → Paste</strong>
+            <strong>WhatsApp</strong>: share sheet opens with receipt image &amp; message attached —
+            pick the donor's contact. Donor number shown as reminder.
         </div>
         <div id="action-status"
             style="max-width:620px;margin:6px auto;font-size:.74rem;color:#777;text-align:center;min-height:18px;">
@@ -1274,10 +1269,11 @@
         function liveAmt() {
             const v = parseFloat(document.getElementById('f-amount').value) || 0;
             const el = document.getElementById('amt-live');
-            if (!v) { el.innerHTML = ''; return; }
+            if (!v) { el.innerHTML = ''; el.style.display = 'none'; return; }
             const rp = Math.floor(v), pa = Math.round((v - rp) * 100);
             let w = toWords(rp); if (pa) w += ` and ${toWords(pa)} Paise`;
             el.innerHTML = `<strong>Rs. ${inr(rp)}</strong> &rarr; ${w} Only`;
+            el.style.display = 'block';
         }
 
 
@@ -1392,7 +1388,6 @@
         function generateReceipt() {
             if (!requireAuth('generateReceipt')) return;
             const donor = titleCase(document.getElementById('f-donor').value.trim());
-            const phone = document.getElementById('f-phone').value.trim();
             const amt = parseFloat(document.getElementById('f-amount').value);
             const mode = document.getElementById('f-mode').value;
             const receiver = document.getElementById('f-receiver').value;
@@ -1415,7 +1410,7 @@
             document.getElementById('r-amount').textContent = `${inr(amt)} /-`;
             document.getElementById('r-receiver').textContent = receiver;
 
-            current = { no, date, donor, phone, amount: amt, words, mode, receiver };
+            current = { no, date, donor, amount: amt, words, mode, receiver };
             histArr.unshift({ ...current });
             bumpNo();
 
@@ -1476,9 +1471,9 @@
             el.style.width = '380px';
             await new Promise(r => setTimeout(r, 120));
 
-            /* Step 4 — capture at scale:2 → ~760px wide, smaller file */
+            /* Step 4 — capture at scale:3 → ~1140px wide */
             const rcpCanvas = await html2canvas(el, {
-                scale: 2, useCORS: false, allowTaint: false,
+                scale: 3, useCORS: false, allowTaint: false,
                 backgroundColor: '#FFFDF8', logging: false,
                 imageTimeout: 8000, windowWidth: 400
             });
@@ -1512,8 +1507,8 @@
                 const canvas = await buildReceiptCanvas();
                 const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
                 const link = document.createElement('a');
-                link.download = current ? `Receipt_${current.no}_${donor}.jpg` : 'Receipt.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 0.88);
+                link.download = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
+                link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1529,16 +1524,8 @@
         /* ── Share via WhatsApp ── */
         async function shareToWhatsApp() {
             const status = document.getElementById('action-status');
-            status.textContent = 'Preparing image…';
+            status.textContent = 'Preparing receipt…';
             try {
-                const canvas = await buildReceiptCanvas();
-                const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
-                const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
-
-                /* Strip non-digits; add India +91 for 10-digit numbers */
-                const rawPhone = (current?.phone || '').replace(/\D/g, '');
-                const phone = rawPhone.length === 10 ? '91' + rawPhone : rawPhone;
-
                 const waMsg =
 `🙏 We humbly thank you for your generous support.
 The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
@@ -1548,56 +1535,35 @@ The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
 May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 — Sri Ponniamman Temple Trust (R)`;
 
-                const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.88));
-                const jpgName = fileName.replace(/\.png$/i, '.jpg');
+                /* Build PNG */
+                const canvas   = await buildReceiptCanvas();
+                const donor    = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
+                const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
+                const blob     = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const file     = new File([blob], fileName, { type: 'image/png' });
 
-                const waUrl = phone
-                    ? `https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`
-                    : `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
-
-                const file = new File([blob], jpgName, { type: 'image/jpeg' });
-
-                /* ── Path 1: Native share with image + open wa.me to donor number ── */
+                /* ── Path 1: Native share — image + message ── */
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                    /* Show donor phone so volunteer knows who to pick */
-                    if (phone) status.textContent = `📲 Send to: ${current.phone}`;
-                    /* Open WhatsApp to donor's number after short delay */
-                    if (phone) setTimeout(() => window.open(waUrl, '_blank'), 400);
+                    status.textContent = '📲 Choose WhatsApp contact…';
                     await navigator.share({ files: [file], text: waMsg });
-                    status.textContent = phone
-                        ? `Sent ✓ — opened WhatsApp to ${current.phone}`
-                        : 'Sent via WhatsApp ✓';
-                    toast('Image shared ✓', 'success');
+                    status.textContent = 'Shared ✓';
+                    toast('Receipt shared ✓', 'success');
                     return;
                 }
 
-                /* ── Path 2: Clipboard → open WhatsApp to donor number ── */
-                try {
-                    await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': blob })]);
-                    window.open(waUrl, '_blank');
-                    status.textContent = phone
-                        ? `📋 Image copied — paste in WhatsApp to ${current.phone}`
-                        : '📋 Image copied — paste in WhatsApp';
-                    toast('Image copied to clipboard ✓', 'success');
-                    return;
-                } catch (clipErr) { console.warn('Clipboard failed:', clipErr); }
-
-                /* ── Path 3: Download + open WhatsApp ── */
+                /* ── Fallback: download PNG (desktop / unsupported browser) ── */
                 const link = document.createElement('a');
-                link.download = jpgName;
-                link.href = canvas.toDataURL('image/jpeg', 0.88);
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                setTimeout(() => window.open(waUrl, '_blank'), 700);
-                status.textContent = phone
-                    ? `Image saved — attach in WhatsApp to ${current.phone}`
-                    : 'Image saved — WhatsApp opened ✓';
+                status.textContent = 'Image downloaded — share in WhatsApp manually';
                 toast('Image saved ✓', 'success');
 
             } catch(e) {
                 if (e.name === 'AbortError') { status.textContent = ''; return; }
-                status.textContent = 'Share failed: ' + e.message;
+                status.textContent = 'Failed: ' + e.message;
                 toast('Share failed', 'error');
-                console.error('shareToWhatsApp error:', e);
+                console.error('shareToWhatsApp:', e);
             }
         }
 
@@ -1610,7 +1576,6 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
                 const p = new URLSearchParams({
                     action: 'addDonation', token: API_TOKEN,
                     receiptNo: d.no, date: d.date, donor: d.donor,
-                    phone: d.phone || '',
                     amount: d.amount, amountWords: d.words, mode: d.mode,
                     receivedBy: d.receiver
                 });
@@ -1629,6 +1594,7 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
         }
 
 
+        /* ── Auto-upload receipt image to Google Drive ── */
         /* ── Connection dot helper ── */
         function setConnDot(state) {
             const dot = document.getElementById('conn-dot');
@@ -1672,11 +1638,12 @@ May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
 
         /* ── Utilities ── */
         function clearForm() {
-            ['f-donor', 'f-phone', 'f-amount'].forEach(id => document.getElementById(id).value = '');
+            ['f-donor', 'f-amount'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('f-receiver').value = '';
             document.getElementById('f-mode').value = 'Cash';
             document.getElementById('f-date').value = todayISO();
-            document.getElementById('amt-live').innerHTML = '';
+            const al = document.getElementById('amt-live');
+            al.innerHTML = ''; al.style.display = 'none';
         }
         function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
