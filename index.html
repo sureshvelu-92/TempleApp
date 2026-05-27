@@ -2040,7 +2040,9 @@
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             _deferredInstall = e;
-            if (!sessionStorage.getItem('install_banner_dismissed')) {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                || window.navigator.standalone === true;
+            if (!isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
                 document.getElementById('install-banner').style.display = 'flex';
             }
         });
