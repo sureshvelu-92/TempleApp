@@ -2,7 +2,7 @@
   "name": "SPT",
   "short_name": "SPT",
   "description": "Sri Ponniamman Temple Trust – Donation Receipts",
-  "start_url": "/TempleApp/index.html",
+  "start_url": "/TempleApp/index.html?pwa=1",
   "scope": "/TempleApp/",
   "display": "standalone",
   "background_color": "#7B0D3E",

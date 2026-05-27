@@ -1342,7 +1342,7 @@
                 <img src="./images/logo.png" alt="logo" onerror="this.style.display='none'" />
             </div>
             <div class="login-title">Sri Ponniamman Temple Trust (R)</div>
-            <div class="login-sub">Aadi Festival 2026</div>
+
 
             <div class="pin-dots" id="pin-dots">
                 <span></span><span></span><span></span><span></span>
@@ -2040,7 +2040,8 @@
         let _deferredInstall = null;
         const _isStandalone = () =>
             window.matchMedia('(display-mode: standalone)').matches
-            || window.navigator.standalone === true;
+            || window.navigator.standalone === true
+            || new URLSearchParams(window.location.search).get('pwa') === '1';
 
         // Show banner after page load so display-mode is correctly detected
         window.addEventListener('load', () => {
