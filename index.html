@@ -1787,6 +1787,7 @@
                         <option value="">— Select —</option>
                         <option>Cash</option>
                         <option>UPI</option>
+                        <option>Bank Transfer</option>
                     </select>
                 </div>
                 <div>
@@ -1961,12 +1962,12 @@
             document.getElementById('f-no').value =
                 donationType === 'kind'
                     ? RCP_YEAR + '/IK/' + currentInKindNo
-                    : RCP_YEAR + '/' + currentNo;
+                    : RCP_YEAR + '/D/' + currentNo;
         }
         function getNo() {
             return donationType === 'kind'
                 ? RCP_YEAR + '/IK/' + currentInKindNo
-                : RCP_YEAR + '/' + currentNo;
+                : RCP_YEAR + '/D/' + currentNo;
         }
         function bumpNo() {
             if (donationType === 'kind') currentInKindNo++;

@@ -107,7 +107,7 @@ function addDonation(p) {
   var balance  = amount - received;
   var status   = p.status || (received >= amount ? 'Received' : received > 0 ? 'Partial' : 'Pending');
 
-  set('#',                 p.receiptNo || seqNo);
+  set('#',                 p.receiptNo || ('2026/D/' + seqNo));
   set('Donor Name',        p.donor     || '');
   set('Phone',             p.phone     || '');
   set('Total (₹)',         amount);
