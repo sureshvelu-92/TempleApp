@@ -270,10 +270,8 @@
             box-shadow: 0 3px 10px rgba(123, 13, 62, .3);
         }
 
-        .btn-print {
-            background: linear-gradient(135deg, #4A148C, #6A1B9A);
-            color: #fff;
-            box-shadow: 0 3px 10px rgba(74, 20, 140, .25);
+        .tab-btn.hidden {
+            display: none;
         }
 
         .btn-img {
@@ -861,10 +859,166 @@
                 print-color-adjust: exact;
             }
         }
+
+        /* ═══════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════ */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: linear-gradient(160deg, var(--m1) 0%, var(--m2) 55%, var(--m3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #login-screen.hide {
+            display: none;
+        }
+
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 28px 28px;
+            width: 320px;
+            max-width: 92vw;
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid var(--iv1);
+            overflow: hidden;
+            margin-bottom: 14px;
+            background: radial-gradient(circle, var(--iv2) 20%, var(--iv1) 55%, var(--m3));
+            box-shadow: 0 0 20px rgba(232,213,163,.35);
+        }
+
+        .login-logo img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .login-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--iv1);
+            text-align: center;
+            letter-spacing: .3px;
+        }
+
+        .login-sub {
+            font-size: .72rem;
+            color: rgba(232,213,163,.7);
+            margin-top: 4px;
+            margin-bottom: 28px;
+        }
+
+        .pin-dots {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+
+        .pin-dots span {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--iv1);
+            background: transparent;
+            transition: background .15s;
+        }
+
+        .pin-dots span.filled {
+            background: var(--iv1);
+        }
+
+        .pin-error {
+            font-size: .72rem;
+            color: #ff6b6b;
+            min-height: 18px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .pin-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 68px);
+            gap: 12px;
+        }
+
+        .pin-key {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 2px solid rgba(232,213,163,.35);
+            background: rgba(255,255,255,.07);
+            color: var(--iv1);
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s, transform .1s;
+        }
+
+        .pin-key:active {
+            background: rgba(232,213,163,.25);
+            transform: scale(.93);
+        }
+
+        .pin-key-empty {
+            border: none;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .pin-key-del {
+            font-size: 1.1rem;
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-8px); }
+            40%      { transform: translateX(8px); }
+            60%      { transform: translateX(-6px); }
+            80%      { transform: translateX(6px); }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- ── LOGIN SCREEN ── -->
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="./images/logo.png" alt="logo" onerror="this.style.display='none'" />
+            </div>
+            <div class="login-title">Sri Ponniamman Temple Trust (R)</div>
+            <div class="login-sub">Aadi Festival 2026</div>
+
+            <div class="pin-dots" id="pin-dots">
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <div id="pin-error" class="pin-error"></div>
+
+            <div class="pin-pad">
+                <button class="pin-key" onclick="pinKey('1')">1</button>
+                <button class="pin-key" onclick="pinKey('2')">2</button>
+                <button class="pin-key" onclick="pinKey('3')">3</button>
+                <button class="pin-key" onclick="pinKey('4')">4</button>
+                <button class="pin-key" onclick="pinKey('5')">5</button>
+                <button class="pin-key" onclick="pinKey('6')">6</button>
+                <button class="pin-key" onclick="pinKey('7')">7</button>
+                <button class="pin-key" onclick="pinKey('8')">8</button>
+                <button class="pin-key" onclick="pinKey('9')">9</button>
+                <button class="pin-key pin-key-empty"></button>
+                <button class="pin-key" onclick="pinKey('0')">0</button>
+                <button class="pin-key pin-key-del" onclick="pinDel()">⌫</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ── APP HEADER ── -->
     <div class="app-header">
@@ -882,7 +1036,7 @@
     <!-- ── TABS ── -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('entry')">Entry</button>
-        <button class="tab-btn" onclick="switchTab('receipt')">Receipt</button>
+        <button class="tab-btn hidden" id="tab-btn-receipt" onclick="switchTab('receipt')">Receipt</button>
         <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
     </div>
 
@@ -1043,7 +1197,6 @@
 
         <!-- Receipt actions -->
         <div class="action-row" style="max-width:620px;margin:14px auto 0;justify-content:center;">
-            <button class="btn btn-print" onclick="window.print()">Print / PDF</button>
             <button class="btn btn-img" onclick="downloadAsImage()">⬇ Download</button>
             <button class="btn btn-wa"   onclick="shareToWhatsApp()">WhatsApp</button>
         </div>
@@ -1160,6 +1313,18 @@
 
         /* ── Settings ── */
         const DEFAULT_GS_URL = 'https://script.google.com/macros/s/AKfycbw1e9kxzZYHHxE-tU0fcJ4yp-_CnWS0nPM_k53fqUatbUEWY3h5EDEITIHlmNybF2qm_g/exec';
+
+        /* ── Auth guard — all Google calls require PIN session ── */
+        function isAuth() { return sessionStorage.getItem('sptt_auth') === '1'; }
+        function requireAuth(label) {
+            if (!isAuth()) {
+                toast('Session expired — please re-enter PIN', 'error');
+                document.getElementById('login-screen').classList.remove('hide');
+                console.warn(label + ' blocked — not authenticated');
+                return false;
+            }
+            return true;
+        }
         function loadSettings() {
             syncNo();
             document.getElementById('f-date').value = todayISO();
@@ -1180,8 +1345,14 @@
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + t).classList.add('active');
-            const map = { entry: 0, receipt: 1, settings: 2 };
-            document.querySelectorAll('.tab-btn')[map[t]].classList.add('active');
+            const btn = t === 'receipt'
+                ? document.getElementById('tab-btn-receipt')
+                : document.querySelector(`.tab-btn[onclick="switchTab('${t}')"]`);
+            if (btn) btn.classList.add('active');
+        }
+
+        function showReceiptTab() {
+            document.getElementById('tab-btn-receipt').classList.remove('hidden');
         }
 
         /* ── State ── */
@@ -1195,6 +1366,7 @@
 
         /* ── Generate Receipt ── */
         function generateReceipt() {
+            if (!requireAuth('generateReceipt')) return;
             const donor = titleCase(document.getElementById('f-donor').value.trim());
             const phone = document.getElementById('f-phone').value.trim();
             const amt = parseFloat(document.getElementById('f-amount').value);
@@ -1224,6 +1396,7 @@
             bumpNo();
 
             document.getElementById('action-status').textContent = '';
+            showReceiptTab();
             switchTab('receipt');
             toast('Receipt generated', 'success');
 
@@ -1332,38 +1505,43 @@
         /* ── Share via WhatsApp ── */
         async function shareToWhatsApp() {
             const status = document.getElementById('action-status');
-            status.textContent = 'Preparing…';
+            status.textContent = 'Preparing image…';
             try {
                 const canvas = await buildReceiptCanvas();
                 const donor = (current?.donor || 'Donor').split(',')[0].trim().replace(/\s+/g, '_');
                 const fileName = current ? `Receipt_${current.no}_${donor}.png` : 'Receipt.png';
 
-                /* Convert canvas → Blob → File */
-                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-                const file = new File([blob], fileName, { type: 'image/png' });
+                /* Strip non-digits from phone; add India country code if 10 digits */
+                const rawPhone = (current?.phone || '').replace(/\D/g, '');
+                const phone = rawPhone.length === 10 ? '91' + rawPhone : rawPhone;
 
-                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                    /* Native share sheet (Android / iOS) – user picks WhatsApp */
-                    await navigator.share({
-                        files: [file],
-                        title: `Receipt #${current?.no || ''}`,
-                        text: `Receipt for ${current?.donor || 'Donor'} – Sri Ponniamman Temple Trust`
-                    });
-                    status.textContent = 'Shared!';
-                    toast('Shared ✓', 'success');
-                } else {
-                    /* Fallback: download image + open WhatsApp Web */
-                    const link = document.createElement('a');
-                    link.download = fileName;
-                    link.href = canvas.toDataURL('image/png');
-                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                    const text = encodeURIComponent(
-                        `Receipt #${current?.no || ''} | ${current?.donor || ''} | Rs.${current?.amount || ''} | Sri Ponniamman Temple Trust`
-                    );
-                    setTimeout(() => window.open(`https://wa.me/?text=${text}`, '_blank'), 600);
-                    status.textContent = 'Image saved – WhatsApp opened';
-                    toast('Saved & WhatsApp opened ✓', 'success');
-                }
+                const msgText = encodeURIComponent(
+`🙏 We humbly thank you for your generous support.
+The contribution to the 42nd Aadi Festival 2026 reflects true devotion.
+
+📎 Receipt is attached.
+
+May Goddess Ponniamman's blessings be with you and your family always! 🙏💫
+— Sri Ponniamman Temple Trust (R)`);
+
+                /* Save image to device first */
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+
+                /* Navigate to WhatsApp: specific contact if phone present, else generic */
+                const waUrl = phone
+                    ? `https://wa.me/${phone}?text=${msgText}`
+                    : `https://wa.me/?text=${msgText}`;
+
+                setTimeout(() => window.open(waUrl, '_blank'), 600);
+
+                status.textContent = phone
+                    ? 'Image saved — tap + in WhatsApp to attach ✓'
+                    : 'Image saved — WhatsApp opened ✓';
+                toast(phone ? 'WhatsApp opened to donor ✓' : 'Saved & WhatsApp opened ✓', 'success');
+
             } catch(e) {
                 if (e.name === 'AbortError') { status.textContent = ''; return; }
                 status.textContent = 'Share failed: ' + e.message;
@@ -1374,6 +1552,7 @@
 
         /* ── Auto-save to Sheet ── */
         async function autoSaveSheet(d) {
+            if (!requireAuth('autoSaveSheet')) return;
             const url = DEFAULT_GS_URL;
             if (!url) return;
             try {
@@ -1401,6 +1580,7 @@
 
         /* ── Test connection ── */
         async function testConn() {
+            if (!requireAuth('testConn')) return;
             const el = document.getElementById('conn-st');
             el.innerHTML = '<span class="badge badge-wait">Testing…</span>';
             try {
@@ -1451,6 +1631,7 @@
 
         /* ── Sync receipt# from Sheet (last # row + 1) ── */
         async function fetchLastSeqFromSheet() {
+            if (!isAuth()) return;
             try {
                 const res = await fetch(DEFAULT_GS_URL + '?action=getLastSeq', { redirect: 'follow' });
                 const json = await res.json();
@@ -1459,6 +1640,51 @@
                     syncNo();
                 }
             } catch (e) { console.warn('fetchLastSeq:', e); }
+        }
+
+        /* ── PIN Login ── */
+        const CORRECT_PIN = '1985';
+        let pinEntry = '';
+
+        function pinKey(d) {
+            if (pinEntry.length >= 4) return;
+            pinEntry += d;
+            updatePinDots();
+            if (pinEntry.length === 4) setTimeout(checkPin, 120);
+        }
+
+        function pinDel() {
+            pinEntry = pinEntry.slice(0, -1);
+            updatePinDots();
+            document.getElementById('pin-error').textContent = '';
+        }
+
+        function updatePinDots() {
+            document.querySelectorAll('#pin-dots span').forEach((s, i) => {
+                s.classList.toggle('filled', i < pinEntry.length);
+            });
+        }
+
+        function checkPin() {
+            if (pinEntry === CORRECT_PIN) {
+                sessionStorage.setItem('sptt_auth', '1');
+                document.getElementById('login-screen').classList.add('hide');
+                fetchLastSeqFromSheet();   /* sync sheet only after auth */
+            } else {
+                document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
+                pinEntry = '';
+                updatePinDots();
+                /* shake animation */
+                const dots = document.getElementById('pin-dots');
+                dots.style.animation = 'none';
+                dots.offsetHeight; // reflow
+                dots.style.animation = 'shake .35s ease';
+            }
+        }
+
+        /* Check session on load */
+        if (sessionStorage.getItem('sptt_auth') === '1') {
+            document.getElementById('login-screen').classList.add('hide');
         }
 
         /* ── Init ── */

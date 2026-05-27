@@ -72,6 +72,7 @@ function addDonation(p) {
 
   set('#',                 p.receiptNo || seqNo);
   set('Donor Name',        p.donor     || '');
+  set('Phone',             p.phone     || '');
   set('Total (₹)',         amount);
   set('Received (₹)',      amount);
   set('Payment Mode',      p.mode      || 'Cash');
@@ -147,7 +148,7 @@ function getReceipts() {
 function makeDate(iso) {
   if (!iso) return '';
   var p = iso.split('-');
-  return new Date(+p[0], +p[1] - 1, +p[2]);
+  return p[2] + '-' + p[1] + '-' + p[0];  // DD-MM-YYYY
 }
 
 function ok(data) {
